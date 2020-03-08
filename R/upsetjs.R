@@ -48,9 +48,13 @@ upsetjs = function(width = '100%',
                    sizingPolicy = upsetjsSizingPolicy()) {
   # forward options using x
   x = structure(
-    mode = 'hover',
-    sets = c(),
+    list(
+      mode = 'hover',
+      sets = c()
+    )
   )
+
+  dependencies = c()
 
   htmlwidgets::createWidget(
     'upsetjs',
@@ -64,6 +68,8 @@ upsetjs = function(width = '100%',
   )
 }
 
+#'
+#' reactive helper to update an upsetjs inplace
 #'
 #' @export
 upsetjsProxy = function(outputId, session) {
@@ -94,7 +100,7 @@ sendMessage = function(upsetjs_proxy, prop, value) {
     class = "upsetjs_msg"
   )
 
-  session$sendCustomMessage("upsetjs-update"), msg)
+  session$sendCustomMessage("upsetjs-update", msg)
 
   upsetjs_proxy
 }
