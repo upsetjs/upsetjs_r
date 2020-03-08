@@ -16,6 +16,7 @@ Encoding: UTF-8
 Imports:
   htmlwidgets,
   htmltools,
-  crosstalk
+  crosstalk,
+  magrittr
 LazyData: true
 RoxygenNote: 6.1.0

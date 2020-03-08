@@ -33,42 +33,23 @@ upsetjsSizingPolicy = function(
 
 #' upsetjs - factory for UpSet HTMLWidget
 #'
-#' @param sets TODO i.e. also crosstalk shared data frame
-#' @param combinations TODO i.e. also crosstalk shared data frame
 #' @param width width of the element
 #' @param height height of the element
 #' @param elementId unique element id
-#' @param mode interaction mode either "hover" (default) or "click"
 #' @param sizingPolicy htmlwidgets sizing policy object. Defaults to \code{\link{upsetjsSizingPolicy}()}
 #'
 #' @return html upsetjs widget
 #'
 #' @ example
 #' @export
-upsetjs = function(sets, combinations,
-                   width = '100%',
+upsetjs = function(width = '100%',
                    height = NULL,
                    elementId = NULL,
-                   mode = 'hover',
                    sizingPolicy = upsetjsSizingPolicy()) {
-  if (crosstalk::is.SharedData(data)) {
-    # using Crosstalk
-    key = data$key()
-    group = data$groupName()
-    data = data$origData()
-    dependencies = crosstalk::crosstalkLibs()
-  } else {
-    # Not using Crosstalk
-    key = NULL
-    group = NULL
-    dependencies = c()
-  }
-
   # forward options using x
   x = structure(
-    crosstalk = list(key = key, group = group),
-    mode = mode,
-    options = list(),
+    mode = 'hover',
+    sets = c(),
   )
 
   htmlwidgets::createWidget(
@@ -97,3 +78,38 @@ upsetjsProxy = function(outputId, session) {
     class = "upsetjs_proxy"
   )
 }
+
+sendMessage = function(upsetjs_proxy, prop, value) {
+  session = upsetjs_proxy$session
+  id = upsetjs_proxy$id
+
+  props = list()
+  props[[prop]] = value
+
+  msg = structure(
+    list(
+      id = id,
+      props = props
+    ),
+    class = "upsetjs_msg"
+  )
+
+  session$sendCustomMessage("upsetjs-update"), msg)
+
+  upsetjs_proxy
+}
+
+properySetter = function(prop) {
+  function(upsetjs, value) {
+    if (inherits(upsetjs, 'upsetjs')) {
+      upsetjs$x[[prop]] = value
+    } else if (inherits(upsetjs, 'upsetjs_proxy')) {
+      sendMessage(upsetjs, prop, value)
+    }
+    upsetjs
+  }
+}
+
+#'
+#' @ export
+# test =
