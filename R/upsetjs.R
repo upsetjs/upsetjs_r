@@ -85,12 +85,9 @@ upsetjsProxy = function(outputId, session) {
   )
 }
 
-sendMessage = function(upsetjs_proxy, prop, value) {
+sendMessage = function(upsetjs_proxy, props) {
   session = upsetjs_proxy$session
   id = upsetjs_proxy$id
-
-  props = list()
-  props[[prop]] = value
 
   msg = structure(
     list(
@@ -109,7 +106,18 @@ setProperty = function(upsetjs, prop, value) {
   if (inherits(upsetjs, 'upsetjs')) {
     upsetjs$x[[prop]] = value
   } else if (inherits(upsetjs, 'upsetjs_proxy')) {
-    sendMessage(upsetjs, prop, value)
+    props = list()
+    props[[prop]] = value
+    sendMessage(upsetjs, props)
+  }
+  upsetjs
+}
+
+setProperties = function(upsetjs, props) {
+  if (inherits(upsetjs, 'upsetjs')) {
+    upsetjs$x[[prop]] = value
+  } else if (inherits(upsetjs, 'upsetjs_proxy')) {
+    sendMessage(upsetjs, props)
   }
   upsetjs
 }
@@ -118,7 +126,7 @@ sortSets = function(sets, order.by = 'freq') {
   if (order.by == 'freq') {
     o = order(sapply(sets, function (x) { x$cardinality }), decreasing=T)
   } else if (order.by == 'degree') {
-    o = order(sapply(sets, function (x) { x$name }))
+    o = order(sapply(sets, function (x) { x$degree }), decreasing=T)
   }
   sets[o]
 }
@@ -128,7 +136,7 @@ sortSets = function(sets, order.by = 'freq') {
 #' @ export
 fromList = function(upsetjs, value, order.by = "freq") {
   toSet = function(key, value) {
-    list(name=key, elems=value, cardinality=length(elems))
+    list(name=key, elems=value, cardinality=length(value))
   }
   sets = mapply(toSet, key=names(value), value=value, SIMPLIFY=F)
   # list of list objects
@@ -136,6 +144,33 @@ fromList = function(upsetjs, value, order.by = "freq") {
 
   sets = sortSets(sets, order.by = order.by)
   setProperty(upsetjs, 'sets', sets)
+}
+
+#'
+#' generates the sets from a lists object
+#' @ export
+fromExpression = function(upsetjs, value, order.by = "freq") {
+  degrees = sapply(names(value), function (x) { length(unlist(strsplit(x, '+'))) })
+
+  combinations = value
+  sets = value[degrees == 1]
+
+  toSet = function(key, value) {
+    list(name=key, elems=c(), cardinality=value)
+  }
+  sets = mapply(toSet, key=names(sets), value=sets, SIMPLIFY=F)
+  names(sets) = NULL
+  sets = sortSets(sets, order.by = order.by)
+
+  toCombination = function(key, value, degree) {
+    list(name=key, elems=c(), cardinality=value, degree=degree)
+  }
+  combinations = mapply(toCombination, key=names(combinations), value=combinations, degree=degrees, SIMPLIFY=F)
+  names(combinations) = NULL
+  combinations = sortSets(combinations, order.by = order.by)
+
+  props = list(sets = sets, combinations = combinations)
+  setProperties(upsetjs, props)
 }
 
 # order.by = c("degree", "freq"))
@@ -147,6 +182,10 @@ fromList = function(upsetjs, value, order.by = "freq") {
 # mainbar.y.label = "Genre Intersections", sets.x.label = "Movies Per Genre",
 # nsets
 # mb.ratio = c(0.55, 0.45)
+
+heightRatios = function(upsetjs, ratios) {
+  setProperty(upsetjs, 'heightRatios', ratios)
+}
 
 fromDataFrame = function(upsetjs, df, order.by = "freq") {
   toSet = function(key) {

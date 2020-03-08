@@ -2,19 +2,43 @@
   // HTMLWidgets.shinyMode
   // HTMLWidgets.viewerMode
 
-  function fixSets(props) {
-    if (!props.sets) {
-      props.sets = [];
-      return;
+  function fixSets(sets) {
+    if (!sets) {
+      return [];
     }
-    if (!Array.isArray(props.sets)) {
-      props.sets = UpSetJS.asSets(Object.keys(props.sets).map(function (key) {
-        return {
-          name: key,
-          elems: props.sets[key]
-        }
-      }));
+    return UpSetJS.asSets(sets.map(function (set) {
+      if (Array.isArray(set.name)) {
+        set.name = set.name[0];
+      }
+      if (Array.isArray(set.cardinality)) {
+        set.cardinality = set.cardinality[0];
+      }
+      if (!Array.isArray(set.elems)) {
+        set.elems = [];
+      }
+      return set;
+    }));
+  }
+
+  function fixCombinations(combinations, sets) {
+    if (!combinations || (Array.isArray(combinations) && combinations.length === 0)) {
+      return null;
     }
+    return UpSetJS.asCombinations(combinations.map(function (c) {
+      if (Array.isArray(c.name)) {
+        c.name = c.name[0];
+      }
+      if (Array.isArray(c.cardinality)) {
+        c.cardinality = c.cardinality[0];
+      }
+      if (Array.isArray(c.degree)) {
+        c.degree = c.degree[0];
+      }
+      if (!Array.isArray(c.elems)) {
+        c.elems = [];
+      }
+      return c;
+    }), 'intersection', UpSetJS.fromSetName(sets, '+'));
   }
 
   HTMLWidgets.widget({
@@ -28,13 +52,23 @@
         height: height
       };
 
-      const fixProps = function (props) {
-        fixSets(props);
+      const fixProps = function (props, delta) {
+        if (delta.sets != null) {
+          props.sets = fixSets(props.sets);
+        }
+        if (delta.combinations != null) {
+          const c = fixCombinations(props.combinations, props.sets);
+          if (c == null) {
+            delete props.combinations;
+          } else {
+            props.combinations = c;
+          }
+        }
       }
 
       const update = function(delta) {
         Object.assign(props, delta);
-        fixProps(props);
+        fixProps(props, delta);
         UpSetJS.renderUpSet(el, props);
       }
 
@@ -52,7 +86,6 @@
 
       return {
         renderValue: function(x) {
-          // TODO update data
           update(x);
         },
 
