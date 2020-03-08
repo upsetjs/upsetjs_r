@@ -16,12 +16,23 @@
     );
   }
 
+  function generateCombinations(combinations, sets) {
+    if (combinations.mode === "union") {
+      return UpSetJS.generateUnions(sets, combinations);
+    }
+    return UpSetJS.generateIntersections(sets, combinations);
+  }
+
   function fixCombinations(combinations, sets) {
     if (
       !combinations ||
       (Array.isArray(combinations) && combinations.length === 0)
     ) {
       return null;
+    }
+    if (!Array.isArray(combinations)) {
+      // generator mode
+      return generateCombinations(combinations, sets);
     }
     const lookup = new Map(
       sets.map(function(s) {

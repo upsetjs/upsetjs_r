@@ -40,7 +40,7 @@ upsetjsSizingPolicy = function(
 #'
 #' @return html upsetjs widget
 #' @examples
-#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% labels(combinations.y.label = "Test")
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3)))
 #' @export
 upsetjs = function(width = '100%',
                    height = NULL,
@@ -91,6 +91,5 @@ upsetjsProxy = function(outputId, session) {
 
 
 # sets = c("PTEN", "TP53", "EGFR", "PIK3R1", "RB1")
-# mainbar.y.label = "Genre Intersections", sets.x.label = "Movies Per Genre",
 # nsets
 

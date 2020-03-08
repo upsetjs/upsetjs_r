@@ -10,6 +10,8 @@ sortSets = function(sets, order.by = 'freq') {
 
 #'
 #' generates the sets from a lists object
+#' @param upsetjs the upsetjs (proxy) instance
+#' @param value the list input value
 #'
 #' @export
 fromList = function(upsetjs, value, order.by = "freq") {
@@ -25,10 +27,13 @@ fromList = function(upsetjs, value, order.by = "freq") {
 }
 
 #'
-#' generates the sets from a lists object that contained the cardinalties of both sets and combinations (+)
+#' generates the sets from a lists object that contained the cardinalties of both sets and combinations (&)
+#' @param upsetjs the upsetjs (proxy) instance
+#' @param value the expression list input
+#' @param symbol the symbol how to split list names to get the sets
 #'
 #' @export
-fromExpression = function(upsetjs, value, symbol = '&', order.by = "freq") {
+fromExpression = function(upsetjs, value, symbol = "&", order.by = "freq") {
   degrees = sapply(names(value), function (x) { length(unlist(strsplit(x, symbol))) })
 
   combinations = value
@@ -55,6 +60,8 @@ fromExpression = function(upsetjs, value, symbol = '&', order.by = "freq") {
 
 #'
 #' extract the sets from a data frame (rows = elems, columns = sets, cell = contained)
+#' @param upsetjs the upsetjs (proxy) instance
+#' @param df the data.frame like structure
 #'
 #' @export
 fromDataFrame = function(upsetjs, df, order.by = "freq") {
@@ -67,4 +74,9 @@ fromDataFrame = function(upsetjs, df, order.by = "freq") {
 
   sets = sortSets(sets, order.by = order.by)
   setProperty(upsetjs, 'sets', sets)
+}
+
+
+generateIntersections = function(upsetjs, order.by = "freq") {
+
 }

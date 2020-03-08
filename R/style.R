@@ -1,6 +1,8 @@
 
 #'
 #' specify the chart layout
+#' @param upsetjs the upsetjs (proxy) instance
+#'
 #' @export
 chartLayout = function(upsetjs,
                       height.ratios = NULL,
@@ -18,6 +20,8 @@ chartLayout = function(upsetjs,
 
 #'
 #' specify chart labels
+#' @param upsetjs the upsetjs (proxy) instance
+#'
 #' @export
 chartLabels = function(upsetjs,
                        combinations.y.label = NULL,
