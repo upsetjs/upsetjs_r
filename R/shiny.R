@@ -1,6 +1,4 @@
 
-#' Shiny bindings for upsetjs
-#'
 #' Output and render functions for using UpSet.js within Shiny
 #' applications and interactive Rmd documents.
 #'
@@ -9,8 +7,6 @@
 #'   \code{'800px'}, \code{'auto'}) or a number, which will be coerced to a
 #'   string and have \code{'px'} appended.
 #' @param height see width
-#'
-#' @name upsetjs-shiny
 #'
 #' @export
 upsetjsOutput = function(outputId,
@@ -26,7 +22,6 @@ upsetjsOutput = function(outputId,
 #' @param quoted Is \code{expr} a quoted expression (with \code{quote()})? This
 #'   is useful if you want to save an expression in a variable.
 #'
-#' @rdname upsetjs-shiny
 #' @export
 renderUpsetjs = function(expr,
                          env = parent.frame(),

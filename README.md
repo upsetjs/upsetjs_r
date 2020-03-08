@@ -1,5 +1,5 @@
-UpSet.js as HTMLWidget
-======================
+UpSet.js as R HTMLWidget
+========================
 
 
 UpSet.s is an TODO
@@ -14,7 +14,7 @@ Installation
 ------------
 
 ```R
-devtools::install_github("upsetjs/upsetjs_htmlwidget")
+devtools::install_github("upsetjs/upsetjs_r")
 library(upsetjs)
 ```
 

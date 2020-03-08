@@ -105,17 +105,57 @@ sendMessage = function(upsetjs_proxy, prop, value) {
   upsetjs_proxy
 }
 
-properySetter = function(prop) {
-  function(upsetjs, value) {
-    if (inherits(upsetjs, 'upsetjs')) {
-      upsetjs$x[[prop]] = value
-    } else if (inherits(upsetjs, 'upsetjs_proxy')) {
-      sendMessage(upsetjs, prop, value)
-    }
-    upsetjs
+setProperty = function(upsetjs, prop, value) {
+  if (inherits(upsetjs, 'upsetjs')) {
+    upsetjs$x[[prop]] = value
+  } else if (inherits(upsetjs, 'upsetjs_proxy')) {
+    sendMessage(upsetjs, prop, value)
   }
+  upsetjs
+}
+
+sortSets = function(sets, order.by = 'freq') {
+  if (order.by == 'freq') {
+    o = order(sapply(sets, function (x) { x$cardinality }), decreasing=T)
+  } else if (order.by == 'degree') {
+    o = order(sapply(sets, function (x) { x$name }))
+  }
+  sets[o]
 }
 
 #'
+#' generates the sets from a lists object
 #' @ export
-# test =
+fromList = function(upsetjs, value, order.by = "freq") {
+  toSet = function(key, value) {
+    list(name=key, elems=value, cardinality=length(elems))
+  }
+  sets = mapply(toSet, key=names(value), value=value, SIMPLIFY=F)
+  # list of list objects
+  names(sets) = NULL
+
+  sets = sortSets(sets, order.by = order.by)
+  setProperty(upsetjs, 'sets', sets)
+}
+
+# order.by = c("degree", "freq"))
+# empty.intersections = "on"
+# list(query = intersects, params = list("Drama", "Comedy", "Action"), color = "orange", active = T)
+
+
+# sets = c("PTEN", "TP53", "EGFR", "PIK3R1", "RB1")
+# mainbar.y.label = "Genre Intersections", sets.x.label = "Movies Per Genre",
+# nsets
+# mb.ratio = c(0.55, 0.45)
+
+fromDataFrame = function(upsetjs, df, order.by = "freq") {
+  toSet = function(key) {
+    list(name=key, elems=c(), cardinality=0)
+  }
+  elems = rownames(df)
+  sets = lapply(toSet, colnames(df))
+
+
+  sets = sortSets(sets, order.by = order.by)
+  setProperty(upsetjs, 'sets', sets)
+}

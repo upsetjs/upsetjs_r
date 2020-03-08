@@ -1,16 +1,21 @@
 (function () {
-  function assign(target, source1, source2) {
-    for (var key in source1) {
-      target[key] = source1[key];
-    }
-    if (source2) {
-      return assign(target, source2);
-    }
-    return target;
-  }
-
   // HTMLWidgets.shinyMode
   // HTMLWidgets.viewerMode
+
+  function fixSets(props) {
+    if (!props.sets) {
+      props.sets = [];
+      return;
+    }
+    if (!Array.isArray(props.sets)) {
+      props.sets = UpSetJS.asSets(Object.keys(props.sets).map(function (key) {
+        return {
+          name: key,
+          elems: props.sets[key]
+        }
+      }));
+    }
+  }
 
   HTMLWidgets.widget({
     name: 'upsetjs',
@@ -18,14 +23,18 @@
 
     factory: function(el, width, height) {
       const props = {
-        sets: UpSetJS.extractSets([{sets: ['A']}, {sets: ['A', 'B']}]),
+        sets: [],
         width: width,
         height: height
       };
 
+      const fixProps = function (props) {
+        fixSets(props);
+      }
+
       const update = function(delta) {
-        assign(props, delta);
-        props.sets = UpSetJS.extractSets([{ sets: ['A'] }, { sets: ['A', 'B'] }]);
+        Object.assign(props, delta);
+        fixProps(props);
         UpSetJS.renderUpSet(el, props);
       }
 
