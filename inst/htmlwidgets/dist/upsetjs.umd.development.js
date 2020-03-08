@@ -658,6 +658,15 @@
 
     return _extends.apply(this, arguments);
   }
+
+  function asSet(set) {
+    var r = _extends({
+      type: 'set',
+      cardinality: set.elems.length
+    }, set);
+
+    return r;
+  }
   /**
    * helper to create a proper data structures for UpSet sets
    * @param sets set like structures
@@ -665,13 +674,50 @@
 
 
   function asSets(sets) {
-    return sets.map(function (set) {
-      var r = _extends({}, set, {
-        type: 'set',
-        cardinality: set.elems.length
-      });
+    return sets.map(asSet);
+  }
 
-      return r;
+  function fromSetName(sets, symbol) {
+    if (symbol === void 0) {
+      symbol = /[∩∪]/;
+    }
+
+    var byName = new Map(sets.map(function (s) {
+      return [s.name, s];
+    }));
+    return function (s) {
+      return s.name.split(symbol).map(function (setName) {
+        return byName.get(setName.trim());
+      });
+    };
+  }
+  /**
+   * helper to create a proper data structures for UpSet sets
+   * @param sets set like structures
+   */
+
+
+  function asCombination(set, type, toSets) {
+    var sets = toSets(set);
+
+    var r = _extends({
+      type: type,
+      cardinality: set.elems.length,
+      sets: new Set(sets),
+      degree: sets.length
+    }, set);
+
+    return r;
+  }
+  /**
+   * helper to create a proper data structures for UpSet sets
+   * @param sets set like structures
+   */
+
+
+  function asCombinations(sets, type, toSets) {
+    return sets.map(function (set) {
+      return asCombination(set, type, toSets);
     });
   }
 
@@ -3486,8 +3532,12 @@
   // }
   // export default UpSet;
 
+  exports.asCombination = asCombination;
+  exports.asCombinations = asCombinations;
+  exports.asSet = asSet;
   exports.asSets = asSets;
   exports.extractSets = extractSets;
+  exports.fromSetName = fromSetName;
   exports.generateIntersections = generateIntersections;
   exports.generateUnions = generateUnions;
   exports.powerSet = powerSet;
