@@ -76,7 +76,22 @@ fromDataFrame = function(upsetjs, df, order.by = "freq") {
   setProperty(upsetjs, 'sets', sets)
 }
 
+#'
+#' generate intersections
+#' @param upsetjs the upsetjs (proxy) instance
+#'
+#' @export
+generateIntersections = function(upsetjs, min=NULL, max=NULL, empty=NULL, order.by = "freq") {
+  gen = list(mode="intersection", min=min, max=max, empty=empty, order=order.by)
+  setProperty(upsetjs, 'combinations', cleanNull(gen))
+}
 
-generateIntersections = function(upsetjs, order.by = "freq") {
-
+#'
+#' generate intersections
+#' @param upsetjs the upsetjs (proxy) instance
+#'
+#' @export
+generateUnions = function(upsetjs, min=NULL, max=NULL, order.by = "freq") {
+  gen = list(mode="union", min=min, max=max, order=order.by)
+  setProperty(upsetjs, 'combinations', cleanNull(gen))
 }

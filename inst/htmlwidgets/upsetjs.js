@@ -16,11 +16,28 @@
     );
   }
 
-  function generateCombinations(combinations, sets) {
-    if (combinations.mode === "union") {
-      return UpSetJS.generateUnions(sets, combinations);
+  function generateCombinations(options, sets) {
+    const gen =
+      options.mode === "union"
+        ? UpSetJS.generateUnions
+        : UpSetJS.generateIntersections;
+
+    const combinations = gen(sets, options);
+    if (options.order == "freq") {
+      combinations.sort(function(a, b) {
+        return b.cardinality - a.cardinality;
+      });
+    } else if (options.order == "degree") {
+      combinations.sort(function(a, b) {
+        return b.degree - a.degree;
+      });
     }
-    return UpSetJS.generateIntersections(sets, combinations);
+
+    if (options.limit) {
+      return combinations.slice(0, options.limit);
+    }
+
+    return combinations;
   }
 
   function fixCombinations(combinations, sets) {
@@ -51,9 +68,11 @@
       }),
       "intersection",
       function(s) {
-        return s.setNames.map(function(si) {
-          return lookup.get(si);
-        });
+        return s.setNames
+          .map(function(si) {
+            return lookup.get(si);
+          })
+          .filter(Boolean);
       }
     );
   }

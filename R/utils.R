@@ -27,7 +27,10 @@ setProperty = function(upsetjs, prop, value) {
   upsetjs
 }
 
-setProperties = function(upsetjs, props) {
+setProperties = function(upsetjs, props, clean=F) {
+  if (clean) {
+    props = cleanNull(props)
+  }
   if (inherits(upsetjs, 'upsetjs')) {
     for(prop in names(props)) {
       upsetjs$x[[prop]] = props[[prop]]
@@ -36,4 +39,8 @@ setProperties = function(upsetjs, props) {
     sendMessage(upsetjs, props)
   }
   upsetjs
+}
+
+cleanNull = function(l) {
+  l[!sapply(l, is.null)]
 }

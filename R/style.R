@@ -14,8 +14,7 @@ chartLayout = function(upsetjs,
                padding = padding,
                barPadding = bar.padding
                )
-  props = props[!sapply(props, is.null)]
-  setProperties(upsetjs, props)
+  setProperties(upsetjs, props, clean=TRUE)
 }
 
 #'
@@ -29,6 +28,5 @@ chartLabels = function(upsetjs,
   props = list(setName = sets.x.label,
                combinationName = combinations.y.label
                )
-  props = props[!sapply(props, is.null)]
-  setProperties(upsetjs, props)
+  setProperties(upsetjs, props, clean=TRUE)
 }
