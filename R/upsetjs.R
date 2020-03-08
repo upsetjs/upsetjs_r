@@ -5,9 +5,31 @@
 #'
 
 
-.upsetjsDefaultOptions = list(
-  mode = 'hover',
-)
+#' upsetjs sizing policy
+#'
+#' @export
+#' @param defaultWidth defaults to \code{"100\%"} of the available width
+#' @param defaultHeight defaults to 400px tall
+#' @param padding defaults to 0px
+#' @param browser.fill defaults to \code{TRUE}
+#' @param ... all other arguments supplied to \code{htmlwidgets::\link[htmlwidgets]{sizingPolicy}}
+#' @return An \code{htmlwidgets::sizingPolicy} object
+upsetjsSizingPolicy = function(
+  defaultWidth = "100%",
+  defaultHeight = 400,
+  padding = 0,
+  browser.fill = TRUE,
+  ...
+  # not adding extra arguments as htmlwidgets::sizingPolicy can change their own args
+) {
+  htmlwidgets::sizingPolicy(
+    defaultWidth = defaultWidth,
+    defaultHeight = defaultHeight,
+    padding = padding,
+    browser.fill = browser.fill,
+    ...
+  )
+}
 
 #' upsetjs - factory for UpSet HTMLWidget
 #'
@@ -16,88 +38,62 @@
 #' @param width width of the element
 #' @param height height of the element
 #' @param elementId unique element id
-#' @param options UpSet.js options
-#'  \describe{
-#'    \item{X}{desc (default: xx)}
-#'  }
 #' @param mode interaction mode either "hover" (default) or "click"
-#' @param dependencies include crosstalk dependencies
+#' @param sizingPolicy htmlwidgets sizing policy object. Defaults to \code{\link{upsetjsSizingPolicy}()}
 #'
 #' @return html upsetjs widget
 #'
-#' @examples
-#'
+#' @ example
 #' @export
 upsetjs = function(sets, combinations,
-                  width = '100%',
-                  height = NULL,
-                  elementId = NULL,
-                  mode = 'hover',
-                  dependencies = crosstalk::crosstalkLibs()) {
-  # extend with all the default options
-  options = c(options, .upsetjsDefaultOptions[!(names(.upsetjsDefaultOptions) %in% names(options))])
-
+                   width = '100%',
+                   height = NULL,
+                   elementId = NULL,
+                   mode = 'hover',
+                   sizingPolicy = upsetjsSizingPolicy()) {
   if (crosstalk::is.SharedData(data)) {
     # using Crosstalk
     key = data$key()
     group = data$groupName()
     data = data$origData()
+    dependencies = crosstalk::crosstalkLibs()
   } else {
     # Not using Crosstalk
     key = NULL
     group = NULL
+    dependencies = c()
+  }
 
   # forward options using x
-  x = list(
+  x = structure(
     crosstalk = list(key = key, group = group),
     mode = mode,
-    options = options,
+    options = list(),
   )
-  # create widget
+
   htmlwidgets::createWidget(
-    name = 'upsetjs',
+    'upsetjs',
     x,
     width = width,
     height = height,
     package = 'upsetjs',
     elementId = elementId,
+    sizingPolicy = sizingPolicy,
     dependencies = dependencies
   )
 }
 
-#' Shiny bindings for upsetjs
-#'
-#' Output and render functions for using UpSet.js within Shiny
-#' applications and interactive Rmd documents.
-#'
-#' @param outputId output variable to read from
-#' @param width,height Must be a valid CSS unit (like \code{'100\%'},
-#'   \code{'800px'}, \code{'auto'}) or a number, which will be coerced to a
-#'   string and have \code{'px'} appended.
-#'
-#' @name upsetjs-shiny
 #'
 #' @export
-upsetjsOutput = function(outputId,
-                        width = '100%',
-                        height = '800px') {
-  htmlwidgets::shinyWidgetOutput(outputId, 'upsetjs', width, height, package = 'upsetjs')
-}
-
-#' Shiny render bindings for upsetjs
-#'
-#' @param expr An expression that generates an upset
-#' @param env The environment in which to evaluate \code{expr}.
-#' @param quoted Is \code{expr} a quoted expression (with \code{quote()})? This
-#'   is useful if you want to save an expression in a variable.
-#'
-#' @rdname upsetjs-shiny
-#' @export
-renderUpSetJS = function(expr,
-                        env = parent.frame(),
-                        quoted = FALSE) {
-  if (!quoted) {
-    expr = substitute(expr)
-  } # force quoted
-  htmlwidgets::shinyRenderWidget(expr, upsetjsOutput, env, quoted = TRUE)
+upsetjsProxy = function(outputId, session) {
+  structure(
+    list(
+      session = session,
+      id = session$ns(outputId),
+      x = structure(
+        list()
+      )
+    ),
+    class = "upsetjs_proxy"
+  )
 }
