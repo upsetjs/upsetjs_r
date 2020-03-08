@@ -1,0 +1,60 @@
+---
+title: "UpSet.js Basic Example"
+author: "Samuel Gratzl"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{UpSet.js Basic Example}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## UpSet.js HTMLWidget in R Markdown
+
+This is a simple example how to include the UpSet.js [HTMLWidget](http://www.htmlwidgets.org/) in your R Markdown file
+
+```{r libraries}
+# devtools::install_github("upsetjs/upsetjs_r")
+library(upsetjs)
+```
+
+## Simple Example
+
+```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
+
+# example of list input (list of named vectors)
+listInput <- list(one = c(1, 2, 3, 5, 7, 8, 11, 12, 13), two = c(1, 2, 4, 5, 
+    10), three = c(1, 5, 6, 7, 8, 9, 10, 12, 13))
+
+upsetjs() %>% 
+  fromList(listInput)
+```
+
+
+## Expression Input
+```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
+
+# example of expression input
+expressionInput <- c(one = 2, two = 1, three = 2, `one&two` = 1, `one&three` = 4, 
+    `two&three` = 1, `one&two&three` = 2)
+
+
+upsetjs() %>% 
+  fromExpression(expressionInput)
+```
+
+
+## Data Frame Input
+```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
+
+# boolean table with rows = elements, columns = sets, cell = is row part of this set
+dataFrame <- as.data.frame(list(one=c(1, 0, 1), two=c(0, 1, 0)), row.names=c('R1', 'R2', 'R3'))
+
+
+upsetjs() %>% 
+  fromDataFrame(dataFrame)
+```

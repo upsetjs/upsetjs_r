@@ -28,8 +28,8 @@ fromList = function(upsetjs, value, order.by = "freq") {
 #' generates the sets from a lists object that contained the cardinalties of both sets and combinations (+)
 #'
 #' @export
-fromExpression = function(upsetjs, value, order.by = "freq") {
-  degrees = sapply(names(value), function (x) { length(unlist(strsplit(x, '+'))) })
+fromExpression = function(upsetjs, value, symbol = '&', order.by = "freq") {
+  degrees = sapply(names(value), function (x) { length(unlist(strsplit(x, symbol))) })
 
   combinations = value
   sets = value[degrees == 1]
@@ -42,7 +42,7 @@ fromExpression = function(upsetjs, value, order.by = "freq") {
   sets = sortSets(sets, order.by = order.by)
 
   toCombination = function(key, value, degree) {
-    list(name=key, elems=c(), cardinality=value, degree=degree)
+    list(name=key, elems=c(), cardinality=value, degree=degree, setNames=unlist(strsplit(key, symbol)))
   }
   combinations = mapply(toCombination, key=names(combinations), value=combinations, degree=degrees, SIMPLIFY=F)
   names(combinations) = NULL
@@ -60,7 +60,7 @@ fromExpression = function(upsetjs, value, order.by = "freq") {
 fromDataFrame = function(upsetjs, df, order.by = "freq") {
   elems = rownames(df)
   toSet = function(key) {
-    sub = elems[df[[s]] == T]
+    sub = elems[df[[key]] == T]
     list(name=key, elems=sub, cardinality=length(sub))
   }
   sets = lapply(colnames(df), toSet)

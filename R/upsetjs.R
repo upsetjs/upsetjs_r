@@ -39,7 +39,8 @@ upsetjsSizingPolicy = function(
 #' @param sizingPolicy htmlwidgets sizing policy object. Defaults to \code{\link{upsetjsSizingPolicy}()}
 #'
 #' @return html upsetjs widget
-#'
+#' @examples
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% labels(combinations.y.label = "Test")
 #' @export
 upsetjs = function(width = '100%',
                    height = NULL,

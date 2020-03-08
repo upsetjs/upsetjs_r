@@ -26,3 +26,6 @@ html upsetjs widget
 \description{
 upsetjs - factory for UpSet HTMLWidget
 }
+\examples{
+upsetjs() \%>\% fromList(list(a=c(1,2,3), b=c(2,3))) \%>\% labels(combinations.y.label = "Test")
+}
