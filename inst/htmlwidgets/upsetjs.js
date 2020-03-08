@@ -18,13 +18,14 @@
 
     factory: function(el, width, height) {
       const props = {
-        sets: [],
+        sets: UpSetJS.extractSets([{sets: ['A']}, {sets: ['A', 'B']}]),
         width: width,
         height: height
       };
 
       const update = function(delta) {
         assign(props, delta);
+        props.sets = UpSetJS.extractSets([{ sets: ['A'] }, { sets: ['A', 'B'] }]);
         UpSetJS.renderUpSet(el, props);
       }
 

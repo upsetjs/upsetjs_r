@@ -3,4 +3,5 @@ dependencies:
     version: 0.1.0
     src: htmlwidgets/dist
     script:
-      - upsetjs.umd.production.min.js
+      - polyfill.js
+      - upsetjs.umd.development.js

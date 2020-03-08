@@ -8,11 +8,12 @@ This is a [HTMLWidget](http://www.htmlwidgets.org/) wrapper around the JavaScrip
 It can be used within standalone [R Shiny](https://shiny.rstudio.com/) apps or [R Markdown](http://rmarkdown.rstudio.com/) files. 
 [Crosstalk](https://rstudio.github.io/crosstalk/) is supported for synching selections and filtering among widgets.
 
+required polyfills: https://polyfill.io/v3/polyfill.min.js?features=Set%2CMap%2CSymbol%2CSymbol.iterator%2CArray.from%2CObject.assign%2CArray.prototype.find
+
 Installation
 ------------
 
 ```R
-devtools::install_github("rstudio/crosstalk")
 devtools::install_github("upsetjs/upsetjs_htmlwidget")
 library(upsetjs)
 ```
@@ -27,6 +28,7 @@ Examples
 ```R
 
 ```
+
 
 
 Advanced Example
