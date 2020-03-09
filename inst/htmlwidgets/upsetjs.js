@@ -77,6 +77,31 @@
     );
   }
 
+  function resolveSelection(selection, sets, combinations) {
+    const s = sets.find(function(s) {
+      return s.name === selection;
+    });
+    if (s) {
+      return s;
+    }
+    const combinedNames = Array.isArray(selection)
+      ? selection
+          .slice()
+          .sort()
+          .join("&")
+      : null;
+    const c = combinations.find(function(c) {
+      return (
+        c.name === selection ||
+        (combinedNames &&
+          combinedNames ===
+            Array.from(c.sets)
+              .sort()
+              .join("&"))
+      );
+    });
+  }
+
   HTMLWidgets.widget({
     name: "upsetjs",
     type: "output",
@@ -101,6 +126,11 @@
           }
         }
         if (typeof props.selection === "string") {
+          props.selection = resolveSelection(
+            props.selection,
+            props.sets,
+            props.combinations
+          );
         }
       };
 
