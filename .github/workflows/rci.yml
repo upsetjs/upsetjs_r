@@ -5,11 +5,14 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: rstudio/r-base:3.6-bionic
     steps:
       - uses: actions/checkout@v2
-      # - name: Install Devtools
-      #   run: Rscript -e "install.packages('devtools', quiet=TRUE)"
-      - name: Check Package
-        run: Rscript -e "devtools::check()"
+      - uses: r-lib/actions/setup-r@master
+      - name: Install dependencies
+        run: |
+          install.packages(c("remotes", "rcmdcheck"))
+          remotes::install_deps(dependencies = TRUE)
+        shell: Rscript {0}
+      - name: Check
+        run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
+        shell: Rscript {0}
