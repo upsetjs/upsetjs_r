@@ -120,7 +120,10 @@
 
       if (HTMLWidgets.shinyMode) {
         props.onClick = function(set) {
-          Shiny.onInputChange(el.id + "_click", set ? set.name : null);
+          Shiny.onInputChange(el.id + "_click", {
+            name: set ? set.name : null,
+            elems: set ? set.elems || [] : []
+          });
         };
       }
 
@@ -182,7 +185,10 @@
 
       const onHover = function(set) {
         if (HTMLWidgets.shinyMode) {
-          Shiny.onInputChange(el.id + "_hover", set ? set.name : null);
+          Shiny.onInputChange(el.id + "_hover", {
+            name: set ? set.name : null,
+            elems: set ? set.elems || [] : []
+          });
         }
         if (!props.interactive) {
           return;
