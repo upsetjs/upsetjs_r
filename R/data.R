@@ -22,8 +22,8 @@ fromList = function(upsetjs, value, order.by = "freq") {
   # list of list objects
   names(sets) = NULL
 
-  sets = sortSets(sets, order.by = order.by)
-  setProperty(upsetjs, 'sets', sets)
+  sets = sortSets(sets, order.by = order.by)  
+  setProperties(upsetjs, list(sets=sets, combinations=list(mode="intersections", order=order.by)))
 }
 
 #'
@@ -73,7 +73,7 @@ fromDataFrame = function(upsetjs, df, order.by = "freq") {
   sets = lapply(colnames(df), toSet)
 
   sets = sortSets(sets, order.by = order.by)
-  setProperty(upsetjs, 'sets', sets)
+  setProperties(upsetjs, list(sets=sets, combinations=list(mode="intersections", order=order.by)))
 }
 
 #'

@@ -66,7 +66,7 @@
         }
         return set;
       }),
-      "intersection",
+      "composite",
       function(s) {
         return s.setNames
           .map(function(si) {
@@ -100,6 +100,8 @@
             props.combinations = c;
           }
         }
+        if (typeof props.selection === "string") {
+        }
       };
 
       const update = function(delta) {
@@ -111,7 +113,7 @@
       if (HTMLWidgets.shinyMode) {
         // TODO register event handlers
         props.onClick = function(set) {
-          Shiny.onInputChange(outputId + "_click", set ? set.name : null);
+          Shiny.onInputChange(outputId + "_click", set ? set.namk : null);
         };
         props.onHover = function(set) {
           Shiny.onInputChange(outputId + "_hover", set ? set.name : null);
