@@ -2,3 +2,5 @@
 .Rhistory
 .RData
 examples/*.html
+doc
+Meta

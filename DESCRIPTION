@@ -20,3 +20,6 @@ Imports:
   magrittr
 LazyData: true
 RoxygenNote: 7.0.2
+VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE)
+Language: en-US

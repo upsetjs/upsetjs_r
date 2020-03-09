@@ -26,26 +26,29 @@ library(upsetjs)
 
 ## List Input
 
+see also UpsetR
+
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
 
-# example of list input (list of named vectors)
-listInput <- list(one = c(1, 2, 3, 5, 7, 8, 11, 12, 13), two = c(1, 2, 4, 5, 
+# example of list input (list of named vectors, each having a list of contained elements)
+listInput <- list(one = c(1, 2, 3, 5, 7, 8, 11, 12, 13), two = c(1, 2, 4, 5,
     10), three = c(1, 5, 6, 7, 8, 9, 10, 12, 13))
 
-upsetjs() %>% 
+upsetjs() %>%
   fromList(listInput)
 ```
 
+see also UpsetR
 
 ## Expression Input
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
 
 # example of expression input
-expressionInput <- c(one = 2, two = 1, three = 2, `one&two` = 1, `one&three` = 4, 
+expressionInput <- c(one = 2, two = 1, three = 2, `one&two` = 1, `one&three` = 4,
     `two&three` = 1, `one&two&three` = 2)
 
 
-upsetjs() %>% 
+upsetjs() %>%
   fromExpression(expressionInput)
 ```
 
@@ -57,48 +60,52 @@ upsetjs() %>%
 dataFrame <- as.data.frame(list(one=c(1, 0, 1), two=c(0, 1, 0)), row.names=c("R1", "R2", "R3"))
 
 
-upsetjs() %>% 
+upsetjs() %>%
   fromDataFrame(dataFrame)
 ```
 
 # Styling, Layout
 
-```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
-upsetjs() %>% 
-  fromList(listInput) %>%
-  chartLabels(combinations.y.label = "My Combinations", sets.x.label = 'My Sets')
-```
-```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
-upsetjs() %>% 
-  fromList(listInput) %>%
-  chartLayout(height.ratios = c(0.3, 0.7))
-```
+set custom labels
 
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
-upsetjs() %>% 
+upsetjs() %>%
   fromList(listInput) %>%
   chartLabels(combinations.y.label = "My Combinations", sets.x.label = 'My Sets')
+```
+
+tune layout to ones needs
+
+```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
+upsetjs() %>%
+  fromList(listInput) %>%
+  chartLayout(height.ratios = c(0.3, 0.7))
 ```
 
 # Selection
 
 ## Single Selection
+
+specify the set to select identified by name or in case of a combination as list of names
+
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
-upsetjs() %>% 
+upsetjs() %>%
   fromList(listInput) %>%
   setSelection("one")
 ```
 
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
-upsetjs() %>% 
+upsetjs() %>%
   fromList(listInput) %>%
   setSelection(c("one", "two"))
 ```
 
 ## Queries
 
+add highlighted queries to the plot. A query can be a set (see selection) or a list of elements to highlight
+
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
-upsetjs() %>% 
+upsetjs() %>%
   fromList(listInput) %>%
   addQuery("Q1", color="steelblue", set="one") %>%
   addQuery("Q2", color="red", elems=c(1,2,4))
@@ -106,8 +113,10 @@ upsetjs() %>%
 
 # Interactivity
 
+by setting this flag, the user can interactively highlight sets within the chart.
+
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
-upsetjs() %>% 
+upsetjs() %>%
   fromList(listInput) %>%
   interactiveChart()
 ```
