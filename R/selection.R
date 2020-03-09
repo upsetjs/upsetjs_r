@@ -13,6 +13,7 @@ setSelection = function(upsetjs, name = NULL) {
 #'
 #' interactive
 #' @param upsetjs the upsetjs (proxy) instance
+#' @param value whether to enable or disable
 #'
 #' @export
 interactiveChart = function(upsetjs, value = TRUE) {

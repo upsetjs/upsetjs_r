@@ -36,6 +36,7 @@ clearQueries = function(upsetjs) {
 #'
 #' renders a legend for the queries
 #' @param upsetjs the upsetjs (proxy) instance
+#' @param value whether to enable or disable
 #' @export
 queryLegend = function(upsets, value=TRUE) {
   setProperty(upsetjs, "queryLegend", value)

@@ -1,7 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 .editorconfig
-.circleci
 examples
 ^doc$
 ^Meta$
+.github

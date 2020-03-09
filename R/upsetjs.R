@@ -70,6 +70,8 @@ upsetjs = function(width = '100%',
 
 #'
 #' reactive helper to update an upsetjs inplace
+#' @param outputId the id of the upsetjs widget
+#' @param session current shiny session
 #'
 #' @export
 upsetjsProxy = function(outputId, session) {
@@ -84,12 +86,3 @@ upsetjsProxy = function(outputId, session) {
     class = "upsetjs_proxy"
   )
 }
-
-
-# empty.intersections = "on"
-# list(query = intersects, params = list("Drama", "Comedy", "Action"), color = "orange", active = T)
-
-
-# sets = c("PTEN", "TP53", "EGFR", "PIK3R1", "RB1")
-# nsets
-

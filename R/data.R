@@ -12,6 +12,7 @@ sortSets = function(sets, order.by = 'freq') {
 #' generates the sets from a lists object
 #' @param upsetjs the upsetjs (proxy) instance
 #' @param value the list input value
+#' @param order.by order intersections by frequency (freq) or degree (deg)
 #'
 #' @export
 fromList = function(upsetjs, value, order.by = "freq") {
@@ -22,7 +23,7 @@ fromList = function(upsetjs, value, order.by = "freq") {
   # list of list objects
   names(sets) = NULL
 
-  sets = sortSets(sets, order.by = order.by)  
+  sets = sortSets(sets, order.by = order.by)
   setProperties(upsetjs, list(sets=sets, combinations=list(mode="intersections", order=order.by)))
 }
 
@@ -31,6 +32,7 @@ fromList = function(upsetjs, value, order.by = "freq") {
 #' @param upsetjs the upsetjs (proxy) instance
 #' @param value the expression list input
 #' @param symbol the symbol how to split list names to get the sets
+#' @param order.by order intersections by frequency (freq) or degree (deg)
 #'
 #' @export
 fromExpression = function(upsetjs, value, symbol = "&", order.by = "freq") {
@@ -62,6 +64,7 @@ fromExpression = function(upsetjs, value, symbol = "&", order.by = "freq") {
 #' extract the sets from a data frame (rows = elems, columns = sets, cell = contained)
 #' @param upsetjs the upsetjs (proxy) instance
 #' @param df the data.frame like structure
+#' @param order.by order intersections by frequency (freq) or degree (deg)
 #'
 #' @export
 fromDataFrame = function(upsetjs, df, order.by = "freq") {
@@ -79,19 +82,28 @@ fromDataFrame = function(upsetjs, df, order.by = "freq") {
 #'
 #' generate intersections
 #' @param upsetjs the upsetjs (proxy) instance
+#' @param min minimum number of sets in an intersection
+#' @param max maximum number of sets in an intersection
+#' @param empty whether to include empty intersections or not
+#' @param order.by order intersections by frequency (freq) or degree (deg)
+#' @param limit limit the number of intersections to the top N
 #'
 #' @export
-generateIntersections = function(upsetjs, min=NULL, max=NULL, empty=NULL, order.by = "freq") {
-  gen = list(mode="intersection", min=min, max=max, empty=empty, order=order.by)
+generateIntersections = function(upsetjs, min=NULL, max=NULL, empty=NULL, order.by = "freq", limit=NULL) {
+  gen = list(mode="intersection", min=min, max=max, empty=empty, order=order.by, limit=limit)
   setProperty(upsetjs, 'combinations', cleanNull(gen))
 }
 
 #'
-#' generate intersections
+#' generate unions
+#' @param min minimum number of sets in an union
+#' @param max maximum number of sets in an union
 #' @param upsetjs the upsetjs (proxy) instance
+#' @param order.by order intersections by frequency (freq) or degree (deg)
+#' @param limit limit the number of intersections to the top N
 #'
 #' @export
-generateUnions = function(upsetjs, min=NULL, max=NULL, order.by = "freq") {
-  gen = list(mode="union", min=min, max=max, order=order.by)
+generateUnions = function(upsetjs, min=NULL, max=NULL, order.by = "freq", limit=NULL) {
+  gen = list(mode="union", min=min, max=max, order=order.by, limit=limit)
   setProperty(upsetjs, 'combinations', cleanNull(gen))
 }
