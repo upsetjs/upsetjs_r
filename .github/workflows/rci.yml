@@ -9,10 +9,7 @@ jobs:
       image: rstudio/r-base:3.6-bionic
     steps:
       - uses: actions/checkout@v2
+      - name: Install Devtools
+        run: Rscript -e "install.packages('devtools', quiet=TRUE)"
       - name: Check Package
-        run: Rscript -e "rcmdcheck::rcmdcheck(error_on = 'error', check_dir = 'check')"
-      - name: Run Code Coverage
-        run: Rscript -e "covr::codecov(quiet = FALSE, commit = '$GITHUB_SHA', branch = '$GITHUB_REF', token = '$${{ secrets.CODECOV_TOKEN }}')"
-      - name: Document Package
-        run: |
-          Rscript -e "pkgdown::build_site(override = list(devel = FALSE, external = FALSE))"
+        run: Rscript -e "devtools::check()"
