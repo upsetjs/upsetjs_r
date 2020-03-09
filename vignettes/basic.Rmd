@@ -73,3 +73,34 @@ upsetjs() %>%
   fromList(listInput) %>%
   chartLayout(height.ratios = c(0.3, 0.7))
 ```
+
+```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
+upsetjs() %>% 
+  fromList(listInput) %>%
+  chartLabels(combinations.y.label = "My Combinations", sets.x.label = 'My Sets')
+```
+
+# Selection
+
+## Single Selection
+```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
+upsetjs() %>% 
+  fromList(listInput) %>%
+  setSelection("one")
+```
+
+```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
+upsetjs() %>% 
+  fromList(listInput) %>%
+  setSelection(c("one", "two"))
+```
+
+## Queries
+
+
+```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
+upsetjs() %>% 
+  fromList(listInput) %>%
+  addQuery("Q1", color="steelblue", set="one") %>%
+  addQuery("Q2", color="red", elems=c(1,2,4))
+```

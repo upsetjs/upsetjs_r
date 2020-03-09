@@ -1,12 +1,13 @@
 
-sendMessage = function(upsetjs_proxy, props) {
+sendMessage = function(upsetjs_proxy, props, ...) {
   session = upsetjs_proxy$session
   id = upsetjs_proxy$id
 
   msg = structure(
     list(
       id = id,
-      props = props
+      props = props,
+      ...
     ),
     class = "upsetjs_msg"
   )
@@ -23,6 +24,21 @@ setProperty = function(upsetjs, prop, value) {
     props = list()
     props[[prop]] = value
     sendMessage(upsetjs, props)
+  }
+  upsetjs
+}
+
+appendProperty = function(upsetjs, prop, value) {
+  if (inherits(upsetjs, 'upsetjs')) {
+    if (is.null(upsetjs$x[[prop]])) {
+      upsetjs$x[[prop]] = list(value)
+    } else {
+      upsetjs$x[[prop]] = c(upsetjs$x[[prop]], list(value))
+    }
+  } else if (inherits(upsetjs, 'upsetjs_proxy')) {
+    props = list()
+    props[[prop]] = value
+    sendMessage(upsetjs, props, append=TRUE)
   }
   upsetjs
 }

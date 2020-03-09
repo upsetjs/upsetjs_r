@@ -679,7 +679,7 @@
 
   function fromSetName(sets, symbol) {
     if (symbol === void 0) {
-      symbol = /[∩∪]/;
+      symbol = /[∩∪&|]/;
     }
 
     var byName = new Map(sets.map(function (s) {
@@ -3303,6 +3303,10 @@
     return Array.isArray(q.elems);
   }
 
+  function isSetQuery(q) {
+    return q.set != null;
+  }
+
   function elemOverlapOf(query) {
     var f = setOverlapFactory(query);
     return function (s) {
@@ -3370,7 +3374,7 @@
     var qs = React.useMemo(function () {
       return queries.map(function (q) {
         return _extends$1({}, q, {
-          overlap: isElemQuery(q) ? elemOverlapOf(q.elems) : q.overlap
+          overlap: isElemQuery(q) ? elemOverlapOf(q.elems) : isSetQuery(q) ? elemOverlapOf(q.set.elems) : q.overlap
         });
       });
     }, [queries]); // const [selection, setSelection] = useState(null as ISet<T> | null);

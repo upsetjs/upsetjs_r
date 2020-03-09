@@ -77,27 +77,32 @@
     );
   }
 
-  function resolveSelection(selection, sets, combinations) {
+  function toUnifiedCombinationName(c) {
+    return Array.from(c.sets)
+      .map(function(s) {
+        return s.name;
+      })
+      .sort()
+      .join("&");
+  }
+
+  function resolveSet(set, sets, combinations) {
     const s = sets.find(function(s) {
-      return s.name === selection;
+      return s.name === set;
     });
     if (s) {
       return s;
     }
-    const combinedNames = Array.isArray(selection)
-      ? selection
+    const combinedNames = Array.isArray(set)
+      ? set
           .slice()
           .sort()
           .join("&")
       : null;
-    const c = combinations.find(function(c) {
+    return combinations.find(function(c) {
       return (
-        c.name === selection ||
-        (combinedNames &&
-          combinedNames ===
-            Array.from(c.sets)
-              .sort()
-              .join("&"))
+        c.name === set ||
+        (combinedNames && combinedNames === toUnifiedCombinationName(c))
       );
     });
   }
@@ -131,8 +136,11 @@
             props.combinations = c;
           }
         }
-        if (typeof props.selection === "string") {
-          props.selection = resolveSelection(
+        if (
+          typeof props.selection === "string" ||
+          Array.isArray(props.selection)
+        ) {
+          props.selection = resolveSet(
             props.selection,
             props.sets,
             props.combinations
@@ -140,11 +148,31 @@
         }
         props.onHover =
           props.interactive || HTMLWidgets.shinyMode ? onHover : undefined;
+
+        if (delta.queries) {
+          props.queries.forEach(function(query) {
+            if (typeof query.set === "string" || Array.isArray(query.set)) {
+              query.set = resolveSet(query.set, props.sets, props.combinations);
+            } else if (
+              typeof query.elems !== "undefined" &&
+              !Array.isArray(query.elems)
+            ) {
+              query.elems = [query.elems];
+            }
+          });
+        }
       }
 
-      function update(delta) {
+      function update(delta, append) {
         if (delta) {
-          Object.assign(props, delta);
+          if (append) {
+            Object.keys(delta).forEach(function(key) {
+              const old = props[key] || [];
+              props[key] = old.concat(delta[key]);
+            });
+          } else {
+            Object.assign(props, delta);
+          }
           fixProps(props, delta);
         }
         UpSetJS.renderUpSet(el, props);
@@ -194,7 +222,7 @@
     Shiny.addCustomMessageHandler("upsetjs-update", function(msg) {
       const el = document.getElementById(msg.id);
       if (typeof el.__update === "function") {
-        el.__update(msg.props);
+        el.__update(msg.props, msg.append);
       }
     });
   }
