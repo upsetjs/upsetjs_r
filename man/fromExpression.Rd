@@ -2,10 +2,17 @@
 % Please edit documentation in R/data.R
 \name{fromExpression}
 \alias{fromExpression}
-\title{generates the sets from a lists object that contained the cardinalties of both sets and combinations (+)}
+\title{generates the sets from a lists object that contained the cardinalties of both sets and combinations (&)}
 \usage{
-fromExpression(upsetjs, value, order.by = "freq")
+fromExpression(upsetjs, value, symbol = "&", order.by = "freq")
+}
+\arguments{
+\item{upsetjs}{the upsetjs (proxy) instance}
+
+\item{value}{the expression list input}
+
+\item{symbol}{the symbol how to split list names to get the sets}
 }
 \description{
-generates the sets from a lists object that contained the cardinalties of both sets and combinations (+)
+generates the sets from a lists object that contained the cardinalties of both sets and combinations (&)
 }

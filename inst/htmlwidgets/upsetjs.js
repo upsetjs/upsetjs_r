@@ -113,7 +113,13 @@
         height: height
       };
 
-      const fixProps = function(props, delta) {
+      if (HTMLWidgets.shinyMode) {
+        props.onClick = function(set) {
+          Shiny.onInputChange(el.id + "_click", set ? set.name : null);
+        };
+      }
+
+      function fixProps(props, delta) {
         if (delta.sets != null) {
           props.sets = fixSets(props.sets);
         }
@@ -132,23 +138,38 @@
             props.combinations
           );
         }
-      };
-
-      const update = function(delta) {
-        Object.assign(props, delta);
-        fixProps(props, delta);
-        UpSetJS.renderUpSet(el, props);
-      };
-
-      if (HTMLWidgets.shinyMode) {
-        // TODO register event handlers
-        props.onClick = function(set) {
-          Shiny.onInputChange(outputId + "_click", set ? set.namk : null);
-        };
-        props.onHover = function(set) {
-          Shiny.onInputChange(outputId + "_hover", set ? set.name : null);
-        };
+        props.onHover =
+          props.interactive || HTMLWidgets.shinyMode ? onHover : undefined;
       }
+
+      function update(delta) {
+        if (delta) {
+          Object.assign(props, delta);
+          fixProps(props, delta);
+        }
+        UpSetJS.renderUpSet(el, props);
+      }
+
+      var bakSelection = null;
+
+      const onHover = function(set) {
+        if (HTMLWidgets.shinyMode) {
+          Shiny.onInputChange(el.id + "_hover", set ? set.name : null);
+        }
+        if (!props.interactive) {
+          return;
+        }
+        if (set) {
+          // hover on
+          bakSelection = props.selection;
+          props.selection = set;
+        } else {
+          // hover off
+          props.selection = bakSelection;
+          bakSelection = null;
+        }
+        update();
+      };
 
       el.__update = update;
 

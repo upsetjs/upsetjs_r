@@ -6,6 +6,9 @@
 \usage{
 chartLabels(upsetjs, combinations.y.label = NULL, sets.x.label = NULL)
 }
+\arguments{
+\item{upsetjs}{the upsetjs (proxy) instance}
+}
 \description{
 specify chart labels
 }

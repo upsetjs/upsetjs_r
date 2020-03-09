@@ -6,6 +6,11 @@
 \usage{
 fromDataFrame(upsetjs, df, order.by = "freq")
 }
+\arguments{
+\item{upsetjs}{the upsetjs (proxy) instance}
+
+\item{df}{the data.frame like structure}
+}
 \description{
 extract the sets from a data frame (rows = elems, columns = sets, cell = contained)
 }
