@@ -18,6 +18,9 @@ Imports:
   htmltools,
   crosstalk,
   magrittr
+Suggests:
+  knitr,
+  rmarkdown
 LazyData: true
 RoxygenNote: 7.0.2
 VignetteBuilder: knitr
