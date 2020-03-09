@@ -3,9 +3,8 @@ Type: Package
 Title: 'HTMLWidget' Wrapper of 'UpSet' for TODO
 Description: 'UpSet' is an interactive technique TODO
   This is a 'htmlwidget' wrapper around the JavaScript library 'UpSet.js'.
-  It is designed to be used in 'R Shiny' apps and 'R Markddown' files.
 Version: 0.1.0
-Date: 2019-09-17
+Date: 2020-03-09
 Authors@R: person("Samuel", "Gratzl", email = "sam@sgratzl.com", role = c("aut", "cre"))
 Maintainer: Samuel Gratzl <sam@sgratzl.com>
 URL: https://github.com/upsetjs/upset_r/
