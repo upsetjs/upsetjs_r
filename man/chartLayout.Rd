@@ -14,6 +14,14 @@ chartLayout(
 }
 \arguments{
 \item{upsetjs}{the upsetjs (proxy) instance}
+
+\item{height.ratios}{a vector of length 2 for the ratios between the combination and set plot, e.g. c(0.6, 0.4)}
+
+\item{width.ratios}{a vector of length 3 for the ratios between set, label, and combination plot, e.g. c(0.3,0.2,0.5)}
+
+\item{padding}{padding around the plot}
+
+\item{bar.padding}{padding ratio (e.g., 0.2) for the bar charts}
 }
 \description{
 specify the chart layout

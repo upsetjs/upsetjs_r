@@ -8,6 +8,8 @@ chartLabels(upsetjs, combinations.y.label = NULL, sets.x.label = NULL)
 }
 \arguments{
 \item{upsetjs}{the upsetjs (proxy) instance}
+
+\item{combinations.y.label}{the label for the combination chart}
 }
 \description{
 specify chart labels

@@ -10,6 +10,8 @@ fromList(upsetjs, value, order.by = "freq")
 \item{upsetjs}{the upsetjs (proxy) instance}
 
 \item{value}{the list input value}
+
+\item{order.by}{order intersections by frequency (freq) or degree (deg)}
 }
 \description{
 generates the sets from a lists object

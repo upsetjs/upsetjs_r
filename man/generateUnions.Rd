@@ -2,13 +2,27 @@
 % Please edit documentation in R/data.R
 \name{generateUnions}
 \alias{generateUnions}
-\title{generate intersections}
+\title{generate unions}
 \usage{
-generateUnions(upsetjs, min = NULL, max = NULL, order.by = "freq")
+generateUnions(
+  upsetjs,
+  min = NULL,
+  max = NULL,
+  order.by = "freq",
+  limit = NULL
+)
 }
 \arguments{
 \item{upsetjs}{the upsetjs (proxy) instance}
+
+\item{min}{minimum number of sets in an union}
+
+\item{max}{maximum number of sets in an union}
+
+\item{order.by}{order intersections by frequency (freq) or degree (deg)}
+
+\item{limit}{limit the number of intersections to the top N}
 }
 \description{
-generate intersections
+generate unions
 }

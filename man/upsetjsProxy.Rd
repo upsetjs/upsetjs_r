@@ -6,6 +6,11 @@
 \usage{
 upsetjsProxy(outputId, session)
 }
+\arguments{
+\item{outputId}{the id of the upsetjs widget}
+
+\item{session}{current shiny session}
+}
 \description{
 reactive helper to update an upsetjs inplace
 }

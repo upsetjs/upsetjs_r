@@ -8,6 +8,8 @@ interactiveChart(upsetjs, value = TRUE)
 }
 \arguments{
 \item{upsetjs}{the upsetjs (proxy) instance}
+
+\item{value}{whether to enable or disable}
 }
 \description{
 interactive

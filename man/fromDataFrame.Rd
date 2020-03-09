@@ -10,6 +10,8 @@ fromDataFrame(upsetjs, df, order.by = "freq")
 \item{upsetjs}{the upsetjs (proxy) instance}
 
 \item{df}{the data.frame like structure}
+
+\item{order.by}{order intersections by frequency (freq) or degree (deg)}
 }
 \description{
 extract the sets from a data frame (rows = elems, columns = sets, cell = contained)

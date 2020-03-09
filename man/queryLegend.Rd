@@ -7,6 +7,8 @@
 queryLegend(upsets, value = TRUE)
 }
 \arguments{
+\item{value}{whether to enable or disable}
+
 \item{upsetjs}{the upsetjs (proxy) instance}
 }
 \description{

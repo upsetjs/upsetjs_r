@@ -9,11 +9,22 @@ generateIntersections(
   min = NULL,
   max = NULL,
   empty = NULL,
-  order.by = "freq"
+  order.by = "freq",
+  limit = NULL
 )
 }
 \arguments{
 \item{upsetjs}{the upsetjs (proxy) instance}
+
+\item{min}{minimum number of sets in an intersection}
+
+\item{max}{maximum number of sets in an intersection}
+
+\item{empty}{whether to include empty intersections or not}
+
+\item{order.by}{order intersections by frequency (freq) or degree (deg)}
+
+\item{limit}{limit the number of intersections to the top N}
 }
 \description{
 generate intersections

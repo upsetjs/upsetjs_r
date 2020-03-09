@@ -64,6 +64,18 @@ upsetjs() %>%
   fromDataFrame(dataFrame)
 ```
 
+# Intersections
+
+In case of an `expressionInput` the combinations of sets are directly given. In all other cases they will be generated. The generation can be customized to limit the number of generated combinations (intersections or unions)
+
+
+```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
+
+upsetjs() %>%
+  fromList(listInput) %>%
+  generateIntersections(min=2) # at least two sets combined
+```
+
 # Styling, Layout
 
 set custom labels

@@ -12,6 +12,8 @@ fromExpression(upsetjs, value, symbol = "&", order.by = "freq")
 \item{value}{the expression list input}
 
 \item{symbol}{the symbol how to split list names to get the sets}
+
+\item{order.by}{order intersections by frequency (freq) or degree (deg)}
 }
 \description{
 generates the sets from a lists object that contained the cardinalties of both sets and combinations (&)
