@@ -97,10 +97,17 @@ upsetjs() %>%
 
 ## Queries
 
-
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
 upsetjs() %>% 
   fromList(listInput) %>%
   addQuery("Q1", color="steelblue", set="one") %>%
   addQuery("Q2", color="red", elems=c(1,2,4))
+```
+
+# Interactivity
+
+```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
+upsetjs() %>% 
+  fromList(listInput) %>%
+  interactiveChart()
 ```
