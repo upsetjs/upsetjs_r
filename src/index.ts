@@ -1,4 +1,5 @@
 import 'core-js';
+import 'regenerator-runtime/runtime';
 import { asSets, asCombinations, GenerateSetCombinationsOptions, ISet, ISets, UpSetProps, renderUpSet, ISetCombinations, ISetCombination, generateCombinations, isSetQuery, isElemQuery, ISetLike} from '@upsetjs/bundle';
 
 declare type HTMLWidget = {

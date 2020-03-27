@@ -14,7 +14,7 @@
   },
   "scripts": {
     "lint": "eslint src --ext .js",
-    "build:dev": "webpack-cli -d",
+    "build:dev": "webpack-cli -d --devtool source-map",
     "build": "webpack-cli -p"
   },
   "browserslist": [
@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "@upsetjs/bundle": "0.3.2",
-    "core-js": "^3.6.4"
+    "core-js": "^2",
+    "regenerator-runtime": "^0.13.5"
   }
 }

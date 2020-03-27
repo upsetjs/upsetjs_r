@@ -1119,7 +1119,7 @@ __metadata:
     "@yarnpkg/pnpify": ^2.0.0-rc.20
     babel-eslint: ^10.1.0
     babel-loader: ^8.0.6
-    core-js: ^3.6.4
+    core-js: ^2
     eslint: ^6.8.0
     eslint-config-prettier: ^6.10.0
     eslint-config-react-app: ^5.2.0
@@ -1132,6 +1132,7 @@ __metadata:
     html-webpack-plugin: ^3.2.0
     pnp-webpack-plugin: ^1.6.4
     prettier: ^1.19.1
+    regenerator-runtime: ^0.13.5
     ts-loader: ^6.2.1
     tslib: ^1.11.1
     typescript: ^3.8.3
@@ -2384,10 +2385,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:^3.6.4":
-  version: 3.6.4
-  resolution: "core-js@npm:3.6.4"
-  checksum: 2/30c4178f2b88e758b4202daf0b8651efd0c6a9f058b50638b1194614c15d31da83a504278b448da1385a594e27dbfcdf2d4bea8d6c6115fbe5cfef0b8734404c
+"core-js@npm:^2":
+  version: 2.6.11
+  resolution: "core-js@npm:2.6.11"
+  checksum: 2/39ad00b46deaecf344470ef940949b58c4b15e71608a98e8ac7429cd16e485b829f9720d44a44b5f4dee966ff04a18baf5283feb8aaba2cb59ce2c25fa72b88c
   languageName: node
   linkType: hard
 
@@ -6027,7 +6028,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"regenerator-runtime@npm:^0.13.4":
+"regenerator-runtime@npm:^0.13.4, regenerator-runtime@npm:^0.13.5":
   version: 0.13.5
   resolution: "regenerator-runtime@npm:0.13.5"
   checksum: 2/8d8ee0eca26e0491085033caf2b1b95379c4db21e38d79cde52bbd4014a3865eee26ec0f4f958682e8600f185f2f5dbcd8c6685b9b9261639767929c19b5bcd2
