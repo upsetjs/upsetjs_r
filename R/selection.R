@@ -6,7 +6,7 @@
 #' @param name the selection to set
 #'
 #' @export
-setSelection = function(upsetjs, name = NULL) {
+setSelection = function(upsetjs, name=NULL) {
   setProperty(upsetjs, "selection", name)
 }
 
@@ -16,6 +16,6 @@ setSelection = function(upsetjs, name = NULL) {
 #' @param value whether to enable or disable
 #'
 #' @export
-interactiveChart = function(upsetjs, value = TRUE) {
+interactiveChart = function(upsetjs, value=TRUE) {
   setProperty(upsetjs, "interactive", value)
 }

@@ -6,7 +6,7 @@
 #' @param queries the queries to set
 #'
 #' @export
-setQueries = function(upsetjs, queries = list()) {
+setQueries = function(upsetjs, queries=list()) {
   setProperty(upsetjs, "queries", queries)
 }
 
@@ -19,7 +19,7 @@ setQueries = function(upsetjs, queries = list()) {
 #' @param set the set name, similar to the selection
 #'
 #' @export
-addQuery = function(upsetjs, name, color, elems = NULL, set = NULL) {
+addQuery = function(upsetjs, name, color, elems=NULL, set=NULL) {
   appendProperty(upsetjs, "queries", cleanNull(list(name=name, color=color, elems=elems, set=set)))
 }
 
