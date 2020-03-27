@@ -74,7 +74,7 @@ HTMLWidgets.widget({
       renderUpSet(el, props);
     }
 
-    let bakSelection: ISetLike<any> | null | undefined = null;
+    let bakSelection: ISetLike<any> | null | undefined | ReadonlyArray<any> = null;
 
     const onHover = (set: ISet<any> | null) => {
       if (HTMLWidgets.shinyMode) {

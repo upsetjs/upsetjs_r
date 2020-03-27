@@ -1199,20 +1199,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@upsetjs/bundle@npm:^0.3.2":
-  version: 0.3.2
-  resolution: "@upsetjs/bundle@npm:0.3.2"
+"@upsetjs/bundle@npm:^0.3.3":
+  version: 0.3.3
+  resolution: "@upsetjs/bundle@npm:0.3.3"
   dependencies:
-    "@upsetjs/model": ^0.3.2
+    "@upsetjs/model": ^0.3.5
     eventemitter3: ^4.0.0
-  checksum: 2/d3d830b935551ef2243c3af091fc6e5776c6846279f469c794d311d8b827dc5d2a7449a324fd440459cfb7ebe937c21421aa62ec63ecee4193a15cddcd31de5f
+  checksum: 2/e056a36032d9c9ffaaa6322ce7e04900605304a7eb8f1b3bdac6d6f68503470a1edb1b256ec020d65f5a3c2c9ab29e85d160709ca7213961ca455c04132836a2
   languageName: node
   linkType: hard
 
-"@upsetjs/model@npm:^0.3.2":
-  version: 0.3.2
-  resolution: "@upsetjs/model@npm:0.3.2"
-  checksum: 2/3985794739b9b1cccf47d7f4cb2f049a1dfd906a072de78ec1f6e53672f45a49d79f7177539b6b3451f2a0d6293271fb0990a99d849ba00527fdda98fa047bf3
+"@upsetjs/model@npm:^0.3.5":
+  version: 0.3.5
+  resolution: "@upsetjs/model@npm:0.3.5"
+  checksum: 2/c29a6ad8e6cab63475da42c6df1bac120934c7f51d08bc5d9c3770851128a69b528902a74cc23a6a84b3d2b8b5ab1cdb2a222189698c939c815807f83e7fdd52
   languageName: node
   linkType: hard
 
@@ -1224,7 +1224,7 @@ __metadata:
     "@babel/preset-env": ^7.9.0
     "@typescript-eslint/eslint-plugin": ^2.25.0
     "@typescript-eslint/parser": ^2.25.0
-    "@upsetjs/bundle": ^0.3.2
+    "@upsetjs/bundle": ^0.3.3
     "@yarnpkg/pnpify": ^2.0.0-rc.20
     babel-eslint: ^10.1.0
     babel-loader: ^8.1.0

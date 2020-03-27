@@ -47,7 +47,7 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
-    "@upsetjs/bundle": "^0.3.2",
+    "@upsetjs/bundle": "^0.3.3",
     "core-js": "^2",
     "regenerator-runtime": "^0.13.5"
   }
