@@ -1,4 +1,4 @@
-export declare type HTMLWidget = {
+declare type HTMLWidget = {
   name: string;
   type: 'output';
   factory(
@@ -11,13 +11,13 @@ export declare type HTMLWidget = {
   };
 };
 
-export declare const HTMLWidgets: {
+declare const HTMLWidgets: {
   shinyMode: boolean;
   viewerMode: boolean;
   widget(widget: HTMLWidget): void;
 };
 
-export declare const Shiny: {
+declare const Shiny: {
   onInputChange(event: string, msg: any): void;
   addCustomMessageHandler(type: string, callback: (msg: any) => void): void;
 };
@@ -70,7 +70,7 @@ declare class FilterHandle {
   clear(): void;
 }
 
-export declare const crosstalk: {
+declare const crosstalk: {
   SelectionHandle: typeof SelectionHandle;
   FilterHandle: typeof FilterHandle;
 };

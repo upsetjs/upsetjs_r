@@ -17,10 +17,10 @@ sendMessage = function(upsetjs_proxy, props, ...) {
   upsetjs_proxy
 }
 
-enableCrosstalk = function(upsetjs, shared) {
+enableCrosstalk = function(upsetjs, shared, mode) {
   if (inherits(upsetjs, 'upsetjs') && "crosstalk" %in% rownames(installed.packages()) && crosstalk::is.SharedData(shared)) {
     upsetjs$dependencies = c(upsetjs$dependencies, crosstalk::crosstalkLibs())
-    upsetjs$x$crosstalk = list(key=shared$key(), group=shared$groupName())
+    upsetjs$x$crosstalk = list(group=shared$groupName(), mode=mode)
   }
   upsetjs
 }

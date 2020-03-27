@@ -19,9 +19,11 @@ sortSets = function(sets, order.by='cardinality', limit=NULL) {
 #' @param value the list input value
 #' @param order.by order intersections by cardinality or degree
 #' @param limit limit the ordered sets to the given limit
+#' @param shared a crosstalk shared data frame
+#' @param shared.mode whether on 'hover' or 'click' (default) is synced
 #'
 #' @export
-fromList = function(upsetjs, value, order.by="cardinality", limit=NULL, shared=NULL) {
+fromList = function(upsetjs, value, order.by="cardinality", limit=NULL, shared=NULL, shared.mode="click") {
   toSet = function(key, value) {
     list(name=key, elems=value, cardinality=length(value))
   }
@@ -30,7 +32,7 @@ fromList = function(upsetjs, value, order.by="cardinality", limit=NULL, shared=N
   names(sets) = NULL
 
   if (!is.null(shared)) {
-     enableCrosstalk(upsetjs, shared)
+     upsetjs = enableCrosstalk(upsetjs, shared, mode=shared.mode)
   }
 
   sets = sortSets(sets, order.by=order.by, limit=limit)
@@ -76,9 +78,11 @@ fromExpression = function(upsetjs, value, symbol="&", order.by="cardinality") {
 #' @param df the data.frame like structure
 #' @param order.by order intersections by cardinality or degree
 #' @param limit limit the ordered sets to the given limit
+#' @param shared a crosstalk shared data frame
+#' @param shared.mode whether on 'hover' or 'click' (default) is synced
 #'
 #' @export
-fromDataFrame = function(upsetjs, df, order.by="cardinality", limit=NULL, shared=NULL) {
+fromDataFrame = function(upsetjs, df, order.by="cardinality", limit=NULL, shared=NULL, shared.mode="click") {
   elems = rownames(df)
   toSet = function(key) {
     sub = elems[df[[key]] == T]
@@ -87,9 +91,9 @@ fromDataFrame = function(upsetjs, df, order.by="cardinality", limit=NULL, shared
   sets = lapply(colnames(df), toSet)
 
   if (!is.null(shared)) {
-    enableCrosstalk(upsetjs, shared)
+    upsetjs = enableCrosstalk(upsetjs, shared, mode=shared.mode)
   } else {
-    enableCrosstalk(upsetjs, df)
+    upsetjs = enableCrosstalk(upsetjs, df, mode=shared.mode)
   }
 
   sets = sortSets(sets, order.by=order.by, limit=limit)

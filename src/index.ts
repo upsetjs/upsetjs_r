@@ -1,12 +1,13 @@
+/// <reference path="../types/index.d.ts" />
+
 import 'core-js';
 import 'regenerator-runtime/runtime';
 import { isElemQuery, ISet, ISetCombinations, ISetLike, isSetQuery, renderUpSet, UpSetProps } from '@upsetjs/bundle';
-import { crosstalk, HTMLWidgets, Shiny } from './types';
 import { fixCombinations, fixSets, resolveSet, resolveSetByElems } from './utils';
 
 declare type CrosstalkOptions = {
-  key: string;
   group: string;
+  mode: 'click' | 'hover';
 };
 
 declare type ShinyUpSetProps = UpSetProps<any> & {
@@ -15,6 +16,7 @@ declare type ShinyUpSetProps = UpSetProps<any> & {
 };
 
 declare type CrosstalkHandler = {
+  mode: 'click' | 'hover';
   update(options: CrosstalkOptions): void;
   trigger(elems?: ReadonlyArray<string>): void;
 };
@@ -29,6 +31,7 @@ HTMLWidgets.widget({
       width,
       height,
     };
+    let crosstalkHandler: CrosstalkHandler | null = null;
 
     function fixProps(props: ShinyUpSetProps, delta: any) {
       if (delta.sets != null) {
@@ -83,8 +86,12 @@ HTMLWidgets.widget({
           elems: set ? set.elems || [] : [],
         });
       }
-      if (!props.interactive) {
+      const crosstalk = crosstalkHandler && crosstalkHandler.mode === 'hover';
+      if (!props.interactive && !crosstalk) {
         return;
+      }
+      if (crosstalk && crosstalkHandler) {
+        crosstalkHandler.trigger(set?.elems);
       }
       if (set) {
         // hover on
@@ -118,8 +125,10 @@ HTMLWidgets.widget({
       update();
 
       return {
+        mode: config.mode,
         update(options) {
           sel.setGroup(options.group);
+          this.mode = options.mode;
         },
         trigger(elems?) {
           if (!elems) {
@@ -131,8 +140,6 @@ HTMLWidgets.widget({
       };
     }
 
-    let crosstalkHandler: CrosstalkHandler | null = null;
-
     if (HTMLWidgets.shinyMode) {
       props.onClick = (set: ISet<any>) => {
         Shiny.onInputChange(`${el.id}_click`, {
@@ -140,8 +147,10 @@ HTMLWidgets.widget({
           elems: set ? set.elems || [] : [],
         });
 
-        if (crosstalkHandler) {
+        if (crosstalkHandler && crosstalkHandler.mode === 'click') {
           crosstalkHandler.trigger(set?.elems);
+          props.selection = set;
+          update();
         }
       };
     }
