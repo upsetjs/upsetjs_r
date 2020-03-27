@@ -1,0 +1,53 @@
+{
+  "name": "@upsetjs/r",
+  "version": "0.2.0",
+  "private": true,
+  "license": "AGPL-3.0",
+  "author": {
+    "name": "Samuel Gratzl",
+    "email": "samu@sgratzl.com",
+    "url": "https://wwww.sgratzl.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sgratzl/upsetjs_r.git"
+  },
+  "scripts": {
+    "lint": "eslint src --ext .js",
+    "build:dev": "webpack-cli -d",
+    "build": "webpack-cli -p"
+  },
+  "browserslist": [
+    "ie 11"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
+    "@typescript-eslint/eslint-plugin": "^2.23.0",
+    "@typescript-eslint/parser": "^2.23.0",
+    "@yarnpkg/pnpify": "^2.0.0-rc.20",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.0.6",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-config-react-app": "^5.2.0",
+    "eslint-plugin-flowtype": "^4.6.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "^2.5.0",
+    "html-webpack-plugin": "^3.2.0",
+    "pnp-webpack-plugin": "^1.6.4",
+    "prettier": "^1.19.1",
+    "ts-loader": "^6.2.1",
+    "tslib": "^1.11.1",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "@upsetjs/bundle": "0.3.2",
+    "core-js": "^3.6.4"
+  }
+}

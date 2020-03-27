@@ -4,3 +4,8 @@
 examples/*.html
 doc
 Meta
+node_modules
+.yarn
+.yarnrc.yml
+.vscode
+*.log

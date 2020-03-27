@@ -5,3 +5,8 @@ examples
 ^doc$
 ^Meta$
 .github
+node_modules
+package.json
+webpack.config.js
+src
+.vscode
