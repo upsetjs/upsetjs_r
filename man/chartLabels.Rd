@@ -10,6 +10,8 @@ chartLabels(upsetjs, combinations.y.label = NULL, sets.x.label = NULL)
 \item{upsetjs}{the upsetjs (proxy) instance}
 
 \item{combinations.y.label}{the label for the combination chart}
+
+\item{sets.x.label}{the label for the set chart}
 }
 \description{
 specify chart labels

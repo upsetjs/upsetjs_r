@@ -9,7 +9,7 @@ generateIntersections(
   min = NULL,
   max = NULL,
   empty = NULL,
-  order.by = "freq",
+  order.by = "cardinality",
   limit = NULL
 )
 }
@@ -22,7 +22,7 @@ generateIntersections(
 
 \item{empty}{whether to include empty intersections or not}
 
-\item{order.by}{order intersections by frequency (freq) or degree (deg)}
+\item{order.by}{order intersections by cardinality or degree}
 
 \item{limit}{limit the number of intersections to the top N}
 }

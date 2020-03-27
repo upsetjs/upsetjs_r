@@ -24,7 +24,7 @@ chartLayout = function(upsetjs,
 #' specify chart labels
 #' @param upsetjs the upsetjs (proxy) instance
 #' @param combinations.y.label the label for the combination chart
-#' @praam sets.x.label the label for the set chart
+#' @param sets.x.label the label for the set chart
 #'
 #' @export
 chartLabels = function(upsetjs,

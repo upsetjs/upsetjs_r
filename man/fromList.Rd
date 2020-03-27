@@ -4,14 +4,14 @@
 \alias{fromList}
 \title{generates the sets from a lists object}
 \usage{
-fromList(upsetjs, value, order.by = "freq")
+fromList(upsetjs, value, order.by = "cardinality")
 }
 \arguments{
 \item{upsetjs}{the upsetjs (proxy) instance}
 
 \item{value}{the list input value}
 
-\item{order.by}{order intersections by frequency (freq) or degree (deg)}
+\item{order.by}{order intersections by cardinality or degree}
 }
 \description{
 generates the sets from a lists object

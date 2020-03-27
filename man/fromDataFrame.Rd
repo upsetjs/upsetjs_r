@@ -4,14 +4,14 @@
 \alias{fromDataFrame}
 \title{extract the sets from a data frame (rows = elems, columns = sets, cell = contained)}
 \usage{
-fromDataFrame(upsetjs, df, order.by = "freq")
+fromDataFrame(upsetjs, df, order.by = "cardinality")
 }
 \arguments{
 \item{upsetjs}{the upsetjs (proxy) instance}
 
 \item{df}{the data.frame like structure}
 
-\item{order.by}{order intersections by frequency (freq) or degree (deg)}
+\item{order.by}{order intersections by cardinality or degree}
 }
 \description{
 extract the sets from a data frame (rows = elems, columns = sets, cell = contained)
