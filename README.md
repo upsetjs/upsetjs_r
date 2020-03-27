@@ -1,15 +1,9 @@
 UpSet.js as R HTMLWidget
 ========================
 
-
-UpSet.s is an TODO
 This is a [HTMLWidget](http://www.htmlwidgets.org/) wrapper around the JavaScript library [UpSet.js](https://github.com/upsetjs/upsetjs). 
 
-It can be used within standalone [R Shiny](https://shiny.rstudio.com/) apps or [R Markdown](http://rmarkdown.rstudio.com/) files. 
 [Crosstalk](https://rstudio.github.io/crosstalk/) is supported for synching selections and filtering among widgets.
-
-Set, Map, Symbol, Symbol.iterator, Array.from, Object.assign, Array.prototype.find
-required polyfills: https://polyfill.io/v3/polyfill.min.js?features=Set%2CMap%2CSymbol%2CSymbol.iterator%2CArray.from%2CObject.assign%2CArray.prototype.find
 
 Installation
 ------------
@@ -23,33 +17,52 @@ Examples
 --------
 
 ```R
-
+listInput <- list(one = c(1, 2, 3, 5, 7, 8, 11, 12, 13), two = c(1, 2, 4, 5, 10), three = c(1, 5, 6, 7, 8, 9, 10, 12, 13))
+upsetjs() %>% fromList(listInput)
 ```
 
-```R
-
-```
-
-
-
-Advanced Example
-----------------
-
-```R
-
-```
+see Basic.Rmd
 
 
 Shiny Example
 -------------
 ```R
-```
+library(shiny)
+library(upsetjs)
 
+listInput <- list(one = c(1, 2, 3, 5, 7, 8, 11, 12, 13),
+                  two = c(1, 2, 4, 5, 10),
+                  three = c(1, 5, 6, 7, 8, 9, 10, 12, 13))
+
+ui <- fluidPage(
+  titlePanel("UpSet.js Shiny Example"),
+  upsetjsOutput("upsetjs1"),
+)
+
+server <- function(input, output, session) {
+  # render upsetjs as interactive plot
+  output$upsetjs1 <- renderUpsetjs({
+    upsetjs() %>% fromList(listInput) %>% interactiveChart()
+  })
+}
+
+# Run the application
+shinyApp(ui = ui, server = server)
+
+```
 
 Development Environment
 -----------------------
 
+```sh
+npm i -g yarn
+yarn set version berry
+yarn
+yarn lint
+yarn build
 ```
+
+```R
 devtools::load_all()
 ```
 
