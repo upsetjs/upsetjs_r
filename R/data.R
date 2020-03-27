@@ -21,13 +21,17 @@ sortSets = function(sets, order.by='cardinality', limit=NULL) {
 #' @param limit limit the ordered sets to the given limit
 #'
 #' @export
-fromList = function(upsetjs, value, order.by="cardinality", limit=NULL) {
+fromList = function(upsetjs, value, order.by="cardinality", limit=NULL, shared=NULL) {
   toSet = function(key, value) {
     list(name=key, elems=value, cardinality=length(value))
   }
   sets = mapply(toSet, key=names(value), value=value, SIMPLIFY=F)
   # list of list objects
   names(sets) = NULL
+
+  if (!is.null(shared)) {
+     enableCrosstalk(upsetjs, shared)
+  }
 
   sets = sortSets(sets, order.by=order.by, limit=limit)
   setProperties(upsetjs, list(sets=sets, combinations=list(type="intersection", order=order.by)))
@@ -74,13 +78,19 @@ fromExpression = function(upsetjs, value, symbol="&", order.by="cardinality") {
 #' @param limit limit the ordered sets to the given limit
 #'
 #' @export
-fromDataFrame = function(upsetjs, df, order.by="cardinality", limit=NULL) {
+fromDataFrame = function(upsetjs, df, order.by="cardinality", limit=NULL, shared=NULL) {
   elems = rownames(df)
   toSet = function(key) {
     sub = elems[df[[key]] == T]
     list(name=key, elems=sub, cardinality=length(sub))
   }
   sets = lapply(colnames(df), toSet)
+
+  if (!is.null(shared)) {
+    enableCrosstalk(upsetjs, shared)
+  } else {
+    enableCrosstalk(upsetjs, df)
+  }
 
   sets = sortSets(sets, order.by=order.by, limit=limit)
   setProperties(upsetjs, list(sets=sets, combinations=list(type="intersection", order=order.by)))

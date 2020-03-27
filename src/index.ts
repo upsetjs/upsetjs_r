@@ -1,124 +1,36 @@
 import 'core-js';
 import 'regenerator-runtime/runtime';
-import {
-  asSets,
-  asCombinations,
-  GenerateSetCombinationsOptions,
-  ISet,
-  ISets,
-  UpSetProps,
-  renderUpSet,
-  ISetCombinations,
-  ISetCombination,
-  generateCombinations,
-  isSetQuery,
-  isElemQuery,
-  ISetLike,
-} from '@upsetjs/bundle';
+import { isElemQuery, ISet, ISetCombinations, ISetLike, isSetQuery, renderUpSet, UpSetProps } from '@upsetjs/bundle';
+import { crosstalk, HTMLWidgets, Shiny } from './types';
+import { fixCombinations, fixSets, resolveSet, resolveSetByElems } from './utils';
 
-declare type HTMLWidget = {
-  name: string;
-  type: 'output';
-  factory(
-    el: HTMLElement,
-    width: number,
-    height: number
-  ): {
-    renderValue(x: any): void;
-    resize(width: number, height: number): void;
-  };
+declare type CrosstalkOptions = {
+  key: string;
+  group: string;
 };
 
-declare const HTMLWidgets: {
-  shinyMode: boolean;
-  viewerMode: boolean;
-  widget(widget: HTMLWidget): void;
+declare type ShinyUpSetProps = UpSetProps<any> & {
+  interactive?: boolean;
+  crosstalk?: CrosstalkOptions;
 };
 
-declare const Shiny: {
-  onInputChange(event: string, msg: any): void;
-  addCustomMessageHandler(type: string, callback: (msg: any) => void): void;
+declare type CrosstalkHandler = {
+  update(options: CrosstalkOptions): void;
+  trigger(elems?: ReadonlyArray<string>): void;
 };
-
-function fixSets(sets: ISets<any>) {
-  if (!sets) {
-    return [];
-  }
-  return asSets(
-    sets.map((set) => {
-      if (!Array.isArray(set.elems)) {
-        (set as any).elems = set.elems == null ? [] : [set.elems];
-      }
-      return set;
-    })
-  );
-}
-
-function fixCombinations(
-  combinations: GenerateSetCombinationsOptions | ISetCombinations<any> | undefined,
-  sets: ISets<any>
-) {
-  if (!combinations || (Array.isArray(combinations) && combinations.length === 0)) {
-    return null;
-  }
-  if (!Array.isArray(combinations)) {
-    return generateCombinations(sets, combinations as GenerateSetCombinationsOptions);
-  }
-  const lookup = new Map(sets.map((s) => [s.name, s]));
-  return asCombinations(
-    combinations.map((set) => {
-      if (!Array.isArray(set.elems)) {
-        (set as any).elems = set.elems == null ? [] : [set.elems];
-      }
-      if (!Array.isArray(set.setNames)) {
-        set.setNames = set.setNames == null ? [] : [set.setNames];
-      }
-      return set;
-    }),
-    'composite',
-    (s: any) => s.setNames.map((si: string) => lookup.get(si)).filter(Boolean)
-  );
-}
-
-function toUnifiedCombinationName(c: ISetCombination<any>) {
-  return Array.from(c.sets)
-    .map((s) => s.name)
-    .sort()
-    .join('&');
-}
-
-function resolveSet(set: string | string[], sets: ISets<any>, combinations: ISetCombinations<any>) {
-  const s = sets.find((s) => s.name === set);
-  if (s) {
-    return s;
-  }
-  const combinedNames = Array.isArray(set) ? set.slice().sort().join('&') : null;
-  return combinations.find(function (c) {
-    return c.name === set || (combinedNames && combinedNames === toUnifiedCombinationName(c));
-  });
-}
 
 HTMLWidgets.widget({
   name: 'upsetjs',
   type: 'output',
 
   factory(el, width, height) {
-    const props: UpSetProps<any> & { interactive?: boolean } = {
+    const props: ShinyUpSetProps = {
       sets: [],
       width,
       height,
     };
 
-    if (HTMLWidgets.shinyMode) {
-      props.onClick = (set: ISet<any>) => {
-        Shiny.onInputChange(`${el.id}_click`, {
-          name: set ? set.name : null,
-          elems: set ? set.elems || [] : [],
-        });
-      };
-    }
-
-    function fixProps(props: UpSetProps<any> & { interactive?: boolean }, delta: any) {
+    function fixProps(props: ShinyUpSetProps, delta: any) {
       if (delta.sets != null) {
         props.sets = fixSets(props.sets);
       }
@@ -186,11 +98,66 @@ HTMLWidgets.widget({
       update();
     };
 
+    function enableCrosstalk(config: CrosstalkOptions): CrosstalkHandler {
+      const sel = new crosstalk.SelectionHandle();
+      sel.setGroup(config.group);
+      sel.on('change', (event) => {
+        if (event.sender === sel) {
+          return;
+        }
+        props.selection = !event.value
+          ? null
+          : resolveSetByElems(event.value, props.sets, props.combinations as ISetCombinations<any>) || event.value;
+        update();
+      });
+
+      // show current state
+      props.selection = !sel.value
+        ? null
+        : resolveSetByElems(sel.value, props.sets, props.combinations as ISetCombinations<any>) || sel.value;
+      update();
+
+      return {
+        update(options) {
+          sel.setGroup(options.group);
+        },
+        trigger(elems?) {
+          if (!elems) {
+            sel.clear();
+          } else {
+            sel.set(elems);
+          }
+        },
+      };
+    }
+
+    let crosstalkHandler: CrosstalkHandler | null = null;
+
+    if (HTMLWidgets.shinyMode) {
+      props.onClick = (set: ISet<any>) => {
+        Shiny.onInputChange(`${el.id}_click`, {
+          name: set ? set.name : null,
+          elems: set ? set.elems || [] : [],
+        });
+
+        if (crosstalkHandler) {
+          crosstalkHandler.trigger(set?.elems);
+        }
+      };
+    }
+
     (el as any).__update = update;
 
     return {
-      renderValue(x: any) {
+      renderValue(x: ShinyUpSetProps) {
         update(x);
+        if (x.crosstalk && (window as any).crosstalk && HTMLWidgets.shinyMode) {
+          if (!crosstalkHandler) {
+            crosstalkHandler = enableCrosstalk(x.crosstalk);
+          } else {
+            crosstalkHandler.update(x.crosstalk);
+          }
+        }
       },
       resize(width: number, height: number) {
         update({

@@ -14,11 +14,10 @@ License: file LICENSE
 Encoding: UTF-8
 Imports:
   htmlwidgets,
-  htmltools,
-  crosstalk,
   magrittr
 Suggests:
   knitr,
+  crosstalk,
   rmarkdown
 LazyData: true
 RoxygenNote: 7.0.2

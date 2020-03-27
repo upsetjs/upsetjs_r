@@ -15,18 +15,18 @@
 #' @param ... all other arguments supplied to \code{htmlwidgets::\link[htmlwidgets]{sizingPolicy}}
 #' @return An \code{htmlwidgets::sizingPolicy} object
 upsetjsSizingPolicy = function(
-  defaultWidth = "100%",
-  defaultHeight = 400,
-  padding = 0,
-  browser.fill = TRUE,
+  defaultWidth="100%",
+  defaultHeight=400,
+  padding=0,
+  browser.fill=TRUE,
   ...
   # not adding extra arguments as htmlwidgets::sizingPolicy can change their own args
 ) {
   htmlwidgets::sizingPolicy(
-    defaultWidth = defaultWidth,
-    defaultHeight = defaultHeight,
-    padding = padding,
-    browser.fill = browser.fill,
+    defaultWidth=defaultWidth,
+    defaultHeight=defaultHeight,
+    padding=padding,
+    browser.fill=browser.fill,
     ...
   )
 }
@@ -36,21 +36,22 @@ upsetjsSizingPolicy = function(
 #' @param width width of the element
 #' @param height height of the element
 #' @param elementId unique element id
+#' @param crosstalk crosstalk shared object
 #' @param sizingPolicy htmlwidgets sizing policy object. Defaults to \code{\link{upsetjsSizingPolicy}()}
 #'
 #' @return html upsetjs widget
 #' @examples
 #' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3)))
 #' @export
-upsetjs = function(width = '100%',
-                   height = NULL,
-                   elementId = NULL,
-                   sizingPolicy = upsetjsSizingPolicy()) {
+upsetjs = function(width='100%',
+                   height=NULL,
+                   elementId=NULL,
+                   sizingPolicy=upsetjsSizingPolicy()) {
   # forward options using x
   x = structure(
     list(
-      mode = 'hover',
-      sets = c()
+      mode='hover',
+      sets=c()
     )
   )
 
@@ -59,12 +60,12 @@ upsetjs = function(width = '100%',
   htmlwidgets::createWidget(
     'upsetjs',
     x,
-    width = width,
-    height = height,
-    package = 'upsetjs',
-    elementId = elementId,
-    sizingPolicy = sizingPolicy,
-    dependencies = dependencies
+    width=width,
+    height=height,
+    package='upsetjs',
+    elementId=elementId,
+    sizingPolicy=sizingPolicy,
+    dependencies=dependencies
   )
 }
 
@@ -77,12 +78,12 @@ upsetjs = function(width = '100%',
 upsetjsProxy = function(outputId, session) {
   structure(
     list(
-      session = session,
-      id = session$ns(outputId),
-      x = structure(
+      session=session,
+      id=session$ns(outputId),
+      x=structure(
         list()
       )
     ),
-    class = "upsetjs_proxy"
+    class="upsetjs_proxy"
   )
 }
