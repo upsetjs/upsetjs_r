@@ -21,7 +21,7 @@ upsetjs() %>% fromList(listInput) %>% interactiveChart()
 ![image](https://user-images.githubusercontent.com/4129778/77757309-4a458580-7031-11ea-972a-226a6058777c.png)
 
 
-see also Basic.Rmd
+see also [Basic.Rmd](./blob/master/vignettes/basic.Rmd)
 
 
 ## Shiny Example
@@ -50,6 +50,8 @@ server <- function(input, output, session) {
 shinyApp(ui = ui, server = server)
 
 ```
+
+see also [Shiny Examples](./blob/master/vignettes/shiny)
 
 ## Dev Environment
 
