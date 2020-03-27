@@ -24,14 +24,17 @@ chartLayout = function(upsetjs,
 #' specify chart labels
 #' @param upsetjs the upsetjs (proxy) instance
 #' @param combinations.y.label the label for the combination chart
+#' @param combinations.y.axis.offset the offset of the combination label from the axis in pixel
 #' @param sets.x.label the label for the set chart
 #'
 #' @export
 chartLabels = function(upsetjs,
                        combinations.y.label=NULL,
+                       combinations.y.axis.offset=NULL,
                        sets.x.label=NULL) {
   props = list(setName=sets.x.label,
-               combinationName=combinations.y.label
+               combinationName=combinations.y.label,
+               combinationNameAxisOffset=combinations.y.axis.offset
                )
   setProperties(upsetjs, props, clean=TRUE)
 }
