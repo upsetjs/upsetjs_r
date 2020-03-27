@@ -1,9 +1,9 @@
-name: rci
+name: ci
 
 on: [push]
 
 jobs:
-  build:
+  build_r:
     runs-on: ubuntu-16.04
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -51,3 +51,34 @@ jobs:
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
+
+  build_node:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - run: npm i -g yarn
+      - run: yarn set version berry
+      - run: yarn plugin import @yarnpkg/plugin-workspace-tools
+      - run: yarn config set checksumBehavior ignore
+      - name: Cache Node.js modules
+        uses: actions/cache@v1
+        with:
+          path: ./.yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - run: yarn install --immutable
+        env:
+          CI: true
+      - run: yarn build
+        env:
+          CI: true
+      - run: yarn lint
+        env:
+          CI: true
+      # - run: yarn test --ci --coverage --maxWorkers=2
+      #   env:
+      #     CI: true
