@@ -5,11 +5,11 @@ sendMessage = function(upsetjs_proxy, props, ...) {
 
   msg = structure(
     list(
-      id = id,
-      props = props,
+      id=id,
+      props=props,
       ...
     ),
-    class = "upsetjs_msg"
+    class="upsetjs_msg"
   )
 
   session$sendCustomMessage("upsetjs-update", msg)

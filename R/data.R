@@ -61,7 +61,7 @@ fromExpression = function(upsetjs, value, symbol="&", order.by="cardinality") {
   names(combinations) = NULL
   combinations = sortSets(combinations, order.by=order.by)
 
-  props = list(sets = sets, combinations = combinations)
+  props = list(sets=sets, combinations=combinations)
   setProperties(upsetjs, props)
 }
 
