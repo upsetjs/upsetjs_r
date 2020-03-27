@@ -1,5 +1,5 @@
 import 'core-js';
-import { asSets, asCombinations, GenerateSetCombinationsOptions, ISet, ISets, UpSetProps, renderUpSet, ISetCombinations, ISetCombination, generateCombinations} from '@upsetjs/bundle';
+import { asSets, asCombinations, GenerateSetCombinationsOptions, ISet, ISets, UpSetProps, renderUpSet, ISetCombinations, ISetCombination, generateCombinations, isSetQuery, isElemQuery, ISetLike} from '@upsetjs/bundle';
 
 declare type HTMLWidget = {
   name: string;
@@ -27,7 +27,7 @@ function fixSets(sets: ISets<any>) {
   return asSets(
     sets.map((set) => {
       if (!Array.isArray(set.elems)) {
-        set.elems = set.elems == null ? [] : [set.elems];
+        (set as any).elems = set.elems == null ? [] : [set.elems];
       }
       return set;
     })
@@ -134,11 +134,11 @@ HTMLWidgets.widget({
 
       if (delta.queries) {
         props.queries!.forEach((query) => {
-          if (typeof query.set === "string" || Array.isArray(query.set)) {
-            query.set = resolveSet(query.set, props.sets, props.combinations as ISetCombinations<any>);
-          } else if (
+          if (isSetQuery(query) && (typeof query.set === "string" || Array.isArray(query.set))) {
+            query.set = resolveSet(query.set, props.sets, props.combinations as ISetCombinations<any>)!;
+          } else if (isElemQuery(query) && (
             typeof query.elems !== "undefined" &&
-            !Array.isArray(query.elems)
+            !Array.isArray(query.elems))
           ) {
             query.elems = [query.elems];
           }
@@ -162,7 +162,7 @@ HTMLWidgets.widget({
       renderUpSet(el, props);
     }
 
-    let bakSelection: ISet<any> | null = null;
+    let bakSelection: ISetLike<any> | null | undefined = null;
 
     const onHover = (set: ISet<any> | null) => {
       if (HTMLWidgets.shinyMode) {
