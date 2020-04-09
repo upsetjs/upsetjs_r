@@ -115,8 +115,8 @@ fromDataFrame = function(upsetjs, df, order.by="cardinality", limit=NULL, shared
 #'
 #' @export
 generateIntersections = function(upsetjs, min=NULL, max=NULL, empty=NULL, order.by="cardinality", limit=NULL) {
-  gen = list(type="intersection", min=min, max=max, empty=empty, order=order.by, limit=limit)
-  setProperty(upsetjs, 'combinations', gen, clean=TRUE)
+  gen = cleanNull(list(type="intersection", min=min, max=max, empty=empty, order=order.by, limit=limit))
+  setProperty(upsetjs, 'combinations', gen)
 }
 
 #'
@@ -131,6 +131,6 @@ generateIntersections = function(upsetjs, min=NULL, max=NULL, empty=NULL, order.
 #'
 #' @export
 generateUnions = function(upsetjs, min=NULL, max=NULL, empty=NULL, order.by="cardinality", limit=NULL) {
-  gen = list(type="union", min=min, max=max, empty=empty, order=order.by, limit=limit)
-  setProperty(upsetjs, 'combinations', gen, clean=TRUE)
+  gen = cleanNull(list(type="union", min=min, max=max, empty=empty, order=order.by, limit=limit))
+  setProperty(upsetjs, 'combinations', gen)
 }
