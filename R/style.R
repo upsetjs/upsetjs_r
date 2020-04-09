@@ -20,7 +20,7 @@ chartLayout = function(upsetjs,
                widthRatios=width.ratios,
                padding=padding,
                barPadding=bar.padding,
-               dotPadding=dot.padding,
+               dotPadding=dot.padding
                )
   setProperties(upsetjs, props, clean=TRUE)
 }
