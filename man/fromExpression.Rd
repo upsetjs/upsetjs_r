@@ -15,6 +15,9 @@ fromExpression(upsetjs, value, symbol = "&", order.by = "cardinality")
 
 \item{order.by}{order intersections by cardinality or degree}
 }
+\value{
+upsetjs
+}
 \description{
 generates the sets from a lists object that contained the cardinalties of both sets and combinations (&)
 }

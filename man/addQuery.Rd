@@ -17,6 +17,9 @@ addQuery(upsetjs, name, color, elems = NULL, set = NULL)
 
 \item{set}{the set name, similar to the selection}
 }
+\value{
+upsetjs
+}
 \description{
 adds a new query to the plot
 }

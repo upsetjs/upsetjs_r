@@ -11,6 +11,9 @@ queryLegend(upsets, value = TRUE)
 
 \item{upsetjs}{the upsetjs (proxy) instance}
 }
+\value{
+upsetjs
+}
 \description{
 renders a legend for the queries
 }

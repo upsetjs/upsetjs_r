@@ -2,7 +2,7 @@
 % Please edit documentation in R/upsetjs.R
 \name{upsetjsSizingPolicy}
 \alias{upsetjsSizingPolicy}
-\title{UpSetjs module}
+\title{upsetjs sizing policy}
 \usage{
 upsetjsSizingPolicy(
   defaultWidth = "100\%",
@@ -27,8 +27,5 @@ upsetjsSizingPolicy(
 An \code{htmlwidgets::sizingPolicy} object
 }
 \description{
-a htmlwidget wrapper around UpSet.js (\url{https://upsetjs.netlify.com/})
-}
-\details{
 upsetjs sizing policy
 }

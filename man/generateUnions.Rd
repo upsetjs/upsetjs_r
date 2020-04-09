@@ -2,12 +2,13 @@
 % Please edit documentation in R/data.R
 \name{generateUnions}
 \alias{generateUnions}
-\title{generate unions}
+\title{configure the generatation of the unions}
 \usage{
 generateUnions(
   upsetjs,
   min = NULL,
   max = NULL,
+  empty = NULL,
   order.by = "cardinality",
   limit = NULL
 )
@@ -19,10 +20,15 @@ generateUnions(
 
 \item{max}{maximum number of sets in an union}
 
+\item{empty}{whether to include empty intersections or not}
+
 \item{order.by}{order intersections by cardinality or degree}
 
 \item{limit}{limit the number of intersections to the top N}
 }
+\value{
+upsetjs
+}
 \description{
-generate unions
+configure the generatation of the unions
 }

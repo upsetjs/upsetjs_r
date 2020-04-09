@@ -11,6 +11,9 @@ setQueries(upsetjs, queries = list())
 
 \item{queries}{the queries to set}
 }
+\value{
+upsetjs
+}
 \description{
 set the queries
 }

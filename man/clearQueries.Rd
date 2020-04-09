@@ -9,6 +9,9 @@ clearQueries(upsetjs)
 \arguments{
 \item{upsetjs}{the upsetjs (proxy) instance}
 }
+\value{
+upsetjs
+}
 \description{
 clears the list of queries for incremental updates
 }

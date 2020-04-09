@@ -4,14 +4,30 @@
 \alias{chartLabels}
 \title{specify chart labels}
 \usage{
-chartLabels(upsetjs, combinations.y.label = NULL, sets.x.label = NULL)
+chartLabels(
+  upsetjs,
+  combinations.y.label = NULL,
+  combinations.y.axis.offset = NULL,
+  sets.x.label = NULL,
+  sets.x.axis.offset = NULL,
+  bar.label.offset = NULL
+)
 }
 \arguments{
 \item{upsetjs}{the upsetjs (proxy) instance}
 
 \item{combinations.y.label}{the label for the combination chart}
 
+\item{combinations.y.axis.offset}{the offset of the combination label from the axis in pixel}
+
 \item{sets.x.label}{the label for the set chart}
+
+\item{sets.x.axis.offset}{the offset of the set label from the axis in pixel}
+
+\item{bar.label.offset}{the offset of the bar label from the bar in pixel}
+}
+\value{
+upsetjs
 }
 \description{
 specify chart labels

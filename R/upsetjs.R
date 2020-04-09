@@ -1,10 +1,3 @@
-
-#' UpSetjs module
-#'
-#' a htmlwidget wrapper around UpSet.js (\url{https://upsetjs.netlify.com/})
-#'
-
-
 #' upsetjs sizing policy
 #'
 #' @export

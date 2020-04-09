@@ -4,7 +4,14 @@
 \alias{fromList}
 \title{generates the sets from a lists object}
 \usage{
-fromList(upsetjs, value, order.by = "cardinality")
+fromList(
+  upsetjs,
+  value,
+  order.by = "cardinality",
+  limit = NULL,
+  shared = NULL,
+  shared.mode = "click"
+)
 }
 \arguments{
 \item{upsetjs}{the upsetjs (proxy) instance}
@@ -12,6 +19,15 @@ fromList(upsetjs, value, order.by = "cardinality")
 \item{value}{the list input value}
 
 \item{order.by}{order intersections by cardinality or degree}
+
+\item{limit}{limit the ordered sets to the given limit}
+
+\item{shared}{a crosstalk shared data frame}
+
+\item{shared.mode}{whether on 'hover' or 'click' (default) is synced}
+}
+\value{
+upsetjs
 }
 \description{
 generates the sets from a lists object

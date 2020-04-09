@@ -2,7 +2,7 @@
 % Please edit documentation in R/selection.R
 \name{interactiveChart}
 \alias{interactiveChart}
-\title{interactive}
+\title{make it an interactive chart}
 \usage{
 interactiveChart(upsetjs, value = TRUE)
 }
@@ -11,6 +11,9 @@ interactiveChart(upsetjs, value = TRUE)
 
 \item{value}{whether to enable or disable}
 }
+\value{
+upsetjs
+}
 \description{
-interactive
+make it an interactive chart
 }

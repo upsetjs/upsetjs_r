@@ -21,6 +21,7 @@ sortSets = function(sets, order.by='cardinality', limit=NULL) {
 #' @param limit limit the ordered sets to the given limit
 #' @param shared a crosstalk shared data frame
 #' @param shared.mode whether on 'hover' or 'click' (default) is synced
+#' @return upsetjs
 #'
 #' @export
 fromList = function(upsetjs, value, order.by="cardinality", limit=NULL, shared=NULL, shared.mode="click") {
@@ -45,6 +46,7 @@ fromList = function(upsetjs, value, order.by="cardinality", limit=NULL, shared=N
 #' @param value the expression list input
 #' @param symbol the symbol how to split list names to get the sets
 #' @param order.by order intersections by cardinality or degree
+#' @return upsetjs
 #'
 #' @export
 fromExpression = function(upsetjs, value, symbol="&", order.by="cardinality") {
@@ -80,6 +82,7 @@ fromExpression = function(upsetjs, value, symbol="&", order.by="cardinality") {
 #' @param limit limit the ordered sets to the given limit
 #' @param shared a crosstalk shared data frame
 #' @param shared.mode whether on 'hover' or 'click' (default) is synced
+#' @return upsetjs
 #'
 #' @export
 fromDataFrame = function(upsetjs, df, order.by="cardinality", limit=NULL, shared=NULL, shared.mode="click") {
@@ -101,30 +104,33 @@ fromDataFrame = function(upsetjs, df, order.by="cardinality", limit=NULL, shared
 }
 
 #'
-#' generate intersections
+#' configure the generation of the intersections
 #' @param upsetjs the upsetjs (proxy) instance
 #' @param min minimum number of sets in an intersection
 #' @param max maximum number of sets in an intersection
 #' @param empty whether to include empty intersections or not
 #' @param order.by order intersections by cardinality or degree
 #' @param limit limit the number of intersections to the top N
+#' @return upsetjs
 #'
 #' @export
 generateIntersections = function(upsetjs, min=NULL, max=NULL, empty=NULL, order.by="cardinality", limit=NULL) {
   gen = list(type="intersection", min=min, max=max, empty=empty, order=order.by, limit=limit)
-  setProperty(upsetjs, 'combinations', cleanNull(gen))
+  setProperty(upsetjs, 'combinations', gen, clean=TRUE)
 }
 
 #'
-#' generate unions
+#' configure the generatation of the unions
 #' @param min minimum number of sets in an union
 #' @param max maximum number of sets in an union
+#' @param empty whether to include empty intersections or not
 #' @param upsetjs the upsetjs (proxy) instance
 #' @param order.by order intersections by cardinality or degree
 #' @param limit limit the number of intersections to the top N
+#' @return upsetjs
 #'
 #' @export
-generateUnions = function(upsetjs, min=NULL, max=NULL, order.by="cardinality", limit=NULL) {
-  gen = list(type="union", min=min, max=max, order=order.by, limit=limit)
-  setProperty(upsetjs, 'combinations', cleanNull(gen))
+generateUnions = function(upsetjs, min=NULL, max=NULL, empty=NULL, order.by="cardinality", limit=NULL) {
+  gen = list(type="union", min=min, max=max, empty=empty, order=order.by, limit=limit)
+  setProperty(upsetjs, 'combinations', gen, clean=TRUE)
 }

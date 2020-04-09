@@ -9,7 +9,10 @@ setSelection(upsetjs, name = NULL)
 \arguments{
 \item{upsetjs}{the upsetjs (proxy) instance}
 
-\item{name}{the selection to set}
+\item{name}{the name of the set to select}
+}
+\value{
+upsetjs
 }
 \description{
 sets the selection of the chart

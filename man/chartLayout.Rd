@@ -9,7 +9,8 @@ chartLayout(
   height.ratios = NULL,
   width.ratios = NULL,
   padding = NULL,
-  bar.padding = NULL
+  bar.padding = NULL,
+  dot.padding = NULL
 )
 }
 \arguments{
@@ -21,7 +22,12 @@ chartLayout(
 
 \item{padding}{padding around the plot}
 
-\item{bar.padding}{padding ratio (e.g., 0.2) for the bar charts}
+\item{bar.padding}{padding ratio (default 0.1) for the bar charts}
+
+\item{dot.padding}{padding facotr (default 0.7) for the dots}
+}
+\value{
+upsetjs
 }
 \description{
 specify the chart layout

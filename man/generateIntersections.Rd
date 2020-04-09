@@ -2,7 +2,7 @@
 % Please edit documentation in R/data.R
 \name{generateIntersections}
 \alias{generateIntersections}
-\title{generate intersections}
+\title{configure the generation of the intersections}
 \usage{
 generateIntersections(
   upsetjs,
@@ -26,6 +26,9 @@ generateIntersections(
 
 \item{limit}{limit the number of intersections to the top N}
 }
+\value{
+upsetjs
+}
 \description{
-generate intersections
+configure the generation of the intersections
 }

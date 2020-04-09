@@ -4,7 +4,14 @@
 \alias{fromDataFrame}
 \title{extract the sets from a data frame (rows = elems, columns = sets, cell = contained)}
 \usage{
-fromDataFrame(upsetjs, df, order.by = "cardinality")
+fromDataFrame(
+  upsetjs,
+  df,
+  order.by = "cardinality",
+  limit = NULL,
+  shared = NULL,
+  shared.mode = "click"
+)
 }
 \arguments{
 \item{upsetjs}{the upsetjs (proxy) instance}
@@ -12,6 +19,15 @@ fromDataFrame(upsetjs, df, order.by = "cardinality")
 \item{df}{the data.frame like structure}
 
 \item{order.by}{order intersections by cardinality or degree}
+
+\item{limit}{limit the ordered sets to the given limit}
+
+\item{shared}{a crosstalk shared data frame}
+
+\item{shared.mode}{whether on 'hover' or 'click' (default) is synced}
+}
+\value{
+upsetjs
 }
 \description{
 extract the sets from a data frame (rows = elems, columns = sets, cell = contained)
