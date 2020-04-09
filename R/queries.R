@@ -44,6 +44,6 @@ clearQueries = function(upsetjs) {
 #' @return upsetjs
 #'
 #' @export
-queryLegend = function(upsets, value=TRUE) {
+queryLegend = function(upsetjs, value=TRUE) {
   setProperty(upsetjs, "queryLegend", value)
 }

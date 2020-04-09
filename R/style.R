@@ -87,18 +87,15 @@ chartFontSizes = function(upsetjs,
 #'
 #' specify chart flags
 #' @param upsetjs the upsetjs (proxy) instance
-#' @param query.legend show query legend if needed
 #' @param export.buttons show export SVG and PNG buttons
 #' @param class.name extra CSS class name to the root element
 #' @return upsetjs
 #'
 #' @export
 chartStyleFlags = function(upsetjs,
-                           query.legend=NULL,
                            export.buttons=NULL,
                            class.name=NULL) {
-  props = list(queryLegend=query.legend,
-               exportButtons=export.buttons,
+  props = list(exportButtons=export.buttons,
                className=class.name
                )
   setProperties(upsetjs, props, clean=TRUE)
