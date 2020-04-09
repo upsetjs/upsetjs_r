@@ -2,6 +2,7 @@
 
 import 'core-js';
 import 'regenerator-runtime/runtime';
+import 'element-closest-polyfill';
 import { isElemQuery, ISet, ISetCombinations, ISetLike, isSetQuery, renderUpSet, UpSetProps } from '@upsetjs/bundle';
 import { fixCombinations, fixSets, resolveSet, resolveSetByElems } from './utils';
 
@@ -30,6 +31,8 @@ HTMLWidgets.widget({
       sets: [],
       width,
       height,
+      alternatingBackgroundColor: 'rgba(0,0,0,0.05)',
+      exportButtons: false,
     };
     let crosstalkHandler: CrosstalkHandler | null = null;
 
