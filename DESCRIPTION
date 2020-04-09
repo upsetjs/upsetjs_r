@@ -18,7 +18,8 @@ Imports:
 Suggests:
   knitr,
   crosstalk,
-  rmarkdown
+  rmarkdown,
+  formatR
 LazyData: true
 RoxygenNote: 7.0.2
 VignetteBuilder: knitr
