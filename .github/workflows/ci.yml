@@ -14,17 +14,11 @@ jobs:
       - uses: r-lib/actions/setup-r@master
         with:
           r-version: 3.6
-      - name: Query dependencies
-        run: |
-          install.packages('remotes')
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), "depends.Rds", version = 2)
-        shell: Rscript {0}
-
       - name: Cache R packages
         uses: actions/cache@v1
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: linux-r3.6-${{ hashFiles('depends.Rds') }}
+          key: linux-r3.6-${{ hashFiles('DESCRIPTION') }}
           restore-keys: linux-r3.6-
 
       - name: Install system dependencies
@@ -49,7 +43,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@master
         with:
-          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
+          name: ${{ runner.os }}-r3.6-results
           path: check
 
   build_node:
