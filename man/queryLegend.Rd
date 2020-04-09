@@ -4,12 +4,12 @@
 \alias{queryLegend}
 \title{renders a legend for the queries}
 \usage{
-queryLegend(upsets, value = TRUE)
+queryLegend(upsetjs, value = TRUE)
 }
 \arguments{
-\item{value}{whether to enable or disable}
-
 \item{upsetjs}{the upsetjs (proxy) instance}
+
+\item{value}{whether to enable or disable}
 }
 \value{
 upsetjs

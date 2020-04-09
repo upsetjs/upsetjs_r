@@ -4,17 +4,10 @@
 \alias{chartStyleFlags}
 \title{specify chart flags}
 \usage{
-chartStyleFlags(
-  upsetjs,
-  query.legend = NULL,
-  export.buttons = NULL,
-  class.name = NULL
-)
+chartStyleFlags(upsetjs, export.buttons = NULL, class.name = NULL)
 }
 \arguments{
 \item{upsetjs}{the upsetjs (proxy) instance}
-
-\item{query.legend}{show query legend if needed}
 
 \item{export.buttons}{show export SVG and PNG buttons}
 
