@@ -1286,20 +1286,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@upsetjs/bundle@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "@upsetjs/bundle@npm:0.4.0"
+"@upsetjs/bundle@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "@upsetjs/bundle@npm:0.4.1"
   dependencies:
-    "@upsetjs/model": ^0.4.0
-    eventemitter3: ^4.0.0
-  checksum: 2/84cf6e6f5320b3f7b0187b13c08afa488e78c3de2c1d23ce99c7a6fa95ed477881c39fc61b789e200f42e3d4a1bf7242acd15b08c3f1d3a90f2760bb674395fb
+    "@upsetjs/model": ^0.4.1
+  checksum: 2/8cf620dc8e45c8a2cf262bfd14208d5b50ce35a63f4a22c24124d1aa9f05f66f719b1bfa54097b704e561cb0be56920476a128de40ee453d1d557a43e7e70047
   languageName: node
   linkType: hard
 
-"@upsetjs/model@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "@upsetjs/model@npm:0.4.0"
-  checksum: 2/e1f7f0ae547afb4b0de6e15bd5a6d123153b6412948142fa55e4defab0fa648479a852fa25cc1af3797783d5876ccb4ef6d7be65a685cb87719be2531316410c
+"@upsetjs/model@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "@upsetjs/model@npm:0.4.1"
+  checksum: 2/4858facea8bb49a1a4f2358dfd17cb41e1f96b7ca983dac41492a8c76d2baeedf58b876de2435d9273a1c0ec71213a01df1e9b9b61378ca708e476ed0c689318
   languageName: node
   linkType: hard
 
@@ -1311,7 +1310,7 @@ __metadata:
     "@babel/preset-env": ^7.9.5
     "@typescript-eslint/eslint-plugin": ^2.27.0
     "@typescript-eslint/parser": ^2.27.0
-    "@upsetjs/bundle": ^0.4.0
+    "@upsetjs/bundle": ^0.4.1
     "@yarnpkg/pnpify": ^2.0.0-rc.20
     babel-eslint: ^10.1.0
     babel-loader: ^8.1.0
@@ -3427,13 +3426,6 @@ __metadata:
   version: 2.0.3
   resolution: "esutils@npm:2.0.3"
   checksum: 2/590b04533177f8f6f0f352b3ac7da6c1c1e3d8375d8973972fba9c94558ca168685fd38319c3c6f4c37ba256df7494a7f15d8e761df1655af8a8f0027d988f8f
-  languageName: node
-  linkType: hard
-
-"eventemitter3@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "eventemitter3@npm:4.0.0"
-  checksum: 2/af47e3a6e2c7492547b5de5afa02c8d37b48f822461827def23aa215154c9008438542985c77b47594696871dfe97c5d0fecccb844150ca15aa4c2f3dcd088b7
   languageName: node
   linkType: hard
 

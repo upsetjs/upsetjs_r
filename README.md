@@ -1,8 +1,10 @@
 # UpSet.js as R HTMLWidget
+
 [![Github Actions][github-actions-image]][github-actions-url]
 
-
 This is a [HTMLWidget](http://www.htmlwidgets.org/) wrapper around the JavaScript library [UpSet.js](https://github.com/upsetjs/upsetjs) and an alternative implementation of [UpSetR](https://www.rdocumentation.org/packages/UpSetR).
+
+This package is part of the UpSet.js ecosystem located at the main [Github Monorepo](https://github.com/upsetjs/upsetjs).
 
 ## Installation
 
@@ -18,11 +20,9 @@ listInput <- list(one = c(1, 2, 3, 5, 7, 8, 11, 12, 13), two = c(1, 2, 4, 5, 10)
 upsetjs() %>% fromList(listInput) %>% interactiveChart()
 ```
 
-![image](https://user-images.githubusercontent.com/4129778/77757309-4a458580-7031-11ea-972a-226a6058777c.png)
-
+![List Input Example](https://user-images.githubusercontent.com/4129778/79375541-10dda700-7f59-11ea-933a-a3ffbca1bfd2.png)
 
 see also [Basic.Rmd](./master/vignettes/basic.Rmd)
-
 
 ## Shiny Example
 
@@ -50,6 +50,8 @@ server <- function(input, output, session) {
 shinyApp(ui = ui, server = server)
 
 ```
+
+![shiny](https://user-images.githubusercontent.com/4129778/79375695-51d5bb80-7f59-11ea-8437-40fa60ce425c.png)
 
 see also [Shiny Examples](./master/vignettes/shiny)
 
@@ -82,11 +84,11 @@ devtools::load_all()
 
 ### Commercial license
 
-If you want to use Upset.js for a commercial application the commercial license is the appropriate license. With this option, your source code is kept proprietary. Contact @sgratzl for details
+If you want to use Upset.js for a commercial application the commercial license is the appropriate license. Contact [@sgratzl](mailto:sam@sgratzl.com) for details.
 
 ### Open-source license
 
-GNU AGPLv3
+This library is released under the `GNU AGPLv3` version to be used for private and academic purposes. In case of a commercial use, please get in touch regarding a commercial license.
 
 [github-actions-image]: https://github.com/sgratzl/upsetjs_r/workflows/ci/badge.svg
 [github-actions-url]: https://github.com/sgratzl/upsetjs_r/actions
