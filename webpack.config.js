@@ -21,7 +21,7 @@ const babel = {
 
 module.exports = {
   entry: {
-    app: './src/index.ts',
+    app: './js_src/index.ts',
   },
   output: {
     filename: 'upsetjs.js',
@@ -44,8 +44,7 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-  ],
+  plugins: [],
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
     alias: { '@': path.resolve(__dirname) },

@@ -20,8 +20,6 @@ upsetjs(
 \item{elementId}{unique element id}
 
 \item{sizingPolicy}{htmlwidgets sizing policy object. Defaults to \code{\link{upsetjsSizingPolicy}()}}
-
-\item{crosstalk}{crosstalk shared object}
 }
 \value{
 html upsetjs widget

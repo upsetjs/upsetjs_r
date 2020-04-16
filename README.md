@@ -73,9 +73,20 @@ yarn build
 
 ### R Package
 
+Notes:
+
+- in windows it requires the R tools. e.g., `$env:PATH="C:/Users/sam/Anaconda3/Rtools/mingw_64/bin;C:/Users/sam/Anaconda3/Rtools/bin;$env:PATH"`
+- R is stupid when coming to ignoring files during build. Thus `.yarn` and `node_modules` directories need to removed prior to the build. e.g.,
+  ```sh
+  mkdir ../upsetjs_r_t
+  mv .yarn ../upsetjs_r_t/
+  mv node_modules ../upsetjs_r_t/
+  ```
+
 ```R
-devtools::document()
-devtools::build_vignettes()
+devtools::check()
+devtools::build()
+devtools::build_site()
 
 devtools::load_all()
 ```

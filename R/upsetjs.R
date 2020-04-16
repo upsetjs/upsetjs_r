@@ -29,7 +29,6 @@ upsetjsSizingPolicy = function(
 #' @param width width of the element
 #' @param height height of the element
 #' @param elementId unique element id
-#' @param crosstalk crosstalk shared object
 #' @param sizingPolicy htmlwidgets sizing policy object. Defaults to \code{\link{upsetjsSizingPolicy}()}
 #'
 #' @return html upsetjs widget
