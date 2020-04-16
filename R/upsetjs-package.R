@@ -5,5 +5,5 @@
 #' @docType package
 #' @name upsetjs
 #' @importFrom magrittr %>%
-#' @export %>%
+#' @importFrom utils installed.packages
 NULL

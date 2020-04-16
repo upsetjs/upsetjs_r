@@ -39,6 +39,7 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
+          remotes::install_cran("pkgdown")
         shell: Rscript {0}
 
       - name: Check
@@ -53,6 +54,10 @@ jobs:
         with:
           name: ${{ runner.os }}-results
           path: check
+
+      - name: Build Website
+        run: pkgdown::build_site()
+        shell: Rscript {0}
   # build_node:
   #   runs-on: ubuntu-latest
   #   steps:
