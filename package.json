@@ -13,7 +13,7 @@
     "url": "https://github.com/sgratzl/upsetjs_r.git"
   },
   "scripts": {
-    "lint": "eslint src --ext .ts",
+    "lint": "eslint js_src --ext .ts",
     "build:dev": "webpack-cli -d --devtool source-map",
     "build": "webpack-cli -p"
   },
