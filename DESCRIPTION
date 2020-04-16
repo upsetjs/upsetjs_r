@@ -3,8 +3,8 @@ Type: Package
 Title: 'HTMLWidget' Wrapper of 'UpSet.s' for exploring large set intersections
 Description: 'UpSet' is an interactive technique for exploring large set intersections.
   This is a 'htmlwidget' wrapper around the JavaScript library 'UpSet.js'.
-Version: 0.4.1
-Date: 2020-03-09
+Version: 0.4.2
+Date: 2020-04-16
 Authors@R: person("Samuel", "Gratzl", email = "sam@sgratzl.com", role = c("aut", "cre"))
 Maintainer: Samuel Gratzl <sam@sgratzl.com>
 URL: https://github.com/upsetjs/upset_r/
