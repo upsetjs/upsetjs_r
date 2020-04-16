@@ -86,10 +86,32 @@ Notes:
 ```R
 devtools::check()
 devtools::build()
-devtools::build_site()
 
 devtools::load_all()
 ```
+
+**R Package Website**
+
+```R
+devtools::build_site()
+```
+
+checkout the gh-pages branch or switch to its worktree
+
+```sh`
+git worktree add ../upsetjs_r_pages -b gh-pages
+
+````
+
+update the website
+
+```sh
+cd ../upsetjs_r_pages
+rm *
+cp ../upsetjs_r/docs .
+git commit -am 'update website'
+git push
+````
 
 ## License
 
