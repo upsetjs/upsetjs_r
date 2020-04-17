@@ -25,7 +25,7 @@ module.exports = {
   },
   output: {
     filename: 'upsetjs.js',
-    path: path.resolve(__dirname, 'inst', 'htmlwidgets'),
+    path: path.resolve(__dirname, 'r_package', 'inst', 'htmlwidgets'),
   },
   module: {
     rules: [
