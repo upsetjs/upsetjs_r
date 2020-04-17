@@ -9,7 +9,7 @@ This package is part of the UpSet.js ecosystem located at the main [Github Monor
 ## Installation
 
 ```R
-devtools::install_url('https://github.com/upsetjs/upsetjs_r/releases/latest/download/upsetjs.tar.gz')
+devtools::install_url("https://github.com/upsetjs/upsetjs_r/releases/latest/download/upsetjs.tar.gz")
 library(upsetjs)
 ```
 
