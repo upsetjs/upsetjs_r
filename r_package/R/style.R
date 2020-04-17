@@ -7,6 +7,8 @@
 #' @param padding padding around the plot
 #' @param bar.padding padding ratio (default 0.1) for the bar charts
 #' @param dot.padding padding facotr (default 0.7) for the dots
+#' @param numerical.scale numerical scale: linear (default) or log
+#' @param band.scale band scale: band (default)
 #' @return upsetjs
 #'
 #' @export
@@ -15,38 +17,41 @@ chartLayout = function(upsetjs,
                        width.ratios=NULL,
                        padding=NULL,
                        bar.padding=NULL,
-                       dot.padding=NULL) {
+                       dot.padding=NULL,
+                       numerical.scale=NULL,
+                       band.scale=NULL) {
   props = list(heightRatios=height.ratios,
                widthRatios=width.ratios,
                padding=padding,
                barPadding=bar.padding,
-               dotPadding=dot.padding
-               )
+               dotPadding=dot.padding,
+               numericalScale=numerical.scale,
+               bandScale=band.scale)
   setProperties(upsetjs, props, clean=TRUE)
 }
 
 #'
 #' specify chart labels
 #' @param upsetjs the upsetjs (proxy) instance
-#' @param combinations.y.label the label for the combination chart
-#' @param combinations.y.axis.offset the offset of the combination label from the axis in pixel
-#' @param sets.x.label the label for the set chart
-#' @param sets.x.axis.offset the offset of the set label from the axis in pixel
+#' @param combination.name the label for the combination chart
+#' @param combination.name.axis.offset the offset of the combination label from the axis in pixel
+#' @param set.name the label for the set chart
+#' @param set.name.axis.offset the offset of the set label from the axis in pixel
 #' @param bar.label.offset the offset of the bar label from the bar in pixel
 #' @return upsetjs
 #'
 #' @export
 chartLabels = function(upsetjs,
-                       combinations.y.label=NULL,
-                       combinations.y.axis.offset=NULL,
-                       sets.x.label=NULL,
-                       sets.x.axis.offset=NULL,
+                       combination.name=NULL,
+                       combination.name.axis.offset=NULL,
+                       set.name=NULL,
+                       set.name.axis.offset=NULL,
                        bar.label.offset=NULL) {
-  props = list(setName=sets.x.label,
-               combinationName=combinations.y.label,
-               combinationNameAxisOffset=combinations.y.axis.offset,
+  props = list(setName=set.name,
+               combinationName=combination.name,
+               combinationNameAxisOffset=combination.name.axis.offset,
                barLabelOffset=bar.label.offset,
-               setNameAxisOffset=sets.x.axis.offset
+               setNameAxisOffset=set.name.axis.offset
                )
   setProperties(upsetjs, props, clean=TRUE)
 }

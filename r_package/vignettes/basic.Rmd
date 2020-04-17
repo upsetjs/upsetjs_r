@@ -1,5 +1,5 @@
 ---
-title: "UpSet.js Basic Example"
+title: "UpSet.js HTMLWidget"
 author: "Samuel Gratzl"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -13,90 +13,127 @@ vignette: >
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# UpSet.js HTMLWidget in R Markdown
+# UpSet.js Jupyter Widget
 
-This is a simple example how to include the UpSet.js [HTMLWidget](http://www.htmlwidgets.org/) in your R Markdown file
+[UpSet.js](https://upset.js.org) is a JavaScript re-implementation of [UpSetR](https://www.rdocumentation.org/packages/UpSetR/) which itself is based on [UpSet](http://vcg.github.io/upset/about/).
+
+The core library is written in React but provides also bundle editions for plain JavaScript use and this R wrappe using [HTMLWidget](http://www.htmlwidgets.org/).
+
+In this tutorial the basic widget functionality is explained.
+
+Let's begin with importing the library 
 
 ```{r libraries}
-# devtools::install_github("upsetjs/upsetjs_r")
+# devtools::install_url("https://github.com/upsetjs/upsetjs_r/releases/latest/download/upsetjs.tar.gz")
 library(upsetjs)
 ```
 
-# Data
+## Basic User Interface
 
-## List Input
-
-see also UpsetR
+**Note**: The input data will be described in more detail in the next section
 
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
 
 # example of list input (list of named vectors, each having a list of contained elements)
-listInput <- list(one = c(1, 2, 3, 5, 7, 8, 11, 12, 13), two = c(1, 2, 4, 5, 10), three = c(1, 5, 6, 7, 8, 9, 10, 12, 13))
+listInput <- list(one = c('a', 'b', 'c', 'e', 'g', 'h', 'k', 'l', 'm'), two = c('a', 'b', 'd', 'e', 'j'), three = c('a', 'e', 'f', 'g', 'h', 'i', 'j', 'l', 'm'))
 
-upsetjs() %>%
-  fromList(listInput)
+w <- upsetjs() %>% fromList(listInput) %>% interactiveChart()
+w
 ```
 
-see also UpsetR
 
-## Expression Input
+UpSet consists of three areas:
+
+- The bottom left area shows the list of sets as a vertical bar chart. The length of the bar corresponds to the cardinality of the set, i.e., the number of elements in this set.
+- The top right area shows the list of set intersections as a horiztonal bar chart. Again the length corresponds to the cardinality of the set
+- The bottom right area shows which intersection consists of which sets. A dark dot indicates that the set is part of this set intersection. The line connecting the dots is just to visually group the dots.
+
+Moving the mouse over a bar or a dot will automatically highlight the corresponding set or set intersection in orange. In addition, the number elements which are shared with the highlighted sets are also highlighted. This gives a quick overview how sets and set intersections are related to each other. More details, in the Interaction section.
+
+## Input Formats
+
+In the current version the UpSet wrapper supports three input data formats: list, expression, and through a data.frame.
+
+### List Input
+
+The first format is a list. The key of the list entry is the set name while the value is the vector of elements this set has. See also UpsetR
+
+```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
+upsetjs() %>% fromList(list(one = c('a', 'b', 'c', 'e', 'g', 'h', 'k', 'l', 'm'), two = c('a', 'b', 'd', 'e', 'j'), three = c('a', 'e', 'f', 'g', 'h', 'i', 'j', 'l', 'm')))
+```
+
+
+### Expression Input
+
+The second version is a a variant in which not the elements are given but their cardinality. Thus, besides the sets also all the set intersections have to be defined. Moreover, this version has only limited interactivty support.
+
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
 
 # example of expression input
-expressionInput <- c(one = 2, two = 1, three = 2, `one&two` = 1, `one&three` = 4, `two&three` = 1, `one&two&three` = 2)
+expressionInput <- c(one = 9, two = 5, three = 9, `one&two` = 3, `one&three` = 6, `two&three` = 3, `one&two&three` = 2)
 
 
-upsetjs() %>%
-  fromExpression(expressionInput)
+upsetjs() %>% fromExpression(expressionInput)
 ```
 
 
-## Data Frame Input
+### Data Frame Input
+
+The last format is a a binary/boolean data frame. The rownames contain the list of elements. Each regular column represents a set with boolean values (e.g., 0 and 1) whether the row represented by the rowname is part of the set or not.
+
+The following data frame defines the same set structure as the dictionary format before.
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
 
 # boolean table with rows = elements, columns = sets, cell = is row part of this set
-dataFrame <- as.data.frame(list(one=c(1, 0, 1), two=c(0, 1, 0)), row.names=c("R1", "R2", "R3"))
+dataFrame <- as.data.frame(list(
+  one=c(1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1), 
+  two=c(1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0),
+  three=c(1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)), 
+  row.names=c('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'))
 
 
-upsetjs() %>%
-  fromDataFrame(dataFrame)
+upsetjs() %>% fromDataFrame(dataFrame)
 ```
 
-# Intersections
+## Data Intersections
 
-In case of an `expressionInput` the combinations of sets are directly given. In all other cases they will be generated. The generation can be customized to limit the number of generated combinations (intersections or unions)
+In case of an `expressionInput` the combinations of sets are directly given. 
+
+`generateIntersections` and `generateUnions` let you customize the generation of the set combinations
+
+- `min` ... minimum number of sets in a set combination
+- `max` ... maximum number of sets in a set combination, NULL means no limit
+- `empty` ... include empty set combinations with no elements. By default they are not included
+- `order.by` ... sort set combinations either by `cardinality` (number of elements) or by `degree` (number of sets
+- `limit` ... show only the first limit set combinations
 
 
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
 
-upsetjs() %>%
-  fromList(listInput) %>%
-  generateIntersections(min=2) # at least two sets combined
+upsetjs() %>% fromList(listInput) %>%
+  generateIntersections(min=2, max=NULL, empty=T, order.by='cardinality', limit=NULL)
 ```
 
-# Styling, Layout
+```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
 
-set custom labels
+upsetjs() %>% fromList(listInput) %>%
+  generateUnions(min=0, max=2, empty=T, order.by='degree', limit=NULL)
+```
+
+## Interaction
+
+### Interactivity
+by setting the `interactiveFlag` flag, the user can interactively highlight sets within the chart.
 
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
 upsetjs() %>%
   fromList(listInput) %>%
-  chartLabels(combinations.y.label = "My Combinations", sets.x.label = 'My Sets')
+  interactiveChart()
 ```
 
-tune layout to ones needs
+### Selection
+with `setSelection` one manually sets the selection that is currently highlighted. The set is referenced by its name, a vector with multiple names is deteced as an intersection name
 
-```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
-upsetjs() %>%
-  fromList(listInput) %>%
-  chartLayout(height.ratios = c(0.3, 0.7))
-```
-
-# Selection
-
-## Single Selection
-
-specify the set to select identified by name or in case of a combination as list of names
 
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
 upsetjs() %>%
@@ -104,29 +141,61 @@ upsetjs() %>%
   setSelection("one")
 ```
 
+
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
 upsetjs() %>%
   fromList(listInput) %>%
   setSelection(c("one", "two"))
 ```
 
+In case UpSet will be used in a R Shiny context, it reports the current selection bsaed using two custom events:
+
+- `<outputid>_hover` when the user hovers over an item
+- `<outputid>_click` when the user clicks on an item
+
+both events are list objects with a `name` attribute that is either `NULL` or the name of the set. In addition, there is an `elems` attribute which contains the list of highlighted elements.
+
+See also Shiny examples at [events.R](https://github.com/upsetjs/upsetjs_r/blob/master/r_package/vignettes/shiny/events.R)
+
+
 ## Queries
 
-add highlighted queries to the plot. A query can be a set (see selection) or a list of elements to highlight
+besides the selection UpSet supports defining queries. A query can be a list of elements or a set that should be highlighted. A query consists of a name, a color, and either the list of elements or the upset set (combination) to highlight.
+
 
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
 upsetjs() %>%
   fromList(listInput) %>%
-  addQuery("Q1", color="steelblue", set="one") %>%
-  addQuery("Q2", color="red", elems=c(1,2,4))
+  addQuery("Q1", color="red", elems=c('a', 'b', 'c')) %>%
+  addQuery("Q2", color="blue", set='two')
 ```
 
-# Interactivity
+## Styling
 
-by setting this flag, the user can interactively highlight sets within the chart.
+### Theme
+
+UpSet.js supports two themes: light and dark. The theme can be set by the `chartTheme` function
 
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
 upsetjs() %>%
   fromList(listInput) %>%
-  interactiveChart()
+  chartTheme('dark')
+```
+
+### Labels
+
+```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
+upsetjs() %>%
+  fromList(listInput) %>%
+  chartLabels(combination.name = "Combination Label", set.name = "Set Label")
+```
+
+### Log Scale
+
+setting `chartLayout(numerical.scale = 'log')` switches to a log scale, similarly `'linear'` goes back to a linear scale
+
+```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
+upsetjs() %>%
+  fromList(listInput) %>%
+  chartLayout(numerical.scale = 'log')
 ```
