@@ -6,7 +6,7 @@
     "baseUrl": "./",
     "paths": {
       "@": ["./"],
-      "*": ["js_src/*", "node_modules/*"]
+      "*": ["src/*", "node_modules/*"]
     },
     "module": "esnext",
     "lib": ["dom", "esnext"],

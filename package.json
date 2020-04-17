@@ -13,9 +13,14 @@
     "url": "https://github.com/sgratzl/upsetjs_r.git"
   },
   "scripts": {
-    "lint": "eslint js_src --ext .ts",
+    "lint": "eslint src --ext .ts",
+    "clean": "rimraf r_package/inst/htmlwidgets/upsetjs.js",
     "build:dev": "webpack-cli -d --devtool source-map",
-    "build": "webpack-cli -p"
+    "build": "npm run clean && webpack-cli -p",
+    "check:r": "RScript -e 'devtools::check(\"r_package\")'",
+    "clean:r": "rimraf *.tar.gz check r_package/man r_package/doc r_package/docs r_package/NAMESPACE",
+    "build:r": "npm run clean:r && RScript -e 'devtools::document(\"r_package\")' -e 'devtools::build(\"r_package\")' -e 'file.copy(list.files(pattern=\"upsetjs_.*.tar.gz\"), \"upsetjs.tar.gz\")'",
+    "docs:r": "RScript -e 'devtools::build_site(\"r_package\")'"
   },
   "browserslist": [
     "ie 11"
@@ -40,6 +45,8 @@
     "html-webpack-plugin": "^4.0.4",
     "pnp-webpack-plugin": "^1.6.4",
     "prettier": "^2.0.4",
+    "rimraf": "^3.0.2",
+    "release-it": "^13.5.2",
     "ts-loader": "^6.2.2",
     "tslib": "^1.11.1",
     "typescript": "^3.8.3",

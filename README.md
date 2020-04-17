@@ -9,7 +9,7 @@ This package is part of the UpSet.js ecosystem located at the main [Github Monor
 ## Installation
 
 ```R
-devtools::install_github("upsetjs/upsetjs_r")
+devtools::install_url('https://github.com/upsetjs/upsetjs_r/releases/latest/download/upsetjs.tar.gz')
 library(upsetjs)
 ```
 
@@ -57,6 +57,10 @@ see also [Shiny Examples](./master/vignettes/shiny)
 
 ## Dev Environment
 
+requirements:
+
+- R with packages: devtools, pkgdown
+
 ```sh
 npm i -g yarn
 yarn set version berry
@@ -75,7 +79,6 @@ yarn build
 
 Notes:
 
-- in windows it requires the R tools. e.g., `$env:PATH="C:/Users/sam/Anaconda3/Rtools/mingw_64/bin;C:/Users/sam/Anaconda3/Rtools/bin;$env:PATH"`
 - R is stupid when coming to ignoring files during build. Thus `.yarn` and `node_modules` directories need to removed prior to the build. e.g.,
   ```sh
   mkdir ../upsetjs_r_t

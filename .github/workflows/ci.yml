@@ -13,39 +13,53 @@ jobs:
       - uses: r-lib/actions/setup-r@master
         with:
           r-version: 3.6
-
-      - name: Query dependencies
-        run: |
-          install.packages('remotes')
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-        shell: Rscript {0}
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+        # build client code
+      - run: npm i -g yarn
+      - run: yarn set version berry
+      - run: yarn config set checksumBehavior ignore
+      - name: Cache Node.js modules
+        uses: actions/cache@v1
+        with:
+          path: ./.yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - run: yarn install --immutable
+        env:
+          CI: true
+      - run: yarn build
+        env:
+          CI: true
 
       - name: Cache R packages
         uses: actions/cache@v1
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-r-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-r-
+          key: ${{ runner.os }}-r-v2-${{ hashFiles('r_package/NAMESPACE') }}
+          restore-keys: ${{ runner.os }}-r-v2-
 
-      - name: Install system dependencies
-        env:
-          RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
-        run: |
-          Rscript -e "remotes::install_github('r-hub/sysreqs')"
-          sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
-          sudo -s eval "$sysreqs"
+      # - name: Install system dependencies
+      #   env:
+      #     RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
+      #   run: |
+      #     Rscript -e "remotes::install_github('r-hub/sysreqs')"
+      #     sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
+      #     sudo -s eval "$sysreqs"
 
       - name: Install dependencies
         run: |
-          remotes::install_deps(dependencies = TRUE)
-          remotes::install_cran("rcmdcheck")
-          remotes::install_cran("pkgdown")
+          install.packages('devtools')
+          install.packages('pkgdown')
+          devtools::install_deps('r_package', dependencies = TRUE)
         shell: Rscript {0}
 
       - name: Check
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
-        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "error", check_dir = "check")
+        run: devtools::check('r_package', args = c("--no-manual", "--as-cran"), error_on = "error", check_dir = "check")
         shell: Rscript {0}
 
       - name: Upload check results
@@ -53,15 +67,15 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: ${{ runner.os }}-results
-          path: check
+          path: r_package/check
 
       - name: Build Website
-        run: pkgdown::build_site()
+        run: devtools::build_site('r_package')
         shell: Rscript {0}
 
       - run: |
           mkdir -p public/integrations/r
-          mv docs/* public/integrations/r/
+          mv r_package/docs/* public/integrations/r/
 
       - name: Deploy
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
@@ -80,10 +94,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: "12.x"
+          node-version: '12.x'
       - run: npm i -g yarn
       - run: yarn set version berry
-      - run: yarn plugin import @yarnpkg/plugin-workspace-tools
       - run: yarn config set checksumBehavior ignore
       - name: Cache Node.js modules
         uses: actions/cache@v1

@@ -21,7 +21,7 @@ const babel = {
 
 module.exports = {
   entry: {
-    app: './js_src/index.ts',
+    app: './src/index.ts',
   },
   output: {
     filename: 'upsetjs.js',
