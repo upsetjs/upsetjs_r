@@ -71,6 +71,7 @@ jobs:
           name: ${{ runner.os }}-results
           path: r_package/check
 
+      - run: cp README.md r_package/
       - name: Build Website
         run: devtools::build_site('r_package')
         shell: Rscript {0}
