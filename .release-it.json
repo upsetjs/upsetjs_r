@@ -13,5 +13,8 @@
   "github": {
     "release": true,
     "assets": ["*.tar.gz"]
+  },
+  "plugins": {
+    "./scripts/bump.js": {}
   }
 }
