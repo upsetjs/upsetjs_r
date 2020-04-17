@@ -60,8 +60,8 @@ jobs:
         shell: Rscript {0}
 
       - run: |
-          mkdir -p public/r
-          mv docs/* public/r/
+          mkdir -p public/integrations/r
+          mv docs/* public/integrations/r/
 
       - name: Deploy
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
