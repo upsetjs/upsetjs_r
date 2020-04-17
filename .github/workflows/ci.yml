@@ -13,6 +13,7 @@ jobs:
       - uses: r-lib/actions/setup-r@master
         with:
           r-version: 3.6
+      - uses: r-lib/actions/setup-pandoc@v1
       - uses: actions/setup-node@v1
         with:
           node-version: '12.x'
