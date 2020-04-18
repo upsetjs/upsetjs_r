@@ -8,6 +8,10 @@
     "email": "samu@sgratzl.com",
     "url": "https://wwww.sgratzl.com"
   },
+  "homepage": "https://github.com/upsetjs/upsetjs_r",
+  "bugs": {
+    "url": "https://github.com/upsetjs/upsetjs_r/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/sgratzl/upsetjs_r.git"
