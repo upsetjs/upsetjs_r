@@ -60,6 +60,7 @@ see also [Shiny Examples](./master/vignettes/shiny)
 requirements:
 
 - R with packages: devtools, pkgdown
+- pandoc
 
 ```sh
 npm i -g yarn
@@ -70,51 +71,50 @@ yarn pnpify --sdk
 
 ### Building
 
-```
+```sh
 yarn lint
 yarn build
 ```
 
 ### R Package
 
-Notes:
+```sh
+yarn check:r
+yarn build:r
+```
 
-- R is stupid when coming to ignoring files during build. Thus `.yarn` and `node_modules` directories need to removed prior to the build. e.g.,
-  ```sh
-  mkdir ../upsetjs_r_t
-  mv .yarn ../upsetjs_r_t/
-  mv node_modules ../upsetjs_r_t/
-  ```
+or in R
 
 ```R
-devtools::check()
-devtools::build()
-
-devtools::load_all()
+devtools::check("r_package")
+devtools::document("r_package")
+devtools::build("r_package")
+devtools::load_all("r_package")
 ```
 
 **R Package Website**
 
-```R
-devtools::build_site()
-```
-
-checkout the gh-pages branch or switch to its worktree
-
-```sh`
-git worktree add ../upsetjs_r_pages -b gh-pages
-
-````
-
-update the website
+will be automatically updated upon push
 
 ```sh
-cd ../upsetjs_r_pages
-rm *
-cp ../upsetjs_r/docs .
-git commit -am 'update website'
-git push
-````
+yarn docs:r
+```
+
+or in R
+
+```R
+devtools::build_site("r_package)
+```
+
+## Release
+
+use `release-it`
+
+```sh
+yarn release:major
+yarn release:minor
+yarn release:patch
+```
 
 ## License
 
