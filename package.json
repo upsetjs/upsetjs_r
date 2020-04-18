@@ -1,11 +1,12 @@
 {
   "name": "@upsetjs/r",
+  "description": "UpSet.js R HTMLWidget wrapper",
   "version": "0.4.1",
   "private": true,
   "license": "AGPL-3.0",
   "author": {
     "name": "Samuel Gratzl",
-    "email": "samu@sgratzl.com",
+    "email": "sam@sgratzl.com",
     "url": "https://wwww.sgratzl.com"
   },
   "homepage": "https://github.com/upsetjs/upsetjs_r",
