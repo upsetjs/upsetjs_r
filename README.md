@@ -133,3 +133,4 @@ This library is released under the `GNU AGPLv3` version to be used for private a
 [github-actions-image]: https://github.com/upsetjs/upsetjs_r/workflows/ci/badge.svg
 [github-actions-url]: https://github.com/upsetjs/upsetjs_r/actions
 [codepen]: https://img.shields.io/badge/CodePen-open-blue?logo=codepen
+[binder]: http://mybinder.org/badge_logo.svg
