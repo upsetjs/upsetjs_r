@@ -1,14 +1,10 @@
 # UpSet.js as R HTMLWidget
 
-[![Github Actions][github-actions-image]][github-actions-url]
+[![Github Actions][github-actions-image]][github-actions-url] [![Open in Binder][binder]][binder-r-url] [![Open Docs][docs]][docs-r-url] [![Open example][example]][example-r-url]
 
 This is a [HTMLWidget](http://www.htmlwidgets.org/) wrapper around the JavaScript library [UpSet.js](https://github.com/upsetjs/upsetjs) and an alternative implementation of [UpSetR](https://www.rdocumentation.org/packages/UpSetR).
 
 This package is part of the UpSet.js ecosystem located at the main [Github Monorepo](https://github.com/upsetjs/upsetjs).
-
-RStudio: [![Binder](http://mybinder.org/badge_logo.svg)](http://mybinder.org/v2/gh/upsetjs/upsetjs_r/master?urlpath=rstudio/r_package)
-
-RShiny: [![Binder](http://mybinder.org/badge_logo.svg)](http://mybinder.org/v2/gh/binder-examples/r/master?urlpath=shiny/r_package/vigenttes/shiny)
 
 ## Installation
 
@@ -133,4 +129,9 @@ This library is released under the `GNU AGPLv3` version to be used for private a
 [github-actions-image]: https://github.com/upsetjs/upsetjs_r/workflows/ci/badge.svg
 [github-actions-url]: https://github.com/upsetjs/upsetjs_r/actions
 [codepen]: https://img.shields.io/badge/CodePen-open-blue?logo=codepen
-[binder]: http://mybinder.org/badge_logo.svg
+[binder]: https://mybinder.org/badge_logo.svg
+[binder-r-url]: https://mybinder.org/v2/gh/upsetjs/upsetjs_r/master?urlpath=rstudio
+[docs]: https://img.shields.io/badge/API-open-blue
+[docs-r-url]: https://upset.js.org/integrations/r
+[example]: https://img.shields.io/badge/Example-open-red
+[example-r-url]: https://upset.js.org/integrations/r/articles/basic
