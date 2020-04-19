@@ -1,0 +1,36 @@
+---
+title: "Covid19"
+author: "Samuel Gratzl"
+date: "April 19, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Covid19 Symptoms using UpSet.js¶
+
+
+
+this is a visualization based on [UpSet.js](https://upset.js.org), see https://upset.js.org/integrations/r, https://upset.js.org/integrations/r/articles/basic.html, and https://github.com/upsetjs/upsetjs_r
+
+
+```{r}
+# devtools::install_url("https://github.com/upsetjs/upsetjs_r/releases/latest/download/upsetjs.tar.gz")
+library(upsetjs)
+```
+
+
+data from: https://github.com/hms-dbmi/upset-altair-notebook
+
+```{r}
+ds <- as.data.frame(read.csv(url('https://raw.githubusercontent.com/hms-dbmi/upset-altair-notebook/master/data/covid_symptoms_table.csv'), row.names=1))
+```
+
+
+```{r, fig.width=12, fig.height=5, tidy=TRUE, fig.align='center'}
+upsetjs() %>%
+  fromDataFrame(ds) %>%
+  interactiveChart()
+```
