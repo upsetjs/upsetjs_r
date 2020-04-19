@@ -6,6 +6,10 @@ This is a [HTMLWidget](http://www.htmlwidgets.org/) wrapper around the JavaScrip
 
 This package is part of the UpSet.js ecosystem located at the main [Github Monorepo](https://github.com/upsetjs/upsetjs).
 
+RStudio: [![Binder](http://mybinder.org/badge_logo.svg)](http://mybinder.org/v2/gh/upsetjs/upsetjs_r/master?urlpath=rstudio/r_package)
+
+RShiny: [![Binder](http://mybinder.org/badge_logo.svg)](http://mybinder.org/v2/gh/binder-examples/r/master?urlpath=shiny/r_package/vigenttes/shiny)
+
 ## Installation
 
 ```R
