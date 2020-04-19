@@ -79,8 +79,6 @@ jobs:
       - run: |
           mkdir -p public/integrations/r
           mv r_package/docs/* public/integrations/r/
-          mkdir -p public/examples/r
-          cp -r r_package/vignettes/* public/examples/r/
 
       - name: Deploy
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
