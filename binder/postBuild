@@ -1,0 +1,4 @@
+#!/bin/bash
+set -ex
+
+Rscript -e "devtools::install_url(\"https://github.com/upsetjs/upsetjs_r/releases/latest/download/upsetjs.tar.gz\")"
