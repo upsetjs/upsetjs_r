@@ -81,8 +81,6 @@ jobs:
           mv r_package/docs/* public/integrations/r/
           mkdir -p public/examples/r
           cp -r r_package/vignettes/* public/examples/r/
-          cp runtime.txt public/
-          cp install.R public/
 
       - name: Deploy
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
