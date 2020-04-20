@@ -41,7 +41,7 @@ HTMLWidgets.widget({
         props.sets = fixSets(props.sets);
       }
       if (delta.combinations != null) {
-        const c = fixCombinations(props.combinations, props.sets);
+        const c = fixCombinations(delta.combinations, props.sets);
         if (c == null) {
           delete props.combinations;
         } else {
