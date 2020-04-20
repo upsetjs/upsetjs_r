@@ -23,7 +23,7 @@
     "prettier": "prettier *.md *.json .eslintrc.js webpack* .prettierrc \"{src,types,scripts,.github}/**\" \"{r_package,binder}/*.yml\" ",
     "prettier:write": "npm run prettier -- --write",
     "prettier:check": "npm run prettier -- --check",
-    "eslint": "tsdx lint src --ext .ts,.tsx",
+    "eslint": "eslint src --ext .ts,.tsx",
     "eslint:fix": "npm run eslint -- --fix",
     "clean": "rimraf r_package/inst/htmlwidgets/upsetjs.js",
     "build:dev": "webpack-cli -d --devtool source-map",
