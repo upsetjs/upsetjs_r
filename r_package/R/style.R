@@ -138,3 +138,15 @@ chartTheme = function(upsetjs,
                )
   setProperties(upsetjs, props, clean=TRUE)
 }
+
+#'
+#' generic set chart props
+#' @return upsetjs
+#'
+#' @export
+chartProps = function(upsetjs,
+                      ...) {
+  props = list(...)
+  setProperties(upsetjs, props, clean=TRUE)
+}
+
