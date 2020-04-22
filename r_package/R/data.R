@@ -16,7 +16,8 @@ sortSets = function(sets, order.by='cardinality', limit=NULL) {
   } else if (order.by[1] == 'degree') {
     order.by = c('degree', 'name')
   }
-  o = do.call(order, lapply(order.by, set_attr))
+  values = lapply(order.by, set_attr)
+  o = do.call(order, values)
   r = sets[o]
   if (is.null(limit)) {
     r
@@ -67,8 +68,10 @@ fromList = function(upsetjs, value, order.by="cardinality", limit=NULL, shared=N
   stopifnot(is.null(limit) || (is.numeric(limit) && length(limit) == 1))
   stopifnot(shared.mode == "click" || shared.mode == "hover")
 
+  elems = c()
   toSet = function(key, value) {
-    list(name=key, elems=value, cardinality=length(value))
+    elems = c(elems, value)
+    list(name=key, elems=value)
   }
   sets = mapply(toSet, key=names(value), value=value, SIMPLIFY=F)
   # list of list objects
@@ -80,7 +83,7 @@ fromList = function(upsetjs, value, order.by="cardinality", limit=NULL, shared=N
 
   sets = sortSets(sets, order.by=order.by, limit=limit)
   gen = generateCombinationsImpl(sets, "intersection", 0, NULL, FALSE, order.by, NULL)
-  setProperties(upsetjs, list(sets=sets, combinations=gen))
+  setProperties(upsetjs, list(sets=sets, combinations=gen, elems=elems, attrs=list())
 }
 
 #'
@@ -116,7 +119,7 @@ fromExpression = function(upsetjs, value, symbol="&", order.by="cardinality") {
   names(combinations) = NULL
   combinations = sortSets(combinations, order.by=order.by)
 
-  props = list(sets=sets, combinations=combinations)
+  props = list(sets=sets, combinations=combinations, elems=c(), attrs=list())
   setProperties(upsetjs, props)
 }
 
@@ -136,7 +139,7 @@ fromExpression = function(upsetjs, value, symbol="&", order.by="cardinality") {
 fromDataFrame = function(upsetjs, df, attributes=NULL, order.by="cardinality", limit=NULL, shared=NULL, shared.mode="click") {
   stopifnotupset(upsetjs)
   stopifnot(is.data.frame(df))
-  stopifnot((is.null(attributes) || is.data.frame(attributes) || is.character(attributes)))
+  stopifnot((is.null(attributes) || is.data.frame(attributes) || is.list(attributes) || is.character(attributes)))
   stopifnot(order.by == "cardinality" || order.by == "degree")
   stopifnottype(limit)
   stopifnot(shared.mode == "click" || shared.mode == "hover")
@@ -158,16 +161,27 @@ fromDataFrame = function(upsetjs, df, attributes=NULL, order.by="cardinality", l
 
   sets = sortSets(sets, order.by=order.by, limit=limit)
   gen = generateCombinationsImpl(sets, "intersection", 0, NULL, FALSE, order.by, NULL)
-  props = list(sets=sets, combinations=gen)
+  props = list(sets=sets, combinations=gen, elems=elems)
 
   if(!is.null(attributes)) {
-    attr_df = if (is.data.frame(attributes)) attributes else df[,attributes]
+    attr_df = if (is.character(attributes)) df[,attributes] else attributes
     props$attrs = attr_df
   }
 
   setProperties(upsetjs, props)
 }
 
+
+#'
+#' extract the vector of elements
+#' @param upsetjs the upsetjs instance
+#' @return vector of elements
+#'
+#' @export
+getSets = function(upsetjs) {
+  stopifnot(inherits(upsetjs, 'upsetjs'))
+  upsetjs$x$elems
+}
 
 #'
 #' extract the vector of sets

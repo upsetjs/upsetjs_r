@@ -20,13 +20,13 @@ declare type CrosstalkOptions = {
   mode: 'click' | 'hover';
 };
 
-declare type IElem = string | number;
+declare type IElem = string;
 
 declare type ShinyUpSetProps = UpSetProps<IElem> & {
   interactive?: boolean;
   crosstalk?: CrosstalkOptions;
 
-  elems: ReadonlyArray[IElem];
+  elems: ReadonlyArray<IElem>;
   attrs: { [attr: string]: ReadonlyArray<number> };
 };
 
@@ -41,7 +41,11 @@ HTMLWidgets.widget({
   type: 'output',
 
   factory(el, width, height) {
-    const props: ShinyUpSetProps = {
+    let interactive = false;
+    let elems: ReadonlyArray<IElem> = [];
+    const elemToIndex = new Map<IElem, number>();
+    let attrs: { [key: string]: ReadonlyArray<number> } = {};
+    const props: UpSetProps<IElem> = {
       sets: [],
       width,
       height,
@@ -50,28 +54,43 @@ HTMLWidgets.widget({
     };
     let crosstalkHandler: CrosstalkHandler | null = null;
 
-    function syncAddons(props: ShinyUpSetProps, keys: string[]) {
+    function syncAddons() {
+      const keys = Object.keys(attrs);
       if (keys.length === 0) {
         delete props.setAddons;
         delete props.combinationAddons;
         return;
       }
       props.setAddons = keys.map((key) =>
-        boxplotAddon((v) => v.attrs[key], this.elems, {
+        boxplotAddon((v) => attrs[key]![elemToIndex.get(v)!], elems, {
           name: key,
         })
       );
-      this.props.combinationAddons = keys.map((key) =>
-        boxplotAddon((v) => v.attrs[key], this.elems, {
+      props.combinationAddons = keys.map((key) =>
+        boxplotAddon((v) => attrs[key]![elemToIndex.get(v)!], elems, {
           name: key,
           orient: 'vertical',
         })
       );
     }
 
-    function fixProps(props: ShinyUpSetProps, delta: any) {
-      delete props.interactive;
-      delete props.crosstalk;
+    function fixProps(props: UpSetProps<IElem>, delta: any) {
+      if (typeof delta.interactive === 'boolean') {
+        interactive = delta.interactive;
+      }
+      delete (props as any).interactive;
+      delete (props as any).crosstalk;
+      if (delta.elems) {
+        elems = delta.elems;
+        elemToIndex.clear();
+        delta.elems.forEach((elem: IElem, i: number) => elemToIndex.set(elem, i));
+      }
+      delete (props as any).elems;
+      if (delta.attrs) {
+        attrs = delta.attrs;
+        syncAddons();
+      }
+      delete (props as any).attrs;
 
       if (delta.sets != null) {
         props.sets = fixSets(props.sets);
@@ -87,7 +106,7 @@ HTMLWidgets.widget({
       if (typeof delta.selection === 'string' || Array.isArray(delta.selection)) {
         props.selection = resolveSet(delta.selection, props.sets, props.combinations as ISetCombinations<IElem>);
       }
-      props.onHover = props.interactive || HTMLWidgets.shinyMode ? onHover : undefined;
+      props.onHover = interactive || HTMLWidgets.shinyMode ? onHover : undefined;
 
       if (delta.queries) {
         props.queries = delta.queries.map((query: any) => {
@@ -128,11 +147,11 @@ HTMLWidgets.widget({
         });
       }
       const crosstalk = crosstalkHandler && crosstalkHandler.mode === 'hover';
-      if (!props.interactive && !crosstalk) {
+      if (!interactive && !crosstalk) {
         return;
       }
       if (crosstalk && crosstalkHandler) {
-        crosstalkHandler.trigger(set?.elems);
+        crosstalkHandler.trigger(set?.elems as string[]);
       }
       if (set) {
         // hover on
