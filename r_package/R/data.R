@@ -3,20 +3,20 @@ sortSets = function(sets, order.by='cardinality', limit=NULL) {
   set_attr = function(order.by.attr) {
     set_names =
     if (order.by.attr == 'cardinality') {
-      sapply(sets, function (x) { -x$cardinality })
-    } else if (order.by == 'degree') {
-      sapply(sets, function (x) { x$degree })
+      sapply(sets, function (x) if (length(x$elems) == 0) x$cardinality * -1 else length(x$elems) * -1)
+    } else if (order.by.attr == 'degree') {
+      sapply(sets, function (x) length(x$setNames))
     } else {
-      sapply(sets, function (x) { x$name })
+      sapply(sets, function (x) x$name)
     }
   }
 
-  if (order.by == 'cardinality') {
+  if (order.by[1] == 'cardinality') {
     order.by = c('cardinality', 'name')
-  } else if (order.by == 'degree') {
+  } else if (order.by[1] == 'degree') {
     order.by = c('degree', 'name')
   }
-  o = order(...sapply(order.by, set_attr))
+  o = do.call(order, lapply(order.by, set_attr))
   r = sets[o]
   if (is.null(limit)) {
     r
@@ -25,15 +25,22 @@ sortSets = function(sets, order.by='cardinality', limit=NULL) {
   }
 }
 
-generateCombinationsImpl = function(sets, set_f, min, max, order.by, limit, symbol="&") {
+generateCombinationsImpl = function(sets, c_type, min, max, empty, order.by, limit, symbol="&") {
   combinations = c()
-  c_type = if (set_f == intersect) "intersection" else "union"
-  for(l in min:max) {
+  set_f = if (c_type == "intersection") intersect else union
+  for(l in min:(if (is.null(max)) length(sets) else max)) {
     combos = combn(sets, l, simplify=F)
     for(combo in combos) {
       set_names = sapply(combo, function(s) s$name)
       set_elems = sapply(combo, function(s) s$elems)
-      elems = set_f(...set_elems)
+      if (length(combo) == 0) {
+        elems = c()
+      } else {
+        elems = set_elems[0]
+        for (other in set_elems) {
+          elems = set_f(elems, other)
+        }
+      }
       if (empty || length(elems) > 0) {
         combinations = c(combinations, list(namepaste(set_names, symbol), type=c_type, elems=elems, setNames=set_names))
       }
@@ -72,7 +79,7 @@ fromList = function(upsetjs, value, order.by="cardinality", limit=NULL, shared=N
   }
 
   sets = sortSets(sets, order.by=order.by, limit=limit)
-  gen = generateCombinationsImpl(sets, intersect, 0, NULL, order.by, NULL)
+  gen = generateCombinationsImpl(sets, "intersection", 0, NULL, FALSE, order.by, NULL)
   setProperties(upsetjs, list(sets=sets, combinations=gen))
 }
 
@@ -150,7 +157,7 @@ fromDataFrame = function(upsetjs, df, attributes=NULL, order.by="cardinality", l
   }
 
   sets = sortSets(sets, order.by=order.by, limit=limit)
-  gen = generateCombinationsImpl(sets, intersect, 0, NULL, order.by, NULL)
+  gen = generateCombinationsImpl(sets, "intersection", 0, NULL, FALSE, order.by, NULL)
   props = list(sets=sets, combinations=gen)
 
   if(!is.null(attributes)) {
@@ -184,7 +191,7 @@ getCombinations = function(upsetjs) {
   upsetjs$x$combinations
 }
 
-generateCombinations = function(upsetjs, set_f, min, max, empty, order.by, limit, symbol = '&') {
+generateCombinations = function(upsetjs, c_type, min, max, empty, order.by, limit, symbol = '&') {
   stopifnotupset(upsetjs)
   stopifnot(is.numeric(min), length(min) == 1)
   stopifnottype(max)
@@ -194,10 +201,10 @@ generateCombinations = function(upsetjs, set_f, min, max, empty, order.by, limit
 
   if(inherits(upsetjs, 'upsetjs')) {
     sets = upsetjs$x$sets
+    set_f = if (set_f == "intersect") intersect else union
     gen = generateCombinationsImpl(sets, set_f, min, max, empty, order.by, limit, symbol)
   } else {
     # proxy
-    c_type = if (set_f == intersect) "intersection" else "union"
     gen = cleanNull(list(type=c_type, min=min, max=max, empty=empty, order=order.by, limit=limit))
   }
   setProperty(upsetjs, 'combinations', gen)
@@ -214,7 +221,7 @@ generateCombinations = function(upsetjs, set_f, min, max, empty, order.by, limit
 #'
 #' @export
 generateIntersections = function(upsetjs, min=0, max=NULL, empty=FALSE, order.by="cardinality", limit=NULL) {
-  generateCombinations(upsetjs, intersect, min, max, empty, order.by, limit)
+  generateCombinations(upsetjs, "intersection", min, max, empty, order.by, limit)
 }
 
 #'
@@ -229,5 +236,5 @@ generateIntersections = function(upsetjs, min=0, max=NULL, empty=FALSE, order.by
 #'
 #' @export
 generateUnions = function(upsetjs, min=0, max=NULL, empty=FALSE, order.by="cardinality", limit=NULL) {
-  generateCombinations(upsetjs, union, min, max, empty, order.by, limit)
+  generateCombinations(upsetjs, "union", min, max, empty, order.by, limit)
 }
