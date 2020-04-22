@@ -118,6 +118,7 @@ fromExpression = function(upsetjs, value, symbol="&", order.by="cardinality") {
 #' extract the sets from a data frame (rows = elems, columns = sets, cell = contained)
 #' @param upsetjs the upsetjs (proxy) instance
 #' @param df the data.frame like structure
+#' @param attributes the optional column list or data frame
 #' @param order.by order intersections by cardinality or degree
 #' @param limit limit the ordered sets to the given limit
 #' @param shared a crosstalk shared data frame
@@ -125,9 +126,10 @@ fromExpression = function(upsetjs, value, symbol="&", order.by="cardinality") {
 #' @return upsetjs
 #'
 #' @export
-fromDataFrame = function(upsetjs, df, order.by="cardinality", limit=NULL, shared=NULL, shared.mode="click") {
+fromDataFrame = function(upsetjs, df, attributes=NULL, order.by="cardinality", limit=NULL, shared=NULL, shared.mode="click") {
   stopifnotupset(upsetjs)
   stopifnot(is.data.frame(df))
+  stopifnot((is.null(attributes) || is.data.frame(attributes) || is.character(attributes)))
   stopifnot(order.by == "cardinality" || order.by == "degree")
   stopifnottype(limit)
   stopifnot(shared.mode == "click" || shared.mode == "hover")
@@ -135,9 +137,11 @@ fromDataFrame = function(upsetjs, df, order.by="cardinality", limit=NULL, shared
   elems = rownames(df)
   toSet = function(key) {
     sub = elems[df[[key]] == T]
-    list(name=key, elems=sub)
+    list(name=key, type="set", elems=sub)
   }
-  sets = lapply(colnames(df), toSet)
+
+  set_names = setdiff(colnames(df), if (is.character(attributes)) attributes else c())
+  sets = lapply(set_names, toSet)
 
   if (!is.null(shared)) {
     upsetjs = enableCrosstalk(upsetjs, shared, mode=shared.mode)
@@ -147,7 +151,14 @@ fromDataFrame = function(upsetjs, df, order.by="cardinality", limit=NULL, shared
 
   sets = sortSets(sets, order.by=order.by, limit=limit)
   gen = generateCombinationsImpl(sets, intersect, 0, NULL, order.by, NULL)
-  setProperties(upsetjs, list(sets=sets, combinations=gen))
+  props = list(sets=sets, combinations=gen)
+
+  if(!is.null(attributes)) {
+    attr_df = if (is.data.frame(attributes)) attributes else df[,attributes]
+    props$attrs = attr_df
+  }
+
+  setProperties(upsetjs, props)
 }
 
 

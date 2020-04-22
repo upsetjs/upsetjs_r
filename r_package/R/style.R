@@ -124,7 +124,7 @@ chartFontSizes = function(upsetjs,
 #'
 #' @export
 chartStyleFlags = function(upsetjs,
-                           id=NULL<
+                           id=NULL,
                            export.buttons=NULL,
                            class.name=NULL) {
   stopifnotupset(upsetjs)
