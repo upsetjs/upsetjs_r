@@ -1,4 +1,12 @@
 
+stopifnotupset = function(upsetjs) {
+  stopifnot(inherits(upsetjs, 'upsetjs') || inherits(upsetjs, 'upsetjs_proxy'))
+}
+
+stopifnottype = function(value, type_f = is.numeric, l = 1) {
+  stopifnot(is.null(value) || (type_f(value) && length(value) == l))
+}
+
 sendMessage = function(upsetjs_proxy, props, ...) {
   session = upsetjs_proxy$session
   id = upsetjs_proxy$id
@@ -26,6 +34,8 @@ enableCrosstalk = function(upsetjs, shared, mode) {
 }
 
 setProperty = function(upsetjs, prop, value) {
+  stopifnotupset(upsetjs)
+
   if (inherits(upsetjs, 'upsetjs')) {
     upsetjs$x[[prop]] = value
   } else if (inherits(upsetjs, 'upsetjs_proxy')) {
@@ -37,6 +47,8 @@ setProperty = function(upsetjs, prop, value) {
 }
 
 appendProperty = function(upsetjs, prop, value) {
+  stopifnotupset(upsetjs)
+
   if (inherits(upsetjs, 'upsetjs')) {
     if (is.null(upsetjs$x[[prop]])) {
       upsetjs$x[[prop]] = list(value)
@@ -52,6 +64,8 @@ appendProperty = function(upsetjs, prop, value) {
 }
 
 setProperties = function(upsetjs, props, clean=F) {
+  stopifnotupset(upsetjs)
+
   if (clean) {
     props = cleanNull(props)
   }

@@ -20,6 +20,16 @@ chartLayout = function(upsetjs,
                        dot.padding=NULL,
                        numerical.scale=NULL,
                        band.scale=NULL) {
+  stopifnotupset(upsetjs)
+  stopifnot(is.null(height.ratios) || (is.numeric(height.ratios) && length(height.ratios) == 2))
+  stopifnot(is.null(width.ratios) || (is.numeric(width.ratios) && length(width.ratios) == 3))
+  stopifnottype(padding)
+  stopifnottype(bar.padding)
+  stopifnottype(dot.padding)
+  stopifnot(is.null(numerical.scale) || (numerical.scale == 'linear' || numerical.scale == 'band'))
+  stopifnot(is.null(band.scale) || band.scale == 'band')
+
+
   props = list(heightRatios=height.ratios,
                widthRatios=width.ratios,
                padding=padding,
@@ -47,6 +57,13 @@ chartLabels = function(upsetjs,
                        set.name=NULL,
                        set.name.axis.offset=NULL,
                        bar.label.offset=NULL) {
+  stopifnotupset(upsetjs)
+  stopifnottype(combination.name, is.character)
+  stopifnottype(combination.name.axis.offset)
+  stopifnottype(set.name, is.character)
+  stopifnottype(set.name.axis.offset)
+  stopifnottype(bar.label.offset)
+
   props = list(setName=set.name,
                combinationName=combination.name,
                combinationNameAxisOffset=combination.name.axis.offset,
@@ -75,6 +92,14 @@ chartFontSizes = function(upsetjs,
                           axis.tick=NULL,
                           bar.label=NULL,
                           legend=NULL) {
+  stopifnotupset(upsetjs)
+  stopifnottype(font.family, is.character)
+  stopifnottype(chart.label, is.character)
+  stopifnottype(set.label, is.character)
+  stopifnottype(axis.tick, is.character)
+  stopifnottype(bar.label, is.character)
+  stopifnottype(legend, is.character)
+
   font.sizes = list(
     chartLabel=chart.label,
     axisTick=axis.tick,
@@ -92,14 +117,21 @@ chartFontSizes = function(upsetjs,
 #'
 #' specify chart flags
 #' @param upsetjs the upsetjs (proxy) instance
+#' @param id the optional HTML ID
 #' @param export.buttons show export SVG and PNG buttons
 #' @param class.name extra CSS class name to the root element
 #' @return upsetjs
 #'
 #' @export
 chartStyleFlags = function(upsetjs,
+                           id=NULL<
                            export.buttons=NULL,
                            class.name=NULL) {
+  stopifnotupset(upsetjs)
+  stopifnottype(export.buttons, is.logical)
+  stopifnottype(class.name, is.character)
+  stopifnottype(id, is.character)
+
   props = list(exportButtons=export.buttons,
                className=class.name
                )
@@ -128,6 +160,15 @@ chartTheme = function(upsetjs,
                       text.color=NULL,
                       hover.hint.color=NULL,
                       not.member.color=NULL) {
+  stopifnotupset(upsetjs)
+  stopifnottype(is.null(theme) || theme == 'light' || theme == 'dark')
+  stopifnottype(selection.color, is.character)
+  stopifnottype(alternating.color, is.character)
+  stopifnottype(color, is.character)
+  stopifnottype(text.color, is.character)
+  stopifnottype(hover.hint.color, is.character)
+  stopifnottype(not.member.color, is.character)
+
   props = list(theme=theme,
                selectionColor=selection.color,
                alternatingBackgroundColor=alternating.color,

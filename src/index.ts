@@ -3,7 +3,16 @@
 import 'core-js';
 import 'regenerator-runtime/runtime';
 import 'element-closest-polyfill';
-import { isElemQuery, ISet, ISetCombinations, ISetLike, isSetQuery, renderUpSet, UpSetProps } from '@upsetjs/bundle';
+import {
+  isElemQuery,
+  ISet,
+  ISetCombinations,
+  ISetLike,
+  isSetQuery,
+  renderUpSet,
+  UpSetProps,
+  boxplotAddon,
+} from '@upsetjs/bundle';
 import { fixCombinations, fixSets, resolveSet, resolveSetByElems } from './utils';
 
 declare type CrosstalkOptions = {
@@ -11,9 +20,14 @@ declare type CrosstalkOptions = {
   mode: 'click' | 'hover';
 };
 
-declare type ShinyUpSetProps = UpSetProps<any> & {
+declare type IElem = string | number;
+
+declare type ShinyUpSetProps = UpSetProps<IElem> & {
   interactive?: boolean;
   crosstalk?: CrosstalkOptions;
+
+  elems: ReadonlyArray[IElem];
+  attrs: { [attr: string]: ReadonlyArray<number> };
 };
 
 declare type CrosstalkHandler = {
@@ -36,7 +50,29 @@ HTMLWidgets.widget({
     };
     let crosstalkHandler: CrosstalkHandler | null = null;
 
+    function syncAddons(props: ShinyUpSetProps, keys: string[]) {
+      if (keys.length === 0) {
+        delete props.setAddons;
+        delete props.combinationAddons;
+        return;
+      }
+      props.setAddons = keys.map((key) =>
+        boxplotAddon((v) => v.attrs[key], this.elems, {
+          name: key,
+        })
+      );
+      this.props.combinationAddons = keys.map((key) =>
+        boxplotAddon((v) => v.attrs[key], this.elems, {
+          name: key,
+          orient: 'vertical',
+        })
+      );
+    }
+
     function fixProps(props: ShinyUpSetProps, delta: any) {
+      delete props.interactive;
+      delete props.crosstalk;
+
       if (delta.sets != null) {
         props.sets = fixSets(props.sets);
       }
@@ -49,17 +85,19 @@ HTMLWidgets.widget({
         }
       }
       if (typeof delta.selection === 'string' || Array.isArray(delta.selection)) {
-        props.selection = resolveSet(delta.selection, props.sets, props.combinations as ISetCombinations<any>);
+        props.selection = resolveSet(delta.selection, props.sets, props.combinations as ISetCombinations<IElem>);
       }
       props.onHover = props.interactive || HTMLWidgets.shinyMode ? onHover : undefined;
 
       if (delta.queries) {
-        props.queries!.forEach((query) => {
+        props.queries = delta.queries.map((query: any) => {
+          const base = Object.assign({}, query);
           if (isSetQuery(query) && (typeof query.set === 'string' || Array.isArray(query.set))) {
-            query.set = resolveSet(query.set, props.sets, props.combinations as ISetCombinations<any>)!;
+            base.set = resolveSet(query.set, props.sets, props.combinations as ISetCombinations<IElem>)!;
           } else if (isElemQuery(query) && typeof query.elems !== 'undefined' && !Array.isArray(query.elems)) {
-            query.elems = [query.elems];
+            base.elems = [query.elems];
           }
+          return base;
         });
       }
     }
@@ -80,9 +118,9 @@ HTMLWidgets.widget({
       renderUpSet(el, props);
     }
 
-    let bakSelection: ISetLike<any> | null | undefined | ReadonlyArray<any> = null;
+    let bakSelection: ISetLike<IElem> | null | undefined | ReadonlyArray<IElem> = null;
 
-    const onHover = (set: ISet<any> | null) => {
+    const onHover = (set: ISet<IElem> | null) => {
       if (HTMLWidgets.shinyMode) {
         Shiny.onInputChange(`${el.id}_hover`, {
           name: set ? set.name : null,
@@ -117,14 +155,14 @@ HTMLWidgets.widget({
         }
         props.selection = !event.value
           ? null
-          : resolveSetByElems(event.value, props.sets, props.combinations as ISetCombinations<any>) || event.value;
+          : resolveSetByElems(event.value, props.sets, props.combinations as ISetCombinations<IElem>) || event.value;
         update();
       });
 
       // show current state
       props.selection = !sel.value
         ? null
-        : resolveSetByElems(sel.value, props.sets, props.combinations as ISetCombinations<any>) || sel.value;
+        : resolveSetByElems(sel.value, props.sets, props.combinations as ISetCombinations<IElem>) || sel.value;
       update();
 
       return {
@@ -144,7 +182,7 @@ HTMLWidgets.widget({
     }
 
     if (HTMLWidgets.shinyMode) {
-      props.onClick = (set: ISet<any>) => {
+      props.onClick = (set: ISet<IElem>) => {
         Shiny.onInputChange(`${el.id}_click`, {
           name: set ? set.name : null,
           elems: set ? set.elems || [] : [],
