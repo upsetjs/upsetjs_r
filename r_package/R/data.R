@@ -1,10 +1,22 @@
 
 sortSets = function(sets, order.by='cardinality', limit=NULL) {
-  if (order.by == 'cardinality') {
-    o = order(sapply(sets, function (x) { x$cardinality }), decreasing=T)
-  } else if (order.by == 'degree') {
-    o = order(sapply(sets, function (x) { x$degree }), decreasing=T)
+  set_attr = function(order.by.attr) {
+    set_names =
+    if (order.by.attr == 'cardinality') {
+      sapply(sets, function (x) { -x$cardinality })
+    } else if (order.by == 'degree') {
+      sapply(sets, function (x) { x$degree })
+    } else {
+      sapply(sets, function (x) { x$name })
+    }
   }
+
+  if (order.by == 'cardinality') {
+    order.by = c('cardinality', 'name')
+  } else if (order.by == 'degree') {
+    order.by = c('degree', 'name')
+  }
+  o = order(...sapply(order.by, set_attr))
   r = sets[o]
   if (is.null(limit)) {
     r
@@ -17,7 +29,7 @@ sortSets = function(sets, order.by='cardinality', limit=NULL) {
 #' generates the sets from a lists object
 #' @param upsetjs the upsetjs (proxy) instance
 #' @param value the list input value
-#' @param order.by order intersections by cardinality or degree
+#' @param order.by order intersections by cardinality or name
 #' @param limit limit the ordered sets to the given limit
 #' @param shared a crosstalk shared data frame
 #' @param shared.mode whether on 'hover' or 'click' (default) is synced
@@ -45,7 +57,7 @@ fromList = function(upsetjs, value, order.by="cardinality", limit=NULL, shared=N
 #' @param upsetjs the upsetjs (proxy) instance
 #' @param value the expression list input
 #' @param symbol the symbol how to split list names to get the sets
-#' @param order.by order intersections by cardinality or degree
+#' @param order.by order intersections by cardinality or name
 #' @return upsetjs
 #'
 #' @export
@@ -109,7 +121,7 @@ fromDataFrame = function(upsetjs, df, order.by="cardinality", limit=NULL, shared
 #' @param min minimum number of sets in an intersection
 #' @param max maximum number of sets in an intersection
 #' @param empty whether to include empty intersections or not
-#' @param order.by order intersections by cardinality or degree
+#' @param order.by order intersections by cardinality, degree, name or a combination of it
 #' @param limit limit the number of intersections to the top N
 #' @return upsetjs
 #'
@@ -125,7 +137,7 @@ generateIntersections = function(upsetjs, min=NULL, max=NULL, empty=NULL, order.
 #' @param max maximum number of sets in an union
 #' @param empty whether to include empty intersections or not
 #' @param upsetjs the upsetjs (proxy) instance
-#' @param order.by order intersections by cardinality or degree
+#' @param order.by order intersections by cardinality, degree, name or a combination of it
 #' @param limit limit the number of intersections to the top N
 #' @return upsetjs
 #'
