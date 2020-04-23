@@ -21,7 +21,7 @@ The core library is written in React but provides also bundle editions for plain
 
 In this tutorial the basic widget functionality is explained.
 
-Let's begin with importing the library 
+Let's begin with importing the library
 
 ```{r libraries}
 # devtools::install_url("https://github.com/upsetjs/upsetjs_r/releases/latest/download/upsetjs.tar.gz")
@@ -86,9 +86,9 @@ The following data frame defines the same set structure as the dictionary format
 
 # boolean table with rows = elements, columns = sets, cell = is row part of this set
 dataFrame <- as.data.frame(list(
-  one=c(1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1), 
+  one=c(1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1),
   two=c(1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0),
-  three=c(1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)), 
+  three=c(1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)),
   row.names=c('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'))
 
 
@@ -97,7 +97,7 @@ upsetjs() %>% fromDataFrame(dataFrame)
 
 ## Data Intersections
 
-In case of an `expressionInput` the combinations of sets are directly given. 
+In case of an `expressionInput` the combinations of sets are directly given.
 
 `generateIntersections` and `generateUnions` let you customize the generation of the set combinations
 
@@ -168,6 +168,23 @@ upsetjs() %>%
   fromList(listInput) %>%
   addQuery("Q1", color="red", elems=c('a', 'b', 'c')) %>%
   addQuery("Q2", color="blue", set='two')
+```
+
+
+## Attributes
+
+UpSet.js supports rendering boxplots as aggregations for numerical attributes of elements. The are given as part of the data frame. The attributes element has to be a list or a data frame.
+
+
+```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
+dataFrame <- as.data.frame(list(
+  one=c(1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1),
+  two=c(1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0),
+  three=c(1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)),
+  row.names=c('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'))
+
+upsetjs() %>%
+  fromDataFrame(dataFrame, attributes = list(attr=runif(nrow(dataFrame))))
 ```
 
 ## Styling

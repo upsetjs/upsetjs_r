@@ -83,7 +83,7 @@ fromList = function(upsetjs, value, order.by="cardinality", limit=NULL, shared=N
 
   sets = sortSets(sets, order.by=order.by, limit=limit)
   gen = generateCombinationsImpl(sets, "intersection", 0, NULL, FALSE, order.by, NULL)
-  setProperties(upsetjs, list(sets=sets, combinations=gen, elems=elems, attrs=list())
+  setProperties(upsetjs, list(sets=sets, combinations=gen, elems=elems, attrs=list()))
 }
 
 #'
