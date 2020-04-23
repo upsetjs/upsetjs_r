@@ -9,7 +9,7 @@
 #' @export
 setSelection = function(upsetjs, name=NULL) {
   stopifnotupset(upsetjs)
-  stopifnot(is.character(value), length(name) >= 1)
+  stopifnot(is.null(name) || (is.character(name), length(name) >= 1))
 
   setProperty(upsetjs, "selection", name)
 }
