@@ -49,7 +49,7 @@ HTMLWidgets.widget({
       width,
       height,
       alternatingBackgroundColor: 'rgba(0,0,0,0.05)',
-      exportButtons: false,
+      exportButtons: HTMLWidgets.shinyMode,
     };
     let crosstalkHandler: CrosstalkHandler | null = null;
 

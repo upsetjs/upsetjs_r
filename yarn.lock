@@ -1426,27 +1426,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@upsetjs/bundle@npm:^0.4.2":
-  version: 0.4.2
-  resolution: "@upsetjs/bundle@npm:0.4.2"
+"@upsetjs/bundle@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@upsetjs/bundle@npm:0.5.0"
   dependencies:
-    "@upsetjs/math": ^0.4.2
-    "@upsetjs/model": ^0.4.2
-  checksum: 2/3d0244ba4d64a2c982144ec87d095f26d45434321fc5a04cfdaa8a631457a0da414831207768cf085a451191e9a33166129cbe84bd2edc7ba72515d780839a8a
+    "@upsetjs/math": ^0.5.0
+    "@upsetjs/model": ^0.5.0
+  checksum: 2/e567d525d43c2f70cbabf4d1fa20b9b34274d00deb05c269ad19b5b94046b4ad6a1380da51b8ec72f19507a9b0036960aac18bf0fd778a3cbaf72bc0f400d92a
   languageName: node
   linkType: hard
 
-"@upsetjs/math@npm:^0.4.2":
-  version: 0.4.2
-  resolution: "@upsetjs/math@npm:0.4.2"
-  checksum: 2/4c5487c1ec026a1ad770ce82ddeb426a82930fbb27135836623b6297115e4dbce0634994b72d4c9667c7da22412c04d2b49e17b5c98e7d7939516dfbfdedcd2a
+"@upsetjs/math@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@upsetjs/math@npm:0.5.0"
+  checksum: 2/4f6d87242ecb9a283eb7fbeb7a40b35980177003c108f8a3f14c5ac5c12b16dee19f66270e3b3c230c159b4a0fba48e4baf4e2fcf87f3059bc8e6b350272ec7d
   languageName: node
   linkType: hard
 
-"@upsetjs/model@npm:^0.4.2":
-  version: 0.4.2
-  resolution: "@upsetjs/model@npm:0.4.2"
-  checksum: 2/85ead0663edcbe041ba3b855534a13e1dbb8c46d8b4b6fb1eeaf82931ef6074c2f366bb56f424aeaa6e1bb96c1b78c58ee75fd4481f4403af9dc411db8cdb826
+"@upsetjs/model@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@upsetjs/model@npm:0.5.0"
+  checksum: 2/8975094ef2326b4771b4b36f32152a00a33c2a6cf4f83f7ebacb5a69871725d53b2117618b72626496f9068cdac71f9924c3b957f3e86aa5425f1eaaf5a15c3f
   languageName: node
   linkType: hard
 
@@ -1458,7 +1458,7 @@ __metadata:
     "@babel/preset-env": ^7.9.5
     "@typescript-eslint/eslint-plugin": ^2.27.0
     "@typescript-eslint/parser": ^2.27.0
-    "@upsetjs/bundle": ^0.4.2
+    "@upsetjs/bundle": ^0.5.0
     "@yarnpkg/pnpify": ^2.0.0-rc.20
     babel-eslint: ^10.1.0
     babel-loader: ^8.1.0
