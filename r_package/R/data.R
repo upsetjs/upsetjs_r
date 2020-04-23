@@ -27,26 +27,30 @@ sortSets = function(sets, order.by='cardinality', limit=NULL) {
 }
 
 generateCombinationsImpl = function(sets, c_type, min, max, empty, order.by, limit, symbol="&") {
-  combinations = c()
+  combinations = list()
   set_f = if (c_type == "intersection") intersect else union
-  for(l in min:(if (is.null(max)) length(sets) else max)) {
-    combos = combn(sets, l, simplify=F)
+  lsets = length(sets)
+
+  for(l in min:(if (is.null(max)) lsets else max)) {
+    combos = combn(1:lsets, l, simplify=F)
     for(combo in combos) {
-      set_names = sapply(combo, function(s) s$name)
-      set_elems = sapply(combo, function(s) s$elems)
-      if (length(combo) == 0) {
+      indices = unlist(combo)
+      set_names = sapply(indices, function(i) sets[[i]]$name)
+      if (length(indices) == 0) {
         elems = c()
       } else {
-        elems = set_elems[0]
-        for (other in set_elems) {
-          elems = set_f(elems, other)
+        elems = sets[[indices[1]]]$elems
+        for (index in indices) {
+          elems = set_f(elems, sets[[index]]$elems)
         }
       }
       if (empty || length(elems) > 0) {
-        combinations = c(combinations, list(namepaste(set_names, symbol), type=c_type, elems=elems, setNames=set_names))
+        combination = list(name=paste(set_names, collapse=symbol), type=c_type, elems=elems, setNames=set_names)
+        combinations = c(combinations, list(combination))
       }
     }
   }
+  names(combinations) = NULL
   sortSets(combinations, order.by, limit)
 }
 
