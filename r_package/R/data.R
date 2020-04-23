@@ -215,8 +215,7 @@ generateCombinations = function(upsetjs, c_type, min, max, empty, order.by, limi
 
   if(inherits(upsetjs, 'upsetjs')) {
     sets = upsetjs$x$sets
-    set_f = if (set_f == "intersect") intersect else union
-    gen = generateCombinationsImpl(sets, set_f, min, max, empty, order.by, limit, symbol)
+    gen = generateCombinationsImpl(sets, c_type, min, max, empty, order.by, limit, symbol)
   } else {
     # proxy
     gen = cleanNull(list(type=c_type, min=min, max=max, empty=empty, order=order.by, limit=limit))
