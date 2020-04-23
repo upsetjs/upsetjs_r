@@ -42,7 +42,6 @@ HTMLWidgets.widget({
 
   factory(el, width, height) {
     let interactive = false;
-    let elems: ReadonlyArray<IElem> = [];
     const elemToIndex = new Map<IElem, number>();
     let attrs: { [key: string]: ReadonlyArray<number> } = {};
     const props: UpSetProps<IElem> = {
@@ -61,16 +60,36 @@ HTMLWidgets.widget({
         delete props.combinationAddons;
         return;
       }
-      props.setAddons = keys.map((key) =>
-        boxplotAddon((v) => attrs[key]![elemToIndex.get(v)!], elems, {
-          name: key,
-        })
+      const minmax = keys.map((key) =>
+        attrs[key].reduce(([min, max], v) => [Math.min(min, v), Math.max(max, v)] as [number, number], [
+          Number.POSITIVE_INFINITY,
+          Number.NEGATIVE_INFINITY,
+        ] as [number, number])
       );
-      props.combinationAddons = keys.map((key) =>
-        boxplotAddon((v) => attrs[key]![elemToIndex.get(v)!], elems, {
-          name: key,
-          orient: 'vertical',
-        })
+      props.setAddons = keys.map((key, i) =>
+        boxplotAddon(
+          (v) => attrs[key]![elemToIndex.get(v)!],
+          {
+            min: minmax[i][0],
+            max: minmax[i][1],
+          },
+          {
+            name: key,
+          }
+        )
+      );
+      props.combinationAddons = keys.map((key, i) =>
+        boxplotAddon(
+          (v) => attrs[key]![elemToIndex.get(v)!],
+          {
+            min: minmax[i][0],
+            max: minmax[i][1],
+          },
+          {
+            name: key,
+            orient: 'vertical',
+          }
+        )
       );
     }
 
@@ -81,7 +100,7 @@ HTMLWidgets.widget({
       delete (props as any).interactive;
       delete (props as any).crosstalk;
       if (delta.elems) {
-        elems = delta.elems;
+        // elems = delta.elems;
         elemToIndex.clear();
         delta.elems.forEach((elem: IElem, i: number) => elemToIndex.set(elem, i));
       }

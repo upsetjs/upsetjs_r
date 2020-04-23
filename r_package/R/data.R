@@ -19,7 +19,7 @@ sortSets = function(sets, order.by='cardinality', limit=NULL) {
   values = lapply(order.by, set_attr)
   o = do.call(order, values)
   r = sets[o]
-  if (is.null(limit)) {
+  if (is.null(limit) || length(r) <= limit) {
     r
   } else {
     r[1:limit]
@@ -45,7 +45,10 @@ generateCombinationsImpl = function(sets, c_type, min, max, empty, order.by, lim
         }
       }
       if (empty || length(elems) > 0) {
-        combination = list(name=paste(set_names, collapse=symbol), type=c_type, elems=elems, setNames=set_names)
+        combination = structure(
+          list(name=paste(set_names, collapse=symbol), type=c_type, elems=elems, setNames=set_names),
+          class="upsetjs_combination"
+        )
         combinations = c(combinations, list(combination))
       }
     }
@@ -75,7 +78,10 @@ fromList = function(upsetjs, value, order.by="cardinality", limit=NULL, shared=N
   elems = c()
   toSet = function(key, value) {
     elems = c(elems, value)
-    list(name=key, elems=value)
+    structure(
+      list(name=key, elems=value),
+      class="upsetjs_set"
+    )
   }
   sets = mapply(toSet, key=names(value), value=value, SIMPLIFY=F)
   # list of list objects
@@ -110,14 +116,20 @@ fromExpression = function(upsetjs, value, symbol="&", order.by="cardinality") {
   sets = value[degrees == 1]
 
   toSet = function(key, value) {
-    list(name=key, type="set", elems=c(), cardinality=value)
+    structure(
+      list(name=key, type="set", elems=c(), cardinality=value),
+      class="upsetjs_set"
+    )
   }
   sets = mapply(toSet, key=names(sets), value=sets, SIMPLIFY=F)
   names(sets) = NULL
   sets = sortSets(sets, order.by=order.by)
 
   toCombination = function(key, value) {
-    list(name=key, type="composite", elems=c(), cardinality=value, setNames=unlist(strsplit(key, symbol)))
+    structure(
+      list(name=key, type="composite", elems=c(), cardinality=value, setNames=unlist(strsplit(key, symbol))),
+      class="upsetjs_combination"
+    )
   }
   combinations = mapply(toCombination, key=names(combinations), value=combinations, SIMPLIFY=F)
   names(combinations) = NULL
@@ -151,7 +163,10 @@ fromDataFrame = function(upsetjs, df, attributes=NULL, order.by="cardinality", l
   elems = rownames(df)
   toSet = function(key) {
     sub = elems[df[[key]] == T]
-    list(name=key, type="set", elems=sub)
+    structure(
+      list(name=key, type="set", elems=sub),
+      class="upsetjs_set"
+    )
   }
 
   set_names = setdiff(colnames(df), if (is.character(attributes)) attributes else c())
