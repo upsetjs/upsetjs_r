@@ -183,6 +183,7 @@ chartTheme = function(upsetjs,
 #'
 #' generic set chart props
 #' @param upsetjs the upsetjs (proxy) instance
+#' @param ... alll upsetjs properties in R name notation
 #' @return upsetjs
 #'
 #' @export
