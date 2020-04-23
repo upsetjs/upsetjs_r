@@ -1,10 +1,14 @@
 
-stopifnotupset = function(upsetjs) {
-  stopifnot(inherits(upsetjs, 'upsetjs') || inherits(upsetjs, 'upsetjs_proxy'))
+checkUpSetArgument = function(upsetjs) {
+  if (!inherits(upsetjs, 'upsetjs') && !inherits(upsetjs, 'upsetjs_proxy')) {
+    stop('first argument needs to be an upset instance')
+  }
 }
 
-stopifnottype = function(value, type_f = is.numeric, l = 1) {
-  stopifnot(is.null(value) || (type_f(value) && length(value) == l))
+stopifnottype = function(name, value, type_f = is.numeric, type_s = 'number') {
+  if (!is.null(value) && !(type_f(value) && length(value) == 1)) {
+    stop(paste0("argument ", name, " is not a ", type_s))
+  }
 }
 
 sendMessage = function(upsetjs_proxy, props, ...) {
@@ -34,7 +38,7 @@ enableCrosstalk = function(upsetjs, shared, mode) {
 }
 
 setProperty = function(upsetjs, prop, value) {
-  stopifnotupset(upsetjs)
+  checkUpSetArgument(upsetjs)
 
   if (inherits(upsetjs, 'upsetjs')) {
     upsetjs$x[[prop]] = value
@@ -47,7 +51,7 @@ setProperty = function(upsetjs, prop, value) {
 }
 
 appendProperty = function(upsetjs, prop, value) {
-  stopifnotupset(upsetjs)
+  checkUpSetArgument(upsetjs)
 
   if (inherits(upsetjs, 'upsetjs')) {
     if (is.null(upsetjs$x[[prop]])) {
@@ -64,7 +68,7 @@ appendProperty = function(upsetjs, prop, value) {
 }
 
 setProperties = function(upsetjs, props, clean=F) {
-  stopifnotupset(upsetjs)
+  checkUpSetArgument(upsetjs)
 
   if (clean) {
     props = cleanNull(props)

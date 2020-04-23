@@ -66,7 +66,7 @@ generateCombinationsImpl = function(sets, c_type, min, max, empty, order.by, lim
 #'
 #' @export
 fromList = function(upsetjs, value, order.by="cardinality", limit=NULL, shared=NULL, shared.mode="click") {
-  stopifnotupset(upsetjs)
+  checkUpSetArgument(upsetjs)
   stopifnot(is.list(value))
   stopifnot(order.by == "cardinality" || order.by == "degree")
   stopifnot(is.null(limit) || (is.numeric(limit) && length(limit) == 1))
@@ -100,7 +100,7 @@ fromList = function(upsetjs, value, order.by="cardinality", limit=NULL, shared=N
 #'
 #' @export
 fromExpression = function(upsetjs, value, symbol="&", order.by="cardinality") {
-  stopifnotupset(upsetjs)
+  checkUpSetArgument(upsetjs)
   stopifnot(is.list(value))
   stopifnot(order.by == "cardinality" || order.by == "degree")
 
@@ -141,11 +141,11 @@ fromExpression = function(upsetjs, value, symbol="&", order.by="cardinality") {
 #'
 #' @export
 fromDataFrame = function(upsetjs, df, attributes=NULL, order.by="cardinality", limit=NULL, shared=NULL, shared.mode="click") {
-  stopifnotupset(upsetjs)
+  checkUpSetArgument(upsetjs)
   stopifnot(is.data.frame(df))
   stopifnot((is.null(attributes) || is.data.frame(attributes) || is.list(attributes) || is.character(attributes)))
   stopifnot(order.by == "cardinality" || order.by == "degree")
-  stopifnottype(limit)
+  stopifnottype('limit', limit)
   stopifnot(shared.mode == "click" || shared.mode == "hover")
 
   elems = rownames(df)
@@ -210,9 +210,9 @@ getCombinations = function(upsetjs) {
 }
 
 generateCombinations = function(upsetjs, c_type, min, max, empty, order.by, limit, symbol = '&') {
-  stopifnotupset(upsetjs)
+  checkUpSetArgument(upsetjs)
   stopifnot(is.numeric(min), length(min) == 1)
-  stopifnottype(max)
+  stopifnottype('max', max)
   stopifnot(is.logical(empty), length(empty) == 1)
   stopifnot(is.character(order.by), length(order.by) >= 1)
   stopifnot(is.null(limit) || (is.numeric(limit) && length(limit) == 1))

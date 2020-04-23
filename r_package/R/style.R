@@ -20,13 +20,13 @@ chartLayout = function(upsetjs,
                        dot.padding=NULL,
                        numerical.scale=NULL,
                        band.scale=NULL) {
-  stopifnotupset(upsetjs)
+  checkUpSetArgument(upsetjs)
   stopifnot(is.null(height.ratios) || (is.numeric(height.ratios) && length(height.ratios) == 2))
   stopifnot(is.null(width.ratios) || (is.numeric(width.ratios) && length(width.ratios) == 3))
-  stopifnottype(padding)
-  stopifnottype(bar.padding)
-  stopifnottype(dot.padding)
-  stopifnot(is.null(numerical.scale) || (numerical.scale == 'linear' || numerical.scale == 'band'))
+  stopifnottype('padding', padding)
+  stopifnottype('bar.padding', bar.padding)
+  stopifnottype('dot.padding', dot.padding)
+  stopifnot(is.null(numerical.scale) || (numerical.scale == 'linear' || numerical.scale == 'log'))
   stopifnot(is.null(band.scale) || band.scale == 'band')
 
 
@@ -57,12 +57,12 @@ chartLabels = function(upsetjs,
                        set.name=NULL,
                        set.name.axis.offset=NULL,
                        bar.label.offset=NULL) {
-  stopifnotupset(upsetjs)
-  stopifnottype(combination.name, is.character)
-  stopifnottype(combination.name.axis.offset)
-  stopifnottype(set.name, is.character)
-  stopifnottype(set.name.axis.offset)
-  stopifnottype(bar.label.offset)
+  checkUpSetArgument(upsetjs)
+  stopifnottype('combination.name', combination.name, is.character, 'string')
+  stopifnottype('combination.name.axis.offset', combination.name.axis.offset)
+  stopifnottype('set.name', set.name, is.character, 'string')
+  stopifnottype('set.name.axis.offset', set.name.axis.offset)
+  stopifnottype('bar.label.offset', bar.label.offset)
 
   props = list(setName=set.name,
                combinationName=combination.name,
@@ -92,13 +92,13 @@ chartFontSizes = function(upsetjs,
                           axis.tick=NULL,
                           bar.label=NULL,
                           legend=NULL) {
-  stopifnotupset(upsetjs)
-  stopifnottype(font.family, is.character)
-  stopifnottype(chart.label, is.character)
-  stopifnottype(set.label, is.character)
-  stopifnottype(axis.tick, is.character)
-  stopifnottype(bar.label, is.character)
-  stopifnottype(legend, is.character)
+  checkUpSetArgument(upsetjs)
+  stopifnottype('font.family', font.family, is.character, 'string')
+  stopifnottype('chart.label', chart.label, is.character, 'string')
+  stopifnottype('set.label', set.label, is.character, 'string')
+  stopifnottype('axis.tick', axis.tick, is.character, 'string')
+  stopifnottype('bar.label', bar.label, is.character, 'string')
+  stopifnottype('legend', legend, is.character, 'string')
 
   font.sizes = list(
     chartLabel=chart.label,
@@ -127,10 +127,10 @@ chartStyleFlags = function(upsetjs,
                            id=NULL,
                            export.buttons=NULL,
                            class.name=NULL) {
-  stopifnotupset(upsetjs)
-  stopifnottype(export.buttons, is.logical)
-  stopifnottype(class.name, is.character)
-  stopifnottype(id, is.character)
+  checkUpSetArgument(upsetjs)
+  stopifnottype('export.buttons', export.buttons, is.logical, 'boolean')
+  stopifnottype('class.name', class.name, is.character, 'string')
+  stopifnottype('id', id, is.character, 'string')
 
   props = list(exportButtons=export.buttons,
                className=class.name
@@ -160,14 +160,14 @@ chartTheme = function(upsetjs,
                       text.color=NULL,
                       hover.hint.color=NULL,
                       not.member.color=NULL) {
-  stopifnotupset(upsetjs)
-  stopifnottype(is.null(theme) || theme == 'light' || theme == 'dark')
-  stopifnottype(selection.color, is.character)
-  stopifnottype(alternating.color, is.character)
-  stopifnottype(color, is.character)
-  stopifnottype(text.color, is.character)
-  stopifnottype(hover.hint.color, is.character)
-  stopifnottype(not.member.color, is.character)
+  checkUpSetArgument(upsetjs)
+  stopifnot(is.null(theme) || theme == 'light' || theme == 'dark')
+  stopifnottype('selection.color', selection.color, is.character, 'string')
+  stopifnottype('alternating.color', alternating.color, is.character, 'string')
+  stopifnottype('color', color, is.character, 'string')
+  stopifnottype('text.color', text.color, is.character, 'string')
+  stopifnottype('hover.hint.color', hover.hint.color, is.character, 'string')
+  stopifnottype('not.member.color', not.member.color, is.character, 'string')
 
   props = list(theme=theme,
                selectionColor=selection.color,
@@ -182,6 +182,7 @@ chartTheme = function(upsetjs,
 
 #'
 #' generic set chart props
+#' @param upsetjs the upsetjs (proxy) instance
 #' @return upsetjs
 #'
 #' @export

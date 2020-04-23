@@ -8,8 +8,8 @@
 #'
 #' @export
 setSelection = function(upsetjs, name=NULL) {
-  stopifnotupset(upsetjs)
-  stopifnot(is.null(name) || (is.character(name), length(name) >= 1))
+  checkUpSetArgument(upsetjs)
+  stopifnot(is.null(name) || (is.character(name) && length(name) >= 1))
 
   setProperty(upsetjs, "selection", name)
 }
@@ -22,7 +22,7 @@ setSelection = function(upsetjs, name=NULL) {
 #'
 #' @export
 interactiveChart = function(upsetjs, value=TRUE) {
-  stopifnotupset(upsetjs)
+  checkUpSetArgument(upsetjs)
   stopifnot(is.logical(value), length(value) == 1)
 
   setProperty(upsetjs, "interactive", value)
