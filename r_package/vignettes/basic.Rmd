@@ -70,7 +70,7 @@ The second version is a a variant in which not the elements are given but their 
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
 
 # example of expression input
-expressionInput <- c(one = 9, two = 5, three = 9, `one&two` = 3, `one&three` = 6, `two&three` = 3, `one&two&three` = 2)
+expressionInput <- list(one = 9, two = 5, three = 9, `one&two` = 3, `one&three` = 6, `two&three` = 3, `one&two&three` = 2)
 
 
 upsetjs() %>% fromExpression(expressionInput)
