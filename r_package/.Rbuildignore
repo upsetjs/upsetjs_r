@@ -1,9 +1,13 @@
 ^.*\.Rproj$
+^.*\..Rcheck$
 ^\.Rproj\.user$
 
 ^doc$
+^shiny$
 ^docs$
 ^Meta$
+
+^.*\.map$
 
 ^_pkgdown\.yml$
 ^pkgdown$

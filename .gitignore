@@ -12,3 +12,4 @@ node_modules
 *.map
 docs
 /*.tar.gz
+*.Rcheck
