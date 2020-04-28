@@ -1,4 +1,11 @@
 #
+# @upsetjs/r
+# https://github.com/upsetjs/upsetjs_r
+#
+# Copyright (c) 2020 Samuel Gratzl <sam@sgratzl.com>
+#
+
+#
 # This is a Shiny web application. You can run the application by clicking
 # the 'Run App' button above.
 #

@@ -1,3 +1,10 @@
+#
+# @upsetjs/r
+# https://github.com/upsetjs/upsetjs_r
+#
+# Copyright (c) 2020 Samuel Gratzl <sam@sgratzl.com>
+#
+
 
 sortSets = function(sets, order.by='cardinality', limit=NULL) {
   set_attr = function(order.by.attr) {

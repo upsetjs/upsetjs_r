@@ -1,3 +1,10 @@
+#
+# @upsetjs/r
+# https://github.com/upsetjs/upsetjs_r
+#
+# Copyright (c) 2020 Samuel Gratzl <sam@sgratzl.com>
+#
+
 
 #' Output and render functions for using UpSet.js within Shiny
 #' applications and interactive Rmd documents.

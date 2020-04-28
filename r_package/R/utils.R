@@ -1,3 +1,10 @@
+#
+# @upsetjs/r
+# https://github.com/upsetjs/upsetjs_r
+#
+# Copyright (c) 2020 Samuel Gratzl <sam@sgratzl.com>
+#
+
 
 checkUpSetArgument = function(upsetjs) {
   if (!inherits(upsetjs, 'upsetjs') && !inherits(upsetjs, 'upsetjs_proxy')) {

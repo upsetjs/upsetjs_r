@@ -1,3 +1,10 @@
+/**
+ * @upsetjs/r
+ * https://github.com/upsetjs/upsetjs_r
+ *
+ * Copyright (c) 2020 Samuel Gratzl <sam@sgratzl.com>
+ */
+
 /// <reference path="../types/index.d.ts" />
 
 import 'core-js';
