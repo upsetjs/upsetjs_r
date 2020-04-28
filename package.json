@@ -1,9 +1,9 @@
 {
   "name": "@upsetjs/r",
-  "description": "UpSet.js R HTMLWidget wrapper",
+  "description": "UpSet.js is a re-implementation of UpSetR to create interactive set visualizations for more than three sets",
   "version": "0.5.0",
   "private": true,
-  "license": "AGPL-3.0",
+  "license": "SEE LICENSE in LICENSE",
   "author": {
     "name": "Samuel Gratzl",
     "email": "sam@sgratzl.com",

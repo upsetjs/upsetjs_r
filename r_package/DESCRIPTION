@@ -1,7 +1,7 @@
 Package: upsetjs
 Type: Package
 Title: 'HTMLWidget' Wrapper of 'UpSet.s' for exploring large set intersections
-Description: 'UpSet' is an interactive technique for exploring large set intersections.
+Description: 'UpSet.js' is a re-implementation of 'UpSetR' to create interactive set visualizations for more than three sets.
   This is a 'htmlwidget' wrapper around the JavaScript library 'UpSet.js'.
 Version: 0.5.0
 Date: 2020-04-24
