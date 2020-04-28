@@ -1,16 +1,16 @@
 Package: upsetjs
 Type: Package
-Title: 'HTMLWidget' Wrapper of 'UpSet.s' for exploring large set intersections
+Title: 'HTMLWidget' Wrapper of 'UpSet.s' for Exploring Large Set Intersections
 Description: 'UpSet.js' is a re-implementation of 'UpSetR' to create interactive set visualizations for more than three sets.
   This is a 'htmlwidget' wrapper around the JavaScript library 'UpSet.js'.
 Version: 0.5.0
 Date: 2020-04-24
 Authors@R: person("Samuel", "Gratzl", email = "sam@sgratzl.com", role = c("aut", "cre"))
 Maintainer: Samuel Gratzl <sam@sgratzl.com>
-URL: https://github.com/upsetjs/upset_r/
-BugReports: https://github.com/upsetjs/upset_r/issues
+URL: https://github.com/upsetjs/upsetjs_r/
+BugReports: https://github.com/upsetjs/upsetjs_r/issues
 Depends: R (>= 3.2.0)
-License: file LICENSE
+License: AGPL-3 | file LICENSE
 Encoding: UTF-8
 Imports:
   htmlwidgets,
