@@ -13,7 +13,7 @@
 #' @param width.ratios a vector of length 3 for the ratios between set, label, and combination plot, e.g. c(0.3,0.2,0.5)
 #' @param padding padding around the plot
 #' @param bar.padding padding ratio (default 0.1) for the bar charts
-#' @param dot.padding padding facotr (default 0.7) for the dots
+#' @param dot.padding padding factor (default 0.7) for the dots
 #' @param numerical.scale numerical scale: linear (default) or log
 #' @param band.scale band scale: band (default)
 #' @return upsetjs
@@ -190,7 +190,7 @@ chartTheme = function(upsetjs,
 #'
 #' generic set chart props
 #' @param upsetjs the upsetjs (proxy) instance
-#' @param ... alll upsetjs properties in R name notation
+#' @param ... all upsetjs properties in R name notation
 #' @return upsetjs
 #'
 #' @export

@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 [UpSet.js](https://upset.js.org) is a JavaScript re-implementation of [UpSetR](https://www.rdocumentation.org/packages/UpSetR/) which itself is based on [UpSet](http://vcg.github.io/upset/about/).
 
-The core library is written in React but provides also bundle editions for plain JavaScript use and this R wrappe using [HTMLWidget](http://www.htmlwidgets.org/).
+The core library is written in React but provides also bundle editions for plain JavaScript use and this R wrapper using [HTMLWidget](http://www.htmlwidgets.org/).
 
 In this tutorial the basic widget functionality is explained.
 
@@ -45,7 +45,7 @@ w
 UpSet consists of three areas:
 
 - The bottom left area shows the list of sets as a vertical bar chart. The length of the bar corresponds to the cardinality of the set, i.e., the number of elements in this set.
-- The top right area shows the list of set intersections as a horiztonal bar chart. Again the length corresponds to the cardinality of the set
+- The top right area shows the list of set intersections as a horizontal bar chart. Again the length corresponds to the cardinality of the set
 - The bottom right area shows which intersection consists of which sets. A dark dot indicates that the set is part of this set intersection. The line connecting the dots is just to visually group the dots.
 
 Moving the mouse over a bar or a dot will automatically highlight the corresponding set or set intersection in orange. In addition, the number elements which are shared with the highlighted sets are also highlighted. This gives a quick overview how sets and set intersections are related to each other. More details, in the Interaction section.
@@ -132,7 +132,7 @@ upsetjs() %>%
 ```
 
 ### Selection
-with `setSelection` one manually sets the selection that is currently highlighted. The set is referenced by its name, a vector with multiple names is deteced as an intersection name
+with `setSelection` one manually sets the selection that is currently highlighted. The set is referenced by its name, a vector with multiple names is detected as an intersection name
 
 
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
@@ -148,7 +148,7 @@ upsetjs() %>%
   setSelection(c("one", "two"))
 ```
 
-In case UpSet will be used in a R Shiny context, it reports the current selection bsaed using two custom events:
+In case UpSet will be used in a R Shiny context, it reports the current selection based using two custom events:
 
 - `<outputid>_hover` when the user hovers over an item
 - `<outputid>_click` when the user clicks on an item

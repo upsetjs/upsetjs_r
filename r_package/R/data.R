@@ -104,7 +104,7 @@ fromList = function(upsetjs, value, order.by="cardinality", limit=NULL, shared=N
 }
 
 #'
-#' generates the sets from a lists object that contained the cardinalties of both sets and combinations (&)
+#' generates the sets from a lists object that contained the cardinalities of both sets and combinations (&)
 #' @param upsetjs the upsetjs (proxy) instance
 #' @param value the expression list input
 #' @param symbol the symbol how to split list names to get the sets
@@ -264,7 +264,7 @@ generateIntersections = function(upsetjs, min=0, max=NULL, empty=FALSE, order.by
 }
 
 #'
-#' configure the generatation of the unions
+#' configure the generation of the unions
 #' @param min minimum number of sets in an union
 #' @param max maximum number of sets in an union
 #' @param empty whether to include empty intersections or not
