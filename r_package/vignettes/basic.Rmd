@@ -155,7 +155,7 @@ In case UpSet will be used in a R Shiny context, it reports the current selectio
 
 both events are list objects with a `name` attribute that is either `NULL` or the name of the set. In addition, there is an `elems` attribute which contains the list of highlighted elements.
 
-See also Shiny examples at [events.R](https://github.com/upsetjs/upsetjs_r/blob/master/r_package/vignettes/shiny/events.R)
+See also Shiny examples at [events.R](https://github.com/upsetjs/upsetjs_r/blob/master/r_package/shiny/events.R)
 
 
 ## Queries
