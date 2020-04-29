@@ -31,7 +31,7 @@ upsetjsSizingPolicy = function(
   )
 }
 
-#' upsetjs - factory for UpSet HTMLWidget
+#' upsetjs - factory for UpSet.js HTMLWidget
 #'
 #' @param width width of the element
 #' @param height height of the element

@@ -8,7 +8,7 @@
 
 checkUpSetArgument = function(upsetjs) {
   if (!inherits(upsetjs, 'upsetjs') && !inherits(upsetjs, 'upsetjs_proxy')) {
-    stop('first argument needs to be an upset instance')
+    stop('first argument needs to be an upsetjs instance')
   }
 }
 

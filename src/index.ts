@@ -16,7 +16,7 @@ import {
   ISetCombinations,
   ISetLike,
   isSetQuery,
-  renderUpSet,
+  renderUpSetJS,
   UpSetProps,
   boxplotAddon,
 } from '@upsetjs/bundle';
@@ -160,7 +160,7 @@ HTMLWidgets.widget({
         }
         fixProps(props, delta);
       }
-      renderUpSet(el, props);
+      renderUpSetJS(el, props);
     }
 
     let bakSelection: ISetLike<IElem> | null | undefined | ReadonlyArray<IElem> = null;

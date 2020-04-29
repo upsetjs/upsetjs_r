@@ -42,7 +42,7 @@ w
 ```
 
 
-UpSet consists of three areas:
+An UpSet plot consists of three areas:
 
 - The bottom left area shows the list of sets as a vertical bar chart. The length of the bar corresponds to the cardinality of the set, i.e., the number of elements in this set.
 - The top right area shows the list of set intersections as a horizontal bar chart. Again the length corresponds to the cardinality of the set
@@ -52,7 +52,7 @@ Moving the mouse over a bar or a dot will automatically highlight the correspond
 
 ## Input Formats
 
-In the current version the UpSet wrapper supports three input data formats: list, expression, and through a data.frame.
+In the current version the UpSet.js wrapper supports three input data formats: list, expression, and through a data.frame.
 
 ### List Input
 
@@ -148,7 +148,7 @@ upsetjs() %>%
   setSelection(c("one", "two"))
 ```
 
-In case UpSet will be used in a R Shiny context, it reports the current selection based using two custom events:
+In case UpSet.js will be used in a R Shiny context, it reports the current selection based using two custom events:
 
 - `<outputid>_hover` when the user hovers over an item
 - `<outputid>_click` when the user clicks on an item
@@ -160,7 +160,7 @@ See also Shiny examples at [events.R](https://github.com/upsetjs/upsetjs_r/blob/
 
 ## Queries
 
-besides the selection UpSet supports defining queries. A query can be a list of elements or a set that should be highlighted. A query consists of a name, a color, and either the list of elements or the upset set (combination) to highlight.
+besides the selection UpSet.js supports defining queries. A query can be a list of elements or a set that should be highlighted. A query consists of a name, a color, and either the list of elements or the set (combination) to highlight.
 
 
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
