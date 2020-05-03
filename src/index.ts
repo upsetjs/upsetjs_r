@@ -16,7 +16,7 @@ import {
   ISetCombinations,
   ISetLike,
   isSetQuery,
-  render,
+  renderUpSet as render,
   UpSetProps,
   boxplotAddon,
 } from '@upsetjs/bundle';
