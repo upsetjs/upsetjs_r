@@ -1451,27 +1451,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@upsetjs/bundle@npm:~0.6.0":
-  version: 0.6.0
-  resolution: "@upsetjs/bundle@npm:0.6.0"
+"@upsetjs/bundle@npm:~1.0.0":
+  version: 1.0.0
+  resolution: "@upsetjs/bundle@npm:1.0.0"
   dependencies:
-    "@upsetjs/math": ^0.6.0
-    "@upsetjs/model": ^0.6.0
-  checksum: 3/9b3c76b6cdfb8547fbd3660b862636a687e48823b00d2753d169ed192c4a85120edfaedd9b191676cc46c80189d5b40cf0c1908f000b1a8e101b8015a4e0cf73
+    "@upsetjs/math": ~1.0.0
+    "@upsetjs/model": ~1.0.0
+  checksum: 3/71ed39910dd46a28bfd55b1bdb994eb4cec61d054c402c0f92a4e32c8b9a5f542ccbaa1faf97f95b8fb4e7c0bfdb9102e15f16f90ff06e5afacb0f203ce605cf
   languageName: node
   linkType: hard
 
-"@upsetjs/math@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "@upsetjs/math@npm:0.6.0"
-  checksum: 3/97537d968c16ff87d39acd04ea164877bd04acfc52d229563ef1d5ca16dfcd15dfb5907d59e9e7395510dc06a0a22e39d7b0f85dc59cba805d9d4f2a280b1ff5
+"@upsetjs/math@npm:~1.0.0":
+  version: 1.0.0
+  resolution: "@upsetjs/math@npm:1.0.0"
+  checksum: 3/7c67f74bf0ab649628f4dc7ba9ef2eff300f598689d4e7ec80c63db334767113007f0a9248c8e417f2930bbcb840f42a17bcd07d88bea536fe782cbf69b3f1ed
   languageName: node
   linkType: hard
 
-"@upsetjs/model@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "@upsetjs/model@npm:0.6.0"
-  checksum: 3/2afa6b5b1de305725905d23c3072e7e4e4502c4204741135611e81fde9a9f1f53b95363eadc931ae7ab41b19c39aa395aa9ffbfd99baaf88256e23ba92929a0e
+"@upsetjs/model@npm:~1.0.0":
+  version: 1.0.0
+  resolution: "@upsetjs/model@npm:1.0.0"
+  checksum: 3/5ba6f40226650628fe9f04091ab753320c59f02fc611aec380f953dc02ade984ba48069a6a53c634ad2d3d798bc269aa1cfc771bc752e70a957d729f5fdb8491
   languageName: node
   linkType: hard
 
@@ -1483,7 +1483,7 @@ __metadata:
     "@babel/preset-env": ^7.9.6
     "@typescript-eslint/eslint-plugin": ^2.30.0
     "@typescript-eslint/parser": ^2.30.0
-    "@upsetjs/bundle": ~0.6.0
+    "@upsetjs/bundle": ~1.0.0
     "@yarnpkg/pnpify": ^2.0.0-rc.22
     babel-loader: ^8.1.0
     core-js: ^3

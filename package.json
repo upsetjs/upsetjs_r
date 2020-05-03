@@ -67,7 +67,7 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
-    "@upsetjs/bundle": "~0.6.0",
+    "@upsetjs/bundle": "~1.0.0",
     "core-js": "^3",
     "element-closest-polyfill": "^1.0.0",
     "regenerator-runtime": "^0.13.5"

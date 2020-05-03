@@ -10,16 +10,7 @@
 import 'core-js';
 import 'regenerator-runtime/runtime';
 import 'element-closest-polyfill';
-import {
-  isElemQuery,
-  ISet,
-  ISetCombinations,
-  ISetLike,
-  isSetQuery,
-  renderUpSet as render,
-  UpSetProps,
-  boxplotAddon,
-} from '@upsetjs/bundle';
+import { isElemQuery, ISetCombinations, ISetLike, isSetQuery, render, UpSetProps, boxplotAddon } from '@upsetjs/bundle';
 import { fixCombinations, fixSets, resolveSet, resolveSetByElems } from './utils';
 
 declare type CrosstalkOptions = {
@@ -163,9 +154,14 @@ HTMLWidgets.widget({
       render(el, props);
     }
 
-    let bakSelection: ISetLike<IElem> | null | undefined | ReadonlyArray<IElem> = null;
+    let bakSelection:
+      | ISetLike<IElem>
+      | null
+      | undefined
+      | ReadonlyArray<IElem>
+      | ((s: ISetLike<string>) => number) = null;
 
-    const onHover = (set: ISet<IElem> | null) => {
+    const onHover = (set: ISetLike<IElem> | null) => {
       if (HTMLWidgets.shinyMode) {
         Shiny.onInputChange(`${el.id}_hover`, {
           name: set ? set.name : null,
@@ -227,7 +223,7 @@ HTMLWidgets.widget({
     }
 
     if (HTMLWidgets.shinyMode) {
-      props.onClick = (set: ISet<IElem>) => {
+      props.onClick = (set: ISetLike<IElem> | null) => {
         Shiny.onInputChange(`${el.id}_click`, {
           name: set ? set.name : null,
           elems: set ? set.elems || [] : [],
