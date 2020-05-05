@@ -162,7 +162,8 @@ fromExpression = function(upsetjs, value, symbol="&", order.by="cardinality") {
 #' @param shared.mode whether on 'hover' or 'click' (default) is synced
 #' @return the object given as first argument
 #' @examples
-#' upsetjs() %>% fromDataFrame(as.data.frame(list(a=c(1, 1, 1),b=c(0, 1, 1)),row.names=c('a', 'b', 'c')))
+#' df <- as.data.frame(list(a=c(1, 1, 1),b=c(0, 1, 1)),row.names=c('a', 'b', 'c'))
+#' upsetjs() %>% fromDataFrame(df)
 #'
 #' @export
 fromDataFrame = function(upsetjs, df, attributes=NULL, order.by="cardinality", limit=NULL, shared=NULL, shared.mode="click") {

@@ -13,7 +13,8 @@
 #' @param queries the queries to set
 #' @return the object given as first argument
 #' @examples
-#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% setQueries(list(list(name="Q1", color="red", set="b")))
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>%
+#' setQueries(list(list(name="Q1", color="red", set="b")))
 #'
 #' @export
 setQueries = function(upsetjs, queries=list()) {
@@ -49,7 +50,8 @@ addQuery = function(upsetjs, name, color, elems=NULL, set=NULL) {
 #' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
 #' @return the object given as first argument
 #' @examples
-#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% addQuery(name="Q1", color="red", set="b") %>% clearQueries()
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>%
+#' addQuery(name="Q1", color="red", set="b") %>% clearQueries()
 #'
 #' @export
 clearQueries = function(upsetjs) {
@@ -65,7 +67,8 @@ clearQueries = function(upsetjs) {
 #' @param value whether to enable or disable
 #' @return the object given as first argument
 #' @examples
-#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% addQuery(name="Q1", color="red", set="b") %>% queryLegend(FALSE)
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>%
+#' addQuery(name="Q1", color="red", set="b") %>% queryLegend(FALSE)
 #'
 #' @export
 queryLegend = function(upsetjs, value=TRUE) {
