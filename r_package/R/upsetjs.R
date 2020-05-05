@@ -77,8 +77,9 @@ upsetjs = function(width='100%',
 #' @param session current shiny session
 #' @return an object of class \code{upsetjs_proxy}
 #' @examples
-#' upsetjsProxy() %>% setSelection('a')
-#'
+#' \dontrun{
+#' upsetjsProxy('upsetjs1', session) %>% setSelection('a')
+#' }
 #' @export
 upsetjsProxy = function(outputId, session) {
   structure(
