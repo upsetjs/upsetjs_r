@@ -68,7 +68,7 @@
   },
   "dependencies": {
     "@upsetjs/bundle": "~1.0.0",
-    "core-js": "^3",
+    "core-js": "^2",
     "element-closest-polyfill": "^1.0.0",
     "regenerator-runtime": "^0.13.5"
   }
