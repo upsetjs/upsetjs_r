@@ -37,7 +37,7 @@ sendMessage = function(upsetjs_proxy, props, ...) {
 }
 
 enableCrosstalk = function(upsetjs, shared, mode) {
-  if (inherits(upsetjs, 'upsetjs') && "crosstalk" %in% rownames(installed.packages()) && crosstalk::is.SharedData(shared)) {
+  if (inherits(upsetjs, 'upsetjs') && requireNamespace("crosstalk", quietly = TRUE) && crosstalk::is.SharedData(shared)) {
     upsetjs$dependencies = c(upsetjs$dependencies, crosstalk::crosstalkLibs())
     upsetjs$x$crosstalk = list(group=shared$groupName(), mode=mode)
   }
