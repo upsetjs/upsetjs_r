@@ -9,9 +9,11 @@
 
 #'
 #' sets the selection of the chart
-#' @param upsetjs the upsetjs (proxy) instance
+#' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
 #' @param name the name of the set to select
-#' @return upsetjs
+#' @return the object given as first argument
+#' @examples
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% setSelection("b")
 #'
 #' @export
 setSelection = function(upsetjs, name=NULL) {
@@ -23,9 +25,11 @@ setSelection = function(upsetjs, name=NULL) {
 
 #'
 #' make it an interactive chart
-#' @param upsetjs the upsetjs (proxy) instance
+#' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
 #' @param value whether to enable or disable
-#' @return upsetjs
+#' @return the object given as first argument
+#' @examples
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% interactiveChart()
 #'
 #' @export
 interactiveChart = function(upsetjs, value=TRUE) {

@@ -8,7 +8,6 @@
 
 sortSets = function(sets, order.by='cardinality', limit=NULL) {
   set_attr = function(order.by.attr) {
-    set_names =
     if (order.by.attr == 'cardinality') {
       sapply(sets, function (x) if (length(x$elems) == 0) x$cardinality * -1 else length(x$elems) * -1)
     } else if (order.by.attr == 'degree') {
@@ -66,13 +65,15 @@ generateCombinationsImpl = function(sets, c_type, min, max, empty, order.by, lim
 
 #'
 #' generates the sets from a lists object
-#' @param upsetjs the upsetjs (proxy) instance
+#' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
 #' @param value the list input value
 #' @param order.by order intersections by cardinality or name
 #' @param limit limit the ordered sets to the given limit
 #' @param shared a crosstalk shared data frame
 #' @param shared.mode whether on 'hover' or 'click' (default) is synced
-#' @return upsetjs
+#' @return the object given as first argument
+#' @examples
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3)))
 #'
 #' @export
 fromList = function(upsetjs, value, order.by="cardinality", limit=NULL, shared=NULL, shared.mode="click") {
@@ -84,7 +85,7 @@ fromList = function(upsetjs, value, order.by="cardinality", limit=NULL, shared=N
 
   elems = c()
   toSet = function(key, value) {
-    elems = c(elems, value)
+    elems <<- unique(c(elems, value))
     structure(
       list(name=key, elems=value),
       class="upsetjs_set"
@@ -93,6 +94,7 @@ fromList = function(upsetjs, value, order.by="cardinality", limit=NULL, shared=N
   sets = mapply(toSet, key=names(value), value=value, SIMPLIFY=F)
   # list of list objects
   names(sets) = NULL
+  names(elems) = NULL
 
   if (!is.null(shared)) {
      upsetjs = enableCrosstalk(upsetjs, shared, mode=shared.mode)
@@ -105,11 +107,13 @@ fromList = function(upsetjs, value, order.by="cardinality", limit=NULL, shared=N
 
 #'
 #' generates the sets from a lists object that contained the cardinalities of both sets and combinations (&)
-#' @param upsetjs the upsetjs (proxy) instance
+#' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
 #' @param value the expression list input
 #' @param symbol the symbol how to split list names to get the sets
 #' @param order.by order intersections by cardinality or name
-#' @return upsetjs
+#' @return the object given as first argument
+#' @examples
+#' upsetjs() %>% fromExpression(list(a=c(1,2,3), b=c(2,3), `a&c`=c(2,3)))
 #'
 #' @export
 fromExpression = function(upsetjs, value, symbol="&", order.by="cardinality") {
@@ -119,26 +123,26 @@ fromExpression = function(upsetjs, value, symbol="&", order.by="cardinality") {
 
   degrees = sapply(names(value), function (x) { length(unlist(strsplit(x, symbol))) })
 
-  combinations = value
-  sets = value[degrees == 1]
+  raw_combinations = value
+  raw_sets = value[degrees == 1]
 
   toSet = function(key, value) {
     structure(
-      list(name=key, type="set", elems=c(), cardinality=value),
+      list(name=key, type="set", elems=c(), cardinality=length(value)),
       class="upsetjs_set"
     )
   }
-  sets = mapply(toSet, key=names(sets), value=sets, SIMPLIFY=F)
+  sets = mapply(toSet, key=names(raw_sets), value=raw_sets, SIMPLIFY=F)
   names(sets) = NULL
   sets = sortSets(sets, order.by=order.by)
 
   toCombination = function(key, value) {
     structure(
-      list(name=key, type="composite", elems=c(), cardinality=value, setNames=unlist(strsplit(key, symbol))),
+      list(name=key, type="composite", elems=c(), cardinality=length(value), setNames=unlist(strsplit(key, symbol))),
       class="upsetjs_combination"
     )
   }
-  combinations = mapply(toCombination, key=names(combinations), value=combinations, SIMPLIFY=F)
+  combinations = mapply(toCombination, key=names(raw_combinations), value=raw_combinations, SIMPLIFY=F)
   names(combinations) = NULL
   combinations = sortSets(combinations, order.by=order.by)
 
@@ -149,14 +153,16 @@ fromExpression = function(upsetjs, value, symbol="&", order.by="cardinality") {
 
 #'
 #' extract the sets from a data frame (rows = elems, columns = sets, cell = contained)
-#' @param upsetjs the upsetjs (proxy) instance
+#' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
 #' @param df the data.frame like structure
 #' @param attributes the optional column list or data frame
 #' @param order.by order intersections by cardinality or degree
 #' @param limit limit the ordered sets to the given limit
 #' @param shared a crosstalk shared data frame
 #' @param shared.mode whether on 'hover' or 'click' (default) is synced
-#' @return upsetjs
+#' @return the object given as first argument
+#' @examples
+#' upsetjs() %>% fromDataFrame(as.data.frame(list(a=c(1, 1, 1),b=c(0, 1, 1)),row.names=c('a', 'b', 'c')))
 #'
 #' @export
 fromDataFrame = function(upsetjs, df, attributes=NULL, order.by="cardinality", limit=NULL, shared=NULL, shared.mode="click") {
@@ -200,19 +206,23 @@ fromDataFrame = function(upsetjs, df, attributes=NULL, order.by="cardinality", l
 
 #'
 #' extract the vector of elements
-#' @param upsetjs the upsetjs instance
+#' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
 #' @return vector of elements
+#' @examples
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% getElements()
 #'
 #' @export
-getSets = function(upsetjs) {
+getElements = function(upsetjs) {
   stopifnot(inherits(upsetjs, 'upsetjs'))
   upsetjs$x$elems
 }
 
 #'
 #' extract the vector of sets
-#' @param upsetjs the upsetjs instance
+#' @param upsetjs an object of class \code{upsetjs}
 #' @return vector of sets
+#' @examples
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% getSets()
 #'
 #' @export
 getSets = function(upsetjs) {
@@ -222,8 +232,10 @@ getSets = function(upsetjs) {
 
 #'
 #' extract the vector of combinations
-#' @param upsetjs the upsetjs instance
+#' @param upsetjs an object of class \code{upsetjs}
 #' @return vector of sets
+#' @examples
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% getCombinations()
 #'
 #' @export
 getCombinations = function(upsetjs) {
@@ -250,13 +262,15 @@ generateCombinations = function(upsetjs, c_type, min, max, empty, order.by, limi
 }
 #'
 #' configure the generation of the intersections
-#' @param upsetjs the upsetjs (proxy) instance
+#' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
 #' @param min minimum number of sets in an intersection
 #' @param max maximum number of sets in an intersection
 #' @param empty whether to include empty intersections or not
 #' @param order.by order intersections by cardinality, degree, name or a combination of it
 #' @param limit limit the number of intersections to the top N
-#' @return upsetjs
+#' @return the object given as first argument
+#' @examples
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% generateIntersections(min=2)
 #'
 #' @export
 generateIntersections = function(upsetjs, min=0, max=NULL, empty=FALSE, order.by="cardinality", limit=NULL) {
@@ -265,13 +279,15 @@ generateIntersections = function(upsetjs, min=0, max=NULL, empty=FALSE, order.by
 
 #'
 #' configure the generation of the unions
+#' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
 #' @param min minimum number of sets in an union
 #' @param max maximum number of sets in an union
 #' @param empty whether to include empty intersections or not
-#' @param upsetjs the upsetjs (proxy) instance
 #' @param order.by order intersections by cardinality, degree, name or a combination of it
 #' @param limit limit the number of intersections to the top N
-#' @return upsetjs
+#' @return the object given as first argument
+#' @examples
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% generateUnions()
 #'
 #' @export
 generateUnions = function(upsetjs, min=0, max=NULL, empty=FALSE, order.by="cardinality", limit=NULL) {

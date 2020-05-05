@@ -8,7 +8,7 @@
 
 #'
 #' specify the chart layout
-#' @param upsetjs the upsetjs (proxy) instance
+#' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
 #' @param height.ratios a vector of length 2 for the ratios between the combination and set plot, e.g. c(0.6, 0.4)
 #' @param width.ratios a vector of length 3 for the ratios between set, label, and combination plot, e.g. c(0.3,0.2,0.5)
 #' @param padding padding around the plot
@@ -16,7 +16,9 @@
 #' @param dot.padding padding factor (default 0.7) for the dots
 #' @param numerical.scale numerical scale: linear (default) or log
 #' @param band.scale band scale: band (default)
-#' @return upsetjs
+#' @return the object given as first argument
+#' @examples
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% chartLayout(width.ratios=c(0.4, 0.2, 0.4))
 #'
 #' @export
 chartLayout = function(upsetjs,
@@ -49,13 +51,15 @@ chartLayout = function(upsetjs,
 
 #'
 #' specify chart labels
-#' @param upsetjs the upsetjs (proxy) instance
+#' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
 #' @param combination.name the label for the combination chart
 #' @param combination.name.axis.offset the offset of the combination label from the axis in pixel
 #' @param set.name the label for the set chart
 #' @param set.name.axis.offset the offset of the set label from the axis in pixel
 #' @param bar.label.offset the offset of the bar label from the bar in pixel
-#' @return upsetjs
+#' @return the object given as first argument
+#' @examples
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% chartLabels(set.name="Test")
 #'
 #' @export
 chartLabels = function(upsetjs,
@@ -82,14 +86,16 @@ chartLabels = function(upsetjs,
 
 #'
 #' specify chart font sizes
-#' @param upsetjs the upsetjs (proxy) instance
+#' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
 #' @param font.family specify the font family to render
 #' @param chart.label font size of the chart label, default: 16px
 #' @param set.label font size of the set label, default: 10px
 #' @param axis.tick font size of the axis tick, default: 16px
 #' @param bar.label font size of the bar label, default: 10px
 #' @param legend font size of the legend label, default: 10px
-#' @return upsetjs
+#' @return the object given as first argument
+#' @examples
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% chartFontSizes(font.family="serif")
 #'
 #' @export
 chartFontSizes = function(upsetjs,
@@ -123,11 +129,13 @@ chartFontSizes = function(upsetjs,
 
 #'
 #' specify chart flags
-#' @param upsetjs the upsetjs (proxy) instance
+#' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
 #' @param id the optional HTML ID
 #' @param export.buttons show export SVG and PNG buttons
 #' @param class.name extra CSS class name to the root element
-#' @return upsetjs
+#' @return the object given as first argument
+#' @examples
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% chartStyleFlags(id="test")
 #'
 #' @export
 chartStyleFlags = function(upsetjs,
@@ -148,7 +156,7 @@ chartStyleFlags = function(upsetjs,
 
 #'
 #' specify theming options
-#' @param upsetjs the upsetjs (proxy) instance
+#' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
 #' @param theme theme to use 'dark' or 'light'
 #' @param color main bar color
 #' @param text.color main text color
@@ -156,7 +164,9 @@ chartStyleFlags = function(upsetjs,
 #' @param not.member.color color of the dot if not a member
 #' @param selection.color selection color
 #' @param alternating.color alternating background color
-#' @return upsetjs
+#' @return the object given as first argument
+#' @examples
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% chartTheme(theme="dark")
 #'
 #' @export
 chartTheme = function(upsetjs,
@@ -189,9 +199,11 @@ chartTheme = function(upsetjs,
 
 #'
 #' generic set chart props
-#' @param upsetjs the upsetjs (proxy) instance
+#' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
 #' @param ... all upsetjs properties in R name notation
-#' @return upsetjs
+#' @return the object given as first argument
+#' @examples
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% chartProps(theme="dark")
 #'
 #' @export
 chartProps = function(upsetjs,

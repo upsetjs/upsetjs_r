@@ -7,13 +7,16 @@
 
 #' upsetjs sizing policy
 #'
-#' @export
 #' @param defaultWidth defaults to \code{"100\%"} of the available width
 #' @param defaultHeight defaults to 400px tall
 #' @param padding defaults to 0px
 #' @param browser.fill defaults to \code{TRUE}
 #' @param ... all other arguments supplied to \code{htmlwidgets::\link[htmlwidgets]{sizingPolicy}}
 #' @return An \code{htmlwidgets::sizingPolicy} object
+#' @examples
+#' upsetjs(sizingPolicy=upsetjsSizingPolicy(padding=20)) %>% fromList(list(a=c(1,2,3), b=c(2,3)))
+#'
+#' @export
 upsetjsSizingPolicy = function(
   defaultWidth="100%",
   defaultHeight=400,
@@ -38,7 +41,7 @@ upsetjsSizingPolicy = function(
 #' @param elementId unique element id
 #' @param sizingPolicy htmlwidgets sizing policy object. Defaults to \code{\link{upsetjsSizingPolicy}()}
 #'
-#' @return html upsetjs widget
+#' @return An object of class \code{upsetjs} and \code{htmlwidget}
 #' @examples
 #' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3)))
 #' @export
@@ -72,6 +75,9 @@ upsetjs = function(width='100%',
 #' reactive helper to update an upsetjs inplace
 #' @param outputId the id of the upsetjs widget
 #' @param session current shiny session
+#' @return an object of class \code{upsetjs_proxy}
+#' @examples
+#' upsetjsProxy() %>% setSelection('a')
 #'
 #' @export
 upsetjsProxy = function(outputId, session) {
