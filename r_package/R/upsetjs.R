@@ -15,6 +15,7 @@
 #' @return An \code{htmlwidgets::sizingPolicy} object
 #' @examples
 #' upsetjs(sizingPolicy=upsetjsSizingPolicy(padding=20)) %>% fromList(list(a=c(1,2,3), b=c(2,3)))
+#' @importFrom htmlwidgets sizingPolicy
 #'
 #' @export
 upsetjsSizingPolicy = function(
@@ -44,6 +45,7 @@ upsetjsSizingPolicy = function(
 #' @return An object of class \code{upsetjs} and \code{htmlwidget}
 #' @examples
 #' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3)))
+#' @importFrom htmlwidgets createWidget
 #' @export
 upsetjs = function(width='100%',
                    height=NULL,

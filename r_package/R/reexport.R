@@ -13,4 +13,4 @@
 #' @param rhs	A function call using the magrittr semantics.
 #'
 #' @export
-`%>%` <- magrittr::`%>%`
+magrittr::`%>%`
