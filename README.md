@@ -1,6 +1,6 @@
 # UpSet.js as R HTMLWidget
 
-[![Github Actions][github-actions-image]][github-actions-url] [![Open in Binder][binder]][binder-r-url] [![Open Docs][docs]][docs-r-url] [![Open example][example]][example-r-url]
+[![CRAN][cran-image]][cran-url] [![Github Actions][github-actions-image]][github-actions-url] [![Open in Binder][binder]][binder-r-url] [![Open Docs][docs]][docs-r-url] [![Open example][example]][example-r-url]
 
 This is a [HTMLWidget](http://www.htmlwidgets.org/) wrapper around the JavaScript library [UpSet.js](https://github.com/upsetjs/upsetjs) and an alternative implementation of [UpSetR](https://www.rdocumentation.org/packages/UpSetR).
 
@@ -9,7 +9,11 @@ This package is part of the UpSet.js ecosystem located at the main [Github Monor
 ## Installation
 
 ```R
+# CRAN version
+install.packages('upsetjs')
+# or
 devtools::install_url("https://github.com/upsetjs/upsetjs_r/releases/latest/download/upsetjs.tar.gz")
+
 library(upsetjs)
 ```
 
@@ -139,3 +143,5 @@ This library is released under the `GNU AGPLv3` version to be used for private a
 [docs-r-url]: https://upset.js.org/integrations/r
 [example]: https://img.shields.io/badge/Example-open-red
 [example-r-url]: https://upset.js.org/integrations/r/articles/basic
+[cran]: https://img.shields.io/cran/v/upsetjs
+[cran-url]: https://www.rdocumentation.org/packages/upsetjs
