@@ -143,5 +143,5 @@ This library is released under the `GNU AGPLv3` version to be used for private a
 [docs-r-url]: https://upset.js.org/integrations/r
 [example]: https://img.shields.io/badge/Example-open-red
 [example-r-url]: https://upset.js.org/integrations/r/articles/basic
-[cran]: https://img.shields.io/cran/v/upsetjs
+[cran-image]: https://img.shields.io/cran/v/upsetjs
 [cran-url]: https://www.rdocumentation.org/packages/upsetjs
