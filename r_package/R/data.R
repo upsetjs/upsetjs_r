@@ -128,7 +128,7 @@ fromExpression = function(upsetjs, value, symbol="&", order.by="cardinality") {
 
   toSet = function(key, value) {
     structure(
-      list(name=key, type="set", elems=c(), cardinality=length(value)),
+      list(name=key, type="set", elems=c(), cardinality=value),
       class="upsetjs_set"
     )
   }
@@ -138,7 +138,7 @@ fromExpression = function(upsetjs, value, symbol="&", order.by="cardinality") {
 
   toCombination = function(key, value) {
     structure(
-      list(name=key, type="composite", elems=c(), cardinality=length(value), setNames=unlist(strsplit(key, symbol))),
+      list(name=key, type="composite", elems=c(), cardinality=value, setNames=unlist(strsplit(key, symbol))),
       class="upsetjs_combination"
     )
   }
