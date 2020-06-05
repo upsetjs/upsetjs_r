@@ -113,7 +113,7 @@ fromList = function(upsetjs, value, order.by="cardinality", limit=NULL, shared=N
 #' @param order.by order intersections by cardinality or name
 #' @return the object given as first argument
 #' @examples
-#' upsetjs() %>% fromExpression(list(a=c(1,2,3), b=c(2,3), `a&c`=c(2,3)))
+#' upsetjs() %>% fromExpression(list(a=3, b=2, `a&b`=2)))
 #'
 #' @export
 fromExpression = function(upsetjs, value, symbol="&", order.by="cardinality") {
