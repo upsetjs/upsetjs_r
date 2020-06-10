@@ -75,6 +75,7 @@ jobs:
         run: yarn build:r
       - name: Prepare Docs
         run: |
+          ls .
           mkdir -p public/integrations/r
           cp upsetjs.tar.gz public/integration/r/
           cp README.md r_package/
