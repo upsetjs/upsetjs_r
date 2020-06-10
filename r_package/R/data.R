@@ -34,11 +34,13 @@ sortSets = function(sets, order.by='cardinality', limit=NULL) {
 
 generateCombinationsImpl = function(sets, c_type, min, max, empty, order.by, limit, symbol="&") {
   combinations = list()
-  set_f = if (c_type == "intersection") intersect else union
+  set_f = if (c_type == "union") union else intersect
+  distinct = (c_type == 'distinct')
   lsets = length(sets)
+  all_indices = 1:lsets
 
   for(l in min:(if (is.null(max)) lsets else max)) {
-    combos = combn(1:lsets, l, simplify=F)
+    combos = combn(all_indices, l, simplify=F)
     for(combo in combos) {
       indices = unlist(combo)
       set_names = sapply(indices, function(i) sets[[i]]$name)
@@ -48,6 +50,12 @@ generateCombinationsImpl = function(sets, c_type, min, max, empty, order.by, lim
         elems = sets[[indices[1]]]$elems
         for (index in indices) {
           elems = set_f(elems, sets[[index]]$elems)
+        }
+      }
+      if (distinct) {
+        not_indices = setdiff(all_indices, indices)
+        for (index in not_indices) {
+          elems = setdiff(elems, sets[[index]]$elems)
         }
       }
       if (empty || length(elems) > 0) {
@@ -276,6 +284,22 @@ generateCombinations = function(upsetjs, c_type, min, max, empty, order.by, limi
 #' @export
 generateIntersections = function(upsetjs, min=0, max=NULL, empty=FALSE, order.by="cardinality", limit=NULL) {
   generateCombinations(upsetjs, "intersection", min, max, empty, order.by, limit)
+}
+#'
+#' configure the generation of the distinct intersections
+#' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
+#' @param min minimum number of sets in an intersection
+#' @param max maximum number of sets in an intersection
+#' @param empty whether to include empty intersections or not
+#' @param order.by order intersections by cardinality, degree, name or a combination of it
+#' @param limit limit the number of intersections to the top N
+#' @return the object given as first argument
+#' @examples
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% generateDistinctIntersections(min=2)
+#'
+#' @export
+generateDistinctIntersections = function(upsetjs, min=0, max=NULL, empty=FALSE, order.by="cardinality", limit=NULL) {
+  generateCombinations(upsetjs, "distinct", min, max, empty, order.by, limit)
 }
 
 #'

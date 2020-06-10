@@ -1,0 +1,68 @@
+---
+title: "UpSet.js HTMLWidget Combination Modes"
+author: "Samuel Gratzl"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{UpSet.js Combination Modes}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# UpSet.js Combination Modes
+
+```{r}
+library(upsetjs)
+library(tibble)
+```
+
+```{r}
+t <- tribble(
+  ~set1, ~set2, ~set3,
+   1,   1,   0,
+   0,   0,   1,
+   0,   1,   1,
+   0,   0,   1,
+   0,   0,   1,
+   0,   1,   1,
+   1,   0,   1,
+   0,   1,   1,
+   0,   0,   1,
+   0,   0,   1,
+   1,   1,   1,
+   1,   0,   0,
+   0,   0,   1,
+   0,   1,   0,
+   1,   1,   1,
+   0,   1,   0,
+   0,   1,   1,
+   0,   1,   0,
+   0,   0,   1,
+   0,   0,   1
+)
+```
+
+## Intersection Mode
+
+```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
+
+upsetjs() %>% fromDataFrame(t) %>% generateIntersections()
+```
+
+## Union Mode
+
+```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
+
+upsetjs() %>% fromDataFrame(t) %>% generateUnions()
+```
+
+## Distinct Intersection Mode
+
+```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
+
+upsetjs() %>% fromDataFrame(t) %>% generateDistinctIntersections()
+```

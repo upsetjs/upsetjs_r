@@ -59,6 +59,10 @@ shinyApp(ui = ui, server = server)
 
 see also [Shiny Examples](./master/shiny)
 
+## Documentation
+
+the package documentation is located at [![Open Docs][docs]][docs-r-url]. An introduction vignette is at [![Open Vignette][example]][example-r-url].
+
 ## Dev Environment
 
 requirements:
