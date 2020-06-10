@@ -28,10 +28,10 @@
     "clean": "rimraf r_package/inst/htmlwidgets/upsetjs.js",
     "build:dev": "webpack-cli -d --devtool source-map",
     "build": "npm run clean && webpack-cli -p",
-    "check:r": "RScript -e 'devtools::check(\"r_package\", error_on = \"error\")'",
+    "check:r": "Rscript -e 'devtools::check(\"r_package\", error_on = \"error\")'",
     "clean:r": "rimraf *.tar.gz check r_package/man r_package/doc r_package/docs r_package/NAMESPACE",
-    "build:r": "npm run clean:r && RScript -e 'devtools::document(\"r_package\")' -e 'devtools::build(\"r_package\")' -e 'file.copy(list.files(pattern=\"upsetjs_.*.tar.gz\"), \"upsetjs.tar.gz\")'",
-    "docs:r": "RScript -e 'devtools::build_site(\"r_package\")'",
+    "build:r": "npm run clean:r && Rscript -e 'devtools::document(\"r_package\")' -e 'devtools::build(\"r_package\")' -e 'file.copy(list.files(pattern=\"upsetjs_.*.tar.gz\"), \"upsetjs.tar.gz\")'",
+    "docs:r": "Rscript -e 'devtools::build_site(\"r_package\")'",
     "release:major": "release-it --disable-metrics major",
     "release:minor": "release-it --disable-metrics minor",
     "release:patch": "release-it --disable-metrics patch"
