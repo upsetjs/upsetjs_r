@@ -73,14 +73,16 @@ jobs:
 
       - name: Build Package
         run: yarn build:r
-      - run: cp README.md r_package/
+      - name: Prepare Docs
+        run: |
+          mkdir -p public/integrations/r
+          cp upsetjs.tar.gz public/integration/r/
+          cp README.md r_package/
       - name: Build Website
         run: yarn docs:r
-
-      - run: |
-          mkdir -p public/integrations/r
+      - name: Copy Docs
+        run: |
           mv r_package/docs/* public/integrations/r/
-          mv upsetjs.tar.gz public/integration/r/
 
       - name: Deploy Master
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
