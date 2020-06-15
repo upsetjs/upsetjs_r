@@ -52,6 +52,8 @@ chartLayout = function(upsetjs,
 #'
 #' specify chart labels
 #' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
+#' @param title the chart title
+#' @param description the chart description
 #' @param combination.name the label for the combination chart
 #' @param combination.name.axis.offset the offset of the combination label from the axis in pixel
 #' @param set.name the label for the set chart
@@ -63,19 +65,25 @@ chartLayout = function(upsetjs,
 #'
 #' @export
 chartLabels = function(upsetjs,
+                       title=NULL,
+                       description=NULL,
                        combination.name=NULL,
                        combination.name.axis.offset=NULL,
                        set.name=NULL,
                        set.name.axis.offset=NULL,
                        bar.label.offset=NULL) {
   checkUpSetArgument(upsetjs)
+  stopifnottype('title', title, is.character, 'string')
+  stopifnottype('description', description, is.character, 'string')
   stopifnottype('combination.name', combination.name, is.character, 'string')
   stopifnottype('combination.name.axis.offset', combination.name.axis.offset)
   stopifnottype('set.name', set.name, is.character, 'string')
   stopifnottype('set.name.axis.offset', set.name.axis.offset)
   stopifnottype('bar.label.offset', bar.label.offset)
 
-  props = list(setName=set.name,
+  props = list(title=title,
+               description=description,
+               setName=set.name,
                combinationName=combination.name,
                combinationNameAxisOffset=combination.name.axis.offset,
                barLabelOffset=bar.label.offset,
@@ -93,6 +101,9 @@ chartLabels = function(upsetjs,
 #' @param axis.tick font size of the axis tick, default: 16px
 #' @param bar.label font size of the bar label, default: 10px
 #' @param legend font size of the legend label, default: 10px
+#' @param title font size of the chart title, default: 24px
+#' @param description font size of the chart description, default: 16px
+#' @param export.label font size of the export label, default: 10px
 #' @return the object given as first argument
 #' @examples
 #' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% chartFontSizes(font.family="serif")
@@ -104,7 +115,10 @@ chartFontSizes = function(upsetjs,
                           set.label=NULL,
                           axis.tick=NULL,
                           bar.label=NULL,
-                          legend=NULL) {
+                          legend=NULL,
+                          title=NULL,
+                          description=NULL,
+                          export.label=NULL) {
   checkUpSetArgument(upsetjs)
   stopifnottype('font.family', font.family, is.character, 'string')
   stopifnottype('chart.label', chart.label, is.character, 'string')
@@ -112,13 +126,19 @@ chartFontSizes = function(upsetjs,
   stopifnottype('axis.tick', axis.tick, is.character, 'string')
   stopifnottype('bar.label', bar.label, is.character, 'string')
   stopifnottype('legend', legend, is.character, 'string')
+  stopifnottype('title', title, is.character, 'string')
+  stopifnottype('description', description, is.character, 'string')
+  stopifnottype('export.label', export.label, is.character, 'string')
 
   font.sizes = list(
     chartLabel=chart.label,
     axisTick=axis.tick,
     setLabel=set.label,
     barLabel=bar.label,
-    legend=legend
+    legend=legend,
+    title=title,
+    description=description,
+    exportLabel=export.label
   )
   props = list(fontFamily=font.family,
                fontSizes=cleanNull(font.sizes)
@@ -159,6 +179,7 @@ chartStyleFlags = function(upsetjs,
 #' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
 #' @param theme theme to use 'dark' or 'light'
 #' @param color main bar color
+#' @param has.selection.color main color used when a selection is present
 #' @param text.color main text color
 #' @param hover.hint.color color of the hover hint
 #' @param not.member.color color of the dot if not a member
@@ -174,14 +195,16 @@ chartTheme = function(upsetjs,
                       selection.color=NULL,
                       alternating.color=NULL,
                       color=NULL,
+                      has.selection.color=NULL,
                       text.color=NULL,
                       hover.hint.color=NULL,
                       not.member.color=NULL) {
   checkUpSetArgument(upsetjs)
-  stopifnot(is.null(theme) || theme == 'light' || theme == 'dark')
+  stopifnot(is.null(theme) || theme == 'light' || theme == 'dark' || theme == 'vega')
   stopifnottype('selection.color', selection.color, is.character, 'string')
   stopifnottype('alternating.color', alternating.color, is.character, 'string')
   stopifnottype('color', color, is.character, 'string')
+  stopifnottype('has.selection.color', has.selection.color, is.character, 'string')
   stopifnottype('text.color', text.color, is.character, 'string')
   stopifnottype('hover.hint.color', hover.hint.color, is.character, 'string')
   stopifnottype('not.member.color', not.member.color, is.character, 'string')
@@ -190,6 +213,7 @@ chartTheme = function(upsetjs,
                selectionColor=selection.color,
                alternatingBackgroundColor=alternating.color,
                color=color,
+               hasSelectionColor=has.selection.color,
                textColor=text.color,
                hoverHintColor=hover.hint.color,
                notMemberColor=not.member.color

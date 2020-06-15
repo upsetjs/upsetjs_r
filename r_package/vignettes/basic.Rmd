@@ -99,7 +99,7 @@ upsetjs() %>% fromDataFrame(dataFrame)
 
 In case of an `expressionInput` the combinations of sets are directly given.
 
-`generateIntersections` and `generateUnions` let you customize the generation of the set combinations
+`generateIntersections`, `generateDistinctIntersections`, and `generateUnions` let you customize the generation of the set combinations
 
 - `min` ... minimum number of sets in a set combination
 - `max` ... maximum number of sets in a set combination, NULL means no limit
@@ -107,6 +107,12 @@ In case of an `expressionInput` the combinations of sets are directly given.
 - `order.by` ... sort set combinations either by `cardinality` (number of elements) or by `degree` (number of sets
 - `limit` ... show only the first limit set combinations
 
+
+```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
+
+upsetjs() %>% fromList(listInput) %>%
+  generateDistinctIntersections()
+```
 
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
 
@@ -191,12 +197,20 @@ upsetjs() %>%
 
 ### Theme
 
-UpSet.js supports two themes: light and dark. The theme can be set by the `chartTheme` function
+UpSet.js supports thre themes: light, dark, and vega. The theme can be set by the `chartTheme` function
 
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
 upsetjs() %>%
   fromList(listInput) %>%
   chartTheme('dark')
+```
+
+### Title
+
+```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
+upsetjs() %>%
+  fromList(listInput) %>%
+  chartLabels(title = "Chart Title", description = "this is a long chart description")
 ```
 
 ### Labels

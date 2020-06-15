@@ -29,7 +29,7 @@ declare type ShinyUpSetProps = UpSetProps<IElem> & {
 };
 
 declare type CrosstalkHandler = {
-  mode: 'click' | 'hover';
+  mode: 'click' | 'hover' | 'contextMenu';
   update(options: CrosstalkOptions): void;
   trigger(elems?: ReadonlyArray<string>): void;
 };
@@ -46,7 +46,6 @@ HTMLWidgets.widget({
       sets: [],
       width,
       height,
-      alternatingBackgroundColor: 'rgba(0,0,0,0.05)',
       exportButtons: HTMLWidgets.shinyMode,
     };
     let crosstalkHandler: CrosstalkHandler | null = null;
@@ -58,7 +57,7 @@ HTMLWidgets.widget({
         delete props.combinationAddons;
         return;
       }
-      const minmax = keys.map((key) =>
+      const minMax = keys.map((key) =>
         attrs[key].reduce(([min, max], v) => [Math.min(min, v), Math.max(max, v)] as [number, number], [
           Number.POSITIVE_INFINITY,
           Number.NEGATIVE_INFINITY,
@@ -68,8 +67,8 @@ HTMLWidgets.widget({
         boxplotAddon(
           (v) => attrs[key]![elemToIndex.get(v)!],
           {
-            min: minmax[i][0],
-            max: minmax[i][1],
+            min: minMax[i][0],
+            max: minMax[i][1],
           },
           {
             name: key,
@@ -80,8 +79,8 @@ HTMLWidgets.widget({
         boxplotAddon(
           (v) => attrs[key]![elemToIndex.get(v)!],
           {
-            min: minmax[i][0],
-            max: minmax[i][1],
+            min: minMax[i][0],
+            max: minMax[i][1],
           },
           {
             name: key,
@@ -230,6 +229,18 @@ HTMLWidgets.widget({
         });
 
         if (crosstalkHandler && crosstalkHandler.mode === 'click') {
+          crosstalkHandler.trigger(set?.elems);
+          props.selection = set;
+          update();
+        }
+      };
+      props.onContextMenu = (set: ISetLike<IElem> | null) => {
+        Shiny.onInputChange(`${el.id}_contextMenu`, {
+          name: set ? set.name : null,
+          elems: set ? set.elems || [] : [],
+        });
+
+        if (crosstalkHandler && crosstalkHandler.mode === 'contextMenu') {
           crosstalkHandler.trigger(set?.elems);
           props.selection = set;
           update();

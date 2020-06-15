@@ -20,7 +20,8 @@ Suggests:
   knitr,
   crosstalk,
   rmarkdown,
-  formatR
+  formatR,
+  tibble
 LazyData: true
 RoxygenNote: 7.0.2
 VignetteBuilder: knitr

@@ -35,7 +35,7 @@ sortSets = function(sets, order.by='cardinality', limit=NULL) {
 generateCombinationsImpl = function(sets, c_type, min, max, empty, order.by, limit, symbol="&") {
   combinations = list()
   set_f = if (c_type == "union") union else intersect
-  distinct = (c_type == 'distinct')
+  distinct = (c_type == 'distinctIntersection')
   lsets = length(sets)
   all_indices = 1:lsets
 
@@ -299,7 +299,7 @@ generateIntersections = function(upsetjs, min=0, max=NULL, empty=FALSE, order.by
 #'
 #' @export
 generateDistinctIntersections = function(upsetjs, min=0, max=NULL, empty=FALSE, order.by="cardinality", limit=NULL) {
-  generateCombinations(upsetjs, "distinct", min, max, empty, order.by, limit)
+  generateCombinations(upsetjs, "distinctIntersection", min, max, empty, order.by, limit)
 }
 
 #'

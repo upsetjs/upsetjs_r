@@ -6,6 +6,7 @@ output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{UpSet.js Combination Modes}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteDepends{tibble}
   \usepackage[utf8]{inputenc}
 ---
 
