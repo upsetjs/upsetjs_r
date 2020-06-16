@@ -370,7 +370,7 @@ generateCombinations = function(upsetjs,
   stopifnot(is.null(limit) ||
               (is.numeric(limit) && length(limit) == 1))
 
-  if (inherits(upsetjs, 'upsetjs')) {
+  if (inherits(upsetjs, 'upsetjs_common')) {
     sets = upsetjs$x$sets
     gen = generateCombinationsImpl(sets, c_type, min, max, empty, order.by, limit, symbol)
   } else {

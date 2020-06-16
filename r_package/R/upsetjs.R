@@ -55,8 +55,8 @@ upsetjs = function(width = '100%',
 
   dependencies = c()
 
-  htmlwidgets::createWidget(
-    c('upsetjs', 'upsetjs_common'),
+  r = htmlwidgets::createWidget(
+    'upsetjs',
     x,
     width = width,
     height = height,
@@ -65,6 +65,8 @@ upsetjs = function(width = '100%',
     sizingPolicy = sizingPolicy,
     dependencies = dependencies
   )
+  class(r) = c(class(r), 'upsetjs_common', 'upsetjs_upset')
+  r
 }
 
 #'
@@ -84,7 +86,7 @@ upsetjsProxy = function(outputId, session) {
       id = session$ns(outputId),
       x = structure(list())
     ),
-    class = c("upsetjs_proxy", "upsetjs_common_proxy")
+    class = c('upsetjs_proxy', 'upsetjs_upset_proxy', 'upsetjs_common_proxy')
   )
 }
 
@@ -114,8 +116,8 @@ upsetjsVennDiagram = function(width = '100%',
 
   dependencies = c()
 
-  htmlwidgets::createWidget(
-    c('upsetjs_venn', 'upsetjs_common'),
+  r = htmlwidgets::createWidget(
+    'upsetjs',
     x,
     width = width,
     height = height,
@@ -124,6 +126,8 @@ upsetjsVennDiagram = function(width = '100%',
     sizingPolicy = sizingPolicy,
     dependencies = dependencies
   )
+  class(r) = c(class(r), 'upsetjs_common', 'upsetjs_venn')
+  r
 }
 
 #'
@@ -143,6 +147,6 @@ upsetjsVennDiagramProxy = function(outputId, session) {
       id = session$ns(outputId),
       x = structure(list(renderMode = "venn"))
     ),
-    class = c("upsetjs_venn_proxy", "upsetjs_common_proxy")
+    class = c('upsetjs_proxy', 'upsetjs_venn_proxy', 'upsetjs_common_proxy')
   )
 }
