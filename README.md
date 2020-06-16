@@ -63,6 +63,19 @@ see also [Shiny Examples](./master/shiny)
 
 the package documentation is located at [![Open Docs][docs]][docs-r-url]. An introduction vignette is at [![Open Vignette][example]][example-r-url].
 
+## Venn Diagram
+
+Besides the main UpSet.js plot also Venn Diagrams for two or three sets are supported. It uses the same input formats and has similar functionality in terms of interaction.
+
+```R
+listInput <- list(one = c(1, 2, 3, 5, 7, 8, 11, 12, 13), two = c(1, 2, 4, 5, 10), three = c(1, 5, 6, 7, 8, 9, 10, 12, 13))
+upsetjsVennDiagram() %>% fromList(listInput) %>% interactiveChart()
+```
+
+![image](https://user-images.githubusercontent.com/4129778/84817608-8a574b80-b015-11ea-91b8-2ff17bb533e4.png)
+
+see also [Venn.Rmd](./master/vignettes/venn.Rmd)
+
 ## Dev Environment
 
 requirements:
