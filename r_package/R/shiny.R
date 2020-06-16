@@ -20,8 +20,8 @@
 #'
 #' @export
 upsetjsOutput = function(outputId,
-                         width='100%',
-                         height='400px') {
+                         width = '100%',
+                         height = '400px') {
   htmlwidgets::shinyWidgetOutput(outputId, 'upsetjs', width, height, 'upsetjs')
 }
 
@@ -36,10 +36,10 @@ upsetjsOutput = function(outputId,
 #'
 #' @export
 renderUpsetjs = function(expr,
-                         env=parent.frame(),
-                         quoted=FALSE) {
+                         env = parent.frame(),
+                         quoted = FALSE) {
   if (!quoted) {
     expr = substitute(expr)
   } # force quoted
-  htmlwidgets::shinyRenderWidget(expr, upsetjsOutput, env, quoted=TRUE)
+  htmlwidgets::shinyRenderWidget(expr, upsetjsOutput, env, quoted = TRUE)
 }

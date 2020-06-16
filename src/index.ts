@@ -10,23 +10,35 @@
 import 'core-js';
 import 'regenerator-runtime/runtime';
 import 'element-closest-polyfill';
-import { isElemQuery, ISetCombinations, ISetLike, isSetQuery, render, UpSetProps, boxplotAddon } from '@upsetjs/bundle';
+import {
+  isElemQuery,
+  ISetCombinations,
+  ISetLike,
+  isSetQuery,
+  render,
+  UpSetProps,
+  boxplotAddon,
+  renderVennDiagram,
+  VennDiagramProps,
+} from '@upsetjs/bundle';
 import { fixCombinations, fixSets, resolveSet, resolveSetByElems } from './utils';
 
 declare type CrosstalkOptions = {
   group: string;
-  mode: 'click' | 'hover';
+  mode: 'click' | 'hover' | 'contextMenu';
 };
 
 declare type IElem = string;
 
-declare type ShinyUpSetProps = UpSetProps<IElem> & {
-  interactive?: boolean;
-  crosstalk?: CrosstalkOptions;
+declare type ShinyUpSetProps = UpSetProps<IElem> &
+  VennDiagramProps<IElem> & {
+    renderMode: 'upset' | 'venn';
+    interactive?: boolean;
+    crosstalk?: CrosstalkOptions;
 
-  elems: ReadonlyArray<IElem>;
-  attrs: { [attr: string]: ReadonlyArray<number> };
-};
+    elems: ReadonlyArray<IElem>;
+    attrs: { [attr: string]: ReadonlyArray<number> };
+  };
 
 declare type CrosstalkHandler = {
   mode: 'click' | 'hover' | 'contextMenu';
@@ -40,9 +52,10 @@ HTMLWidgets.widget({
 
   factory(el, width, height) {
     let interactive = false;
+    let renderMode: 'upset' | 'venn' = 'upset';
     const elemToIndex = new Map<IElem, number>();
     let attrs: { [key: string]: ReadonlyArray<number> } = {};
-    const props: UpSetProps<IElem> = {
+    const props: UpSetProps<IElem> & VennDiagramProps<IElem> = {
       sets: [],
       width,
       height,
@@ -90,10 +103,14 @@ HTMLWidgets.widget({
       );
     }
 
-    function fixProps(props: UpSetProps<IElem>, delta: any) {
+    function fixProps(props: UpSetProps<IElem> & VennDiagramProps<IElem>, delta: any) {
       if (typeof delta.interactive === 'boolean') {
         interactive = delta.interactive;
       }
+      if (typeof delta.renderMode === 'string') {
+        renderMode = delta.renderMode;
+      }
+      delete (props as any).renderMode;
       delete (props as any).interactive;
       delete (props as any).crosstalk;
       if (delta.elems) {
@@ -150,7 +167,11 @@ HTMLWidgets.widget({
         }
         fixProps(props, delta);
       }
-      render(el, props);
+      if (renderMode === 'venn') {
+        renderVennDiagram(el, props);
+      } else {
+        render(el, props);
+      }
     }
 
     let bakSelection:

@@ -16,9 +16,10 @@
 #' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% setSelection("b")
 #'
 #' @export
-setSelection = function(upsetjs, name=NULL) {
-  checkUpSetArgument(upsetjs)
-  stopifnot(is.null(name) || (is.character(name) && length(name) >= 1))
+setSelection = function(upsetjs, name = NULL) {
+  checkUpSetOrVennArgument(upsetjs)
+  stopifnot(is.null(name) ||
+              (is.character(name) && length(name) >= 1))
 
   setProperty(upsetjs, "selection", name)
 }
@@ -32,8 +33,8 @@ setSelection = function(upsetjs, name=NULL) {
 #' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% interactiveChart()
 #'
 #' @export
-interactiveChart = function(upsetjs, value=TRUE) {
-  checkUpSetArgument(upsetjs)
+interactiveChart = function(upsetjs, value = TRUE) {
+  checkUpSetOrVennArgument(upsetjs)
   stopifnot(is.logical(value), length(value) == 1)
 
   setProperty(upsetjs, "interactive", value)

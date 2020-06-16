@@ -22,31 +22,58 @@
 #'
 #' @export
 chartLayout = function(upsetjs,
-                       height.ratios=NULL,
-                       width.ratios=NULL,
-                       padding=NULL,
-                       bar.padding=NULL,
-                       dot.padding=NULL,
-                       numerical.scale=NULL,
-                       band.scale=NULL) {
+                       height.ratios = NULL,
+                       width.ratios = NULL,
+                       padding = NULL,
+                       bar.padding = NULL,
+                       dot.padding = NULL,
+                       numerical.scale = NULL,
+                       band.scale = NULL) {
   checkUpSetArgument(upsetjs)
-  stopifnot(is.null(height.ratios) || (is.numeric(height.ratios) && length(height.ratios) == 2))
-  stopifnot(is.null(width.ratios) || (is.numeric(width.ratios) && length(width.ratios) == 3))
+  stopifnot(is.null(height.ratios) ||
+              (is.numeric(height.ratios) &&
+                 length(height.ratios) == 2))
+  stopifnot(is.null(width.ratios) ||
+              (is.numeric(width.ratios) &&
+                 length(width.ratios) == 3))
   stopifnottype('padding', padding)
   stopifnottype('bar.padding', bar.padding)
   stopifnottype('dot.padding', dot.padding)
-  stopifnot(is.null(numerical.scale) || (numerical.scale == 'linear' || numerical.scale == 'log'))
+  stopifnot(
+    is.null(numerical.scale) ||
+      (numerical.scale == 'linear' || numerical.scale == 'log')
+  )
   stopifnot(is.null(band.scale) || band.scale == 'band')
 
 
-  props = list(heightRatios=height.ratios,
-               widthRatios=width.ratios,
-               padding=padding,
-               barPadding=bar.padding,
-               dotPadding=dot.padding,
-               numericalScale=numerical.scale,
-               bandScale=band.scale)
-  setProperties(upsetjs, props, clean=TRUE)
+  props = list(
+    heightRatios = height.ratios,
+    widthRatios = width.ratios,
+    padding = padding,
+    barPadding = bar.padding,
+    dotPadding = dot.padding,
+    numericalScale = numerical.scale,
+    bandScale = band.scale
+  )
+  setProperties(upsetjs, props, clean = TRUE)
+}
+
+#'
+#' specify the chart venn layout
+#' @param upsetjs an object of class \code{upsetjs_venn} or \code{upsetjs_venn_proxy}
+#' @param padding padding around the plot
+#' @return the object given as first argument
+#' @examples
+#' upsetjsVennDiagram() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% chartVennLayout(padding=10)
+#'
+#' @export
+chartVennLayout = function(upsetjs,
+                           padding = NULL) {
+  checkVennDiagramArgument(upsetjs)
+  stopifnottype('padding', padding)
+
+  props = list(padding = padding)
+  setProperties(upsetjs, props, clean = TRUE)
 }
 
 #'
@@ -65,31 +92,57 @@ chartLayout = function(upsetjs,
 #'
 #' @export
 chartLabels = function(upsetjs,
-                       title=NULL,
-                       description=NULL,
-                       combination.name=NULL,
-                       combination.name.axis.offset=NULL,
-                       set.name=NULL,
-                       set.name.axis.offset=NULL,
-                       bar.label.offset=NULL) {
+                       title = NULL,
+                       description = NULL,
+                       combination.name = NULL,
+                       combination.name.axis.offset = NULL,
+                       set.name = NULL,
+                       set.name.axis.offset = NULL,
+                       bar.label.offset = NULL) {
   checkUpSetArgument(upsetjs)
   stopifnottype('title', title, is.character, 'string')
   stopifnottype('description', description, is.character, 'string')
-  stopifnottype('combination.name', combination.name, is.character, 'string')
-  stopifnottype('combination.name.axis.offset', combination.name.axis.offset)
+  stopifnottype('combination.name',
+                combination.name,
+                is.character,
+                'string')
+  stopifnottype('combination.name.axis.offset',
+                combination.name.axis.offset)
   stopifnottype('set.name', set.name, is.character, 'string')
   stopifnottype('set.name.axis.offset', set.name.axis.offset)
   stopifnottype('bar.label.offset', bar.label.offset)
 
-  props = list(title=title,
-               description=description,
-               setName=set.name,
-               combinationName=combination.name,
-               combinationNameAxisOffset=combination.name.axis.offset,
-               barLabelOffset=bar.label.offset,
-               setNameAxisOffset=set.name.axis.offset
-               )
-  setProperties(upsetjs, props, clean=TRUE)
+  props = list(
+    title = title,
+    description = description,
+    setName = set.name,
+    combinationName = combination.name,
+    combinationNameAxisOffset = combination.name.axis.offset,
+    barLabelOffset = bar.label.offset,
+    setNameAxisOffset = set.name.axis.offset
+  )
+  setProperties(upsetjs, props, clean = TRUE)
+}
+#'
+#' specify chart labels
+#' @param upsetjs an object of class \code{upsetjs_venn} or \code{upsetjs_venn_proxy}
+#' @param title the chart title
+#' @param description the chart description
+#' @return the object given as first argument
+#' @examples
+#' upsetjsVennDiagram() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% chartVennLabels(title="Test")
+#'
+#' @export
+chartVennLabels = function(upsetjs,
+                           title = NULL,
+                           description = NULL) {
+  checkVennDiagramArgument(upsetjs)
+  stopifnottype('title', title, is.character, 'string')
+  stopifnottype('description', description, is.character, 'string')
+
+  props = list(title = title,
+               description = description)
+  setProperties(upsetjs, props, clean = TRUE)
 }
 
 #'
@@ -104,22 +157,24 @@ chartLabels = function(upsetjs,
 #' @param title font size of the chart title, default: 24px
 #' @param description font size of the chart description, default: 16px
 #' @param export.label font size of the export label, default: 10px
+#' @param value.label font size of the value label, (venn diagram only) default: 12px
 #' @return the object given as first argument
 #' @examples
 #' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% chartFontSizes(font.family="serif")
 #'
 #' @export
 chartFontSizes = function(upsetjs,
-                          font.family=NULL,
-                          chart.label=NULL,
-                          set.label=NULL,
-                          axis.tick=NULL,
-                          bar.label=NULL,
-                          legend=NULL,
-                          title=NULL,
-                          description=NULL,
-                          export.label=NULL) {
-  checkUpSetArgument(upsetjs)
+                          font.family = NULL,
+                          chart.label = NULL,
+                          set.label = NULL,
+                          axis.tick = NULL,
+                          bar.label = NULL,
+                          legend = NULL,
+                          title = NULL,
+                          description = NULL,
+                          export.label = NULL,
+                          value.label = NULL) {
+  checkUpSetOrVennArgument(upsetjs)
   stopifnottype('font.family', font.family, is.character, 'string')
   stopifnottype('chart.label', chart.label, is.character, 'string')
   stopifnottype('set.label', set.label, is.character, 'string')
@@ -129,21 +184,22 @@ chartFontSizes = function(upsetjs,
   stopifnottype('title', title, is.character, 'string')
   stopifnottype('description', description, is.character, 'string')
   stopifnottype('export.label', export.label, is.character, 'string')
+  stopifnottype('value.label', value.label, is.character, 'string')
 
   font.sizes = list(
-    chartLabel=chart.label,
-    axisTick=axis.tick,
-    setLabel=set.label,
-    barLabel=bar.label,
-    legend=legend,
-    title=title,
-    description=description,
-    exportLabel=export.label
+    chartLabel = chart.label,
+    axisTick = axis.tick,
+    setLabel = set.label,
+    barLabel = bar.label,
+    legend = legend,
+    title = title,
+    description = description,
+    exportLabel = export.label,
+    valueLabel = value.label
   )
-  props = list(fontFamily=font.family,
-               fontSizes=cleanNull(font.sizes)
-               )
-  setProperties(upsetjs, props, clean=TRUE)
+  props = list(fontFamily = font.family,
+               fontSizes = cleanNull(font.sizes))
+  setProperties(upsetjs, props, clean = TRUE)
 }
 
 
@@ -159,18 +215,17 @@ chartFontSizes = function(upsetjs,
 #'
 #' @export
 chartStyleFlags = function(upsetjs,
-                           id=NULL,
-                           export.buttons=NULL,
-                           class.name=NULL) {
-  checkUpSetArgument(upsetjs)
+                           id = NULL,
+                           export.buttons = NULL,
+                           class.name = NULL) {
+  checkUpSetOrVennArgument(upsetjs)
   stopifnottype('export.buttons', export.buttons, is.logical, 'boolean')
   stopifnottype('class.name', class.name, is.character, 'string')
   stopifnottype('id', id, is.character, 'string')
 
-  props = list(exportButtons=export.buttons,
-               className=class.name
-               )
-  setProperties(upsetjs, props, clean=TRUE)
+  props = list(exportButtons = export.buttons,
+               className = class.name)
+  setProperties(upsetjs, props, clean = TRUE)
 }
 
 
@@ -185,40 +240,66 @@ chartStyleFlags = function(upsetjs,
 #' @param not.member.color color of the dot if not a member
 #' @param selection.color selection color
 #' @param alternating.color alternating background color
+#' @param value.text.color value text color (venn diagram only)
+#' @param stroke.color circle stroke color (venn diagram only)
 #' @return the object given as first argument
 #' @examples
 #' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% chartTheme(theme="dark")
 #'
 #' @export
 chartTheme = function(upsetjs,
-                      theme=NULL,
-                      selection.color=NULL,
-                      alternating.color=NULL,
-                      color=NULL,
-                      has.selection.color=NULL,
-                      text.color=NULL,
-                      hover.hint.color=NULL,
-                      not.member.color=NULL) {
-  checkUpSetArgument(upsetjs)
-  stopifnot(is.null(theme) || theme == 'light' || theme == 'dark' || theme == 'vega')
+                      theme = NULL,
+                      selection.color = NULL,
+                      alternating.color = NULL,
+                      color = NULL,
+                      has.selection.color = NULL,
+                      text.color = NULL,
+                      hover.hint.color = NULL,
+                      not.member.color = NULL,
+                      value.text.color = NULL,
+                      stroke.color = NULL) {
+  checkUpSetOrVennArgument(upsetjs)
+  stopifnot(is.null(theme) ||
+              theme == 'light' ||
+              theme == 'dark' || theme == 'vega')
   stopifnottype('selection.color', selection.color, is.character, 'string')
-  stopifnottype('alternating.color', alternating.color, is.character, 'string')
+  stopifnottype('alternating.color',
+                alternating.color,
+                is.character,
+                'string')
   stopifnottype('color', color, is.character, 'string')
-  stopifnottype('has.selection.color', has.selection.color, is.character, 'string')
+  stopifnottype('has.selection.color',
+                has.selection.color,
+                is.character,
+                'string')
   stopifnottype('text.color', text.color, is.character, 'string')
-  stopifnottype('hover.hint.color', hover.hint.color, is.character, 'string')
-  stopifnottype('not.member.color', not.member.color, is.character, 'string')
+  stopifnottype('hover.hint.color',
+                hover.hint.color,
+                is.character,
+                'string')
+  stopifnottype('not.member.color',
+                not.member.color,
+                is.character,
+                'string')
+  stopifnottype('value.text.color',
+                value.text.color,
+                is.character,
+                'string')
+  stopifnottype('stroke.color', stroke.color, is.character, 'string')
 
-  props = list(theme=theme,
-               selectionColor=selection.color,
-               alternatingBackgroundColor=alternating.color,
-               color=color,
-               hasSelectionColor=has.selection.color,
-               textColor=text.color,
-               hoverHintColor=hover.hint.color,
-               notMemberColor=not.member.color
-               )
-  setProperties(upsetjs, props, clean=TRUE)
+  props = list(
+    theme = theme,
+    selectionColor = selection.color,
+    alternatingBackgroundColor = alternating.color,
+    color = color,
+    hasSelectionColor = has.selection.color,
+    textColor = text.color,
+    hoverHintColor = hover.hint.color,
+    notMemberColor = not.member.color,
+    valueTextColor = value.text.color,
+    strokeColor = stroke.color
+  )
+  setProperties(upsetjs, props, clean = TRUE)
 }
 
 #'
@@ -233,7 +314,6 @@ chartTheme = function(upsetjs,
 chartProps = function(upsetjs,
                       ...) {
   props = list(...)
-  names(props) = gsub('\\.([a-z])', '\\U\\1', names(props), perl=T)
-  setProperties(upsetjs, props, clean=TRUE)
+  names(props) = gsub('\\.([a-z])', '\\U\\1', names(props), perl = T)
+  setProperties(upsetjs, props, clean = TRUE)
 }
-

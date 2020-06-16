@@ -1,6 +1,6 @@
 Package: upsetjs
 Type: Package
-Title: 'HTMLWidget' Wrapper of 'UpSet.s' for Exploring Large Set Intersections
+Title: 'HTMLWidget' Wrapper of 'UpSet.js' for Exploring Large Set Intersections
 Description: 'UpSet.js' is a re-implementation of 'UpSetR' to create interactive set visualizations for more than three sets.
   This is a 'htmlwidget' wrapper around the 'JavaScript' library 'UpSet.js'.
 Version: 1.1.0
@@ -23,7 +23,7 @@ Suggests:
   formatR,
   tibble
 LazyData: true
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 Language: en-US
