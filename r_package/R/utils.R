@@ -95,7 +95,7 @@ appendProperty = function(upsetjs, prop, value) {
   upsetjs
 }
 
-setProperties = function(upsetjs, props, clean = F) {
+setProperties = function(upsetjs, props, clean = FALSE) {
   checkUpSetOrVennArgument(upsetjs)
 
   if (clean) {

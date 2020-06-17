@@ -61,7 +61,7 @@ generateCombinationsImpl = function(sets,
     lsets
     else
       max)) {
-    combos = combn(all_indices, l, simplify = F)
+    combos = combn(all_indices, l, simplify = FALSE)
     for (combo in combos) {
       indices = unlist(combo)
       set_names = sapply(indices, function(i)
@@ -131,7 +131,7 @@ fromList = function(upsetjs,
   sets = mapply(toSet,
                 key = names(value),
                 value = value,
-                SIMPLIFY = F)
+                SIMPLIFY = FALSE)
   # list of list objects
   names(sets) = NULL
   names(elems) = NULL
@@ -195,7 +195,7 @@ fromExpression = function(upsetjs,
     toSet,
     key = names(raw_sets),
     value = raw_sets,
-    SIMPLIFY = F
+    SIMPLIFY = FALSE
   )
   names(sets) = NULL
   sets = sortSets(sets, order.by = order.by)
@@ -216,7 +216,7 @@ fromExpression = function(upsetjs,
     toCombination,
     key = names(raw_combinations),
     value = raw_combinations,
-    SIMPLIFY = F
+    SIMPLIFY = FALSE
   )
   names(combinations) = NULL
   combinations = sortSets(combinations, order.by = order.by)
@@ -266,7 +266,7 @@ fromDataFrame = function(upsetjs,
 
   elems = rownames(df)
   toSet = function(key) {
-    sub = elems[df[[key]] == T]
+    sub = elems[df[[key]] = TRUE]
     structure(list(
       name = key,
       type = "set",

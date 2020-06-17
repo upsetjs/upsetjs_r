@@ -19,7 +19,7 @@ library(crosstalk)
 library(plotly)
 library(upsetjs)
 
-movies <- read.csv( system.file("extdata", "movies.csv", package = "UpSetR"), header=T, sep=";" )
+movies <- read.csv( system.file("extdata", "movies.csv", package = "UpSetR"), header=TRUE, sep=";" )
 rownames(movies) <- movies$Name
 
 ds <- SharedData$new(movies)

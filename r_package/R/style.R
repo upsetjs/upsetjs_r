@@ -314,6 +314,6 @@ chartTheme = function(upsetjs,
 chartProps = function(upsetjs,
                       ...) {
   props = list(...)
-  names(props) = gsub('\\.([a-z])', '\\U\\1', names(props), perl = T)
+  names(props) = gsub('\\.([a-z])', '\\U\\1', names(props), perl = TRUE)
   setProperties(upsetjs, props, clean = TRUE)
 }
