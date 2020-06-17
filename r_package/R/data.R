@@ -302,16 +302,18 @@ fromDataFrame = function(upsetjs,
   props = list(sets = sets,
                combinations = gen,
                elems = elems)
+  
+  upsetjs = setProperties(upsetjs, props)
 
   if (!is.null(attributes)) {
     attr_df = if (is.character(attributes))
       df[, attributes]
     else
       attributes
-    props$attrs = attr_df
+    upsetjs = setAttributes(upsetjs, attr_df)
   }
 
-  setProperties(upsetjs, props)
+  upsetjs
 }
 
 

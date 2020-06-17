@@ -180,7 +180,8 @@ upsetjs() %>%
 
 ## Attributes
 
-UpSet.js supports rendering boxplots as aggregations for numerical attributes of elements. The are given as part of the data frame. The attributes element has to be a list or a data frame.
+UpSet.js supports rendering boxplots as aggregations for numerical attributes of elements and mosaic plots for categorical attributes. 
+The are given as part of the data frame. The attributes element has to be a list or a data frame.
 
 
 ```{r, fig.width=9, fig.height=5, out.width="850px", tidy=TRUE, fig.align='center'}
@@ -193,6 +194,7 @@ dataFrame <- as.data.frame(list(
 upsetjs() %>%
   fromDataFrame(dataFrame, attributes = list(attr=runif(nrow(dataFrame))))
 ```
+
 
 ## Styling
 

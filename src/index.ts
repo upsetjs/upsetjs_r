@@ -20,6 +20,7 @@ import {
   boxplotAddon,
   renderVennDiagram,
   VennDiagramProps,
+  categoricalAddon,
 } from '@upsetjs/bundle';
 import { fixCombinations, fixSets, resolveSet, resolveSetByElems } from './utils';
 
@@ -37,7 +38,7 @@ declare type ShinyUpSetProps = UpSetProps<IElem> &
     crosstalk?: CrosstalkOptions;
 
     elems: ReadonlyArray<IElem>;
-    attrs: { [attr: string]: ReadonlyArray<number> };
+    attrs: ReadonlyArray<UpSetAttrSpec>;
   };
 
 declare type CrosstalkHandler = {
@@ -45,6 +46,23 @@ declare type CrosstalkHandler = {
   update(options: CrosstalkOptions): void;
   trigger(elems?: ReadonlyArray<string>): void;
 };
+
+declare type UpSetNumericAttrSpec = {
+  type: 'number';
+  name: string;
+  domain: [number, number];
+  values: ReadonlyArray<number>;
+  elems?: ReadonlyArray<IElem>;
+};
+declare type UpSetCategoricalAttrSpec = {
+  type: 'categorical';
+  name: string;
+  categories: ReadonlyArray<string>;
+  values: ReadonlyArray<string>;
+  elems?: ReadonlyArray<IElem>;
+};
+
+declare type UpSetAttrSpec = UpSetNumericAttrSpec | UpSetCategoricalAttrSpec;
 
 HTMLWidgets.widget({
   name: 'upsetjs',
@@ -54,7 +72,7 @@ HTMLWidgets.widget({
     let interactive = false;
     let renderMode: 'upset' | 'venn' = 'upset';
     const elemToIndex = new Map<IElem, number>();
-    let attrs: { [key: string]: ReadonlyArray<number> } = {};
+    let attrs: UpSetAttrSpec[] = [];
     const props: UpSetProps<IElem> & VennDiagramProps<IElem> = {
       sets: [],
       width,
@@ -64,43 +82,37 @@ HTMLWidgets.widget({
     let crosstalkHandler: CrosstalkHandler | null = null;
 
     function syncAddons() {
-      const keys = Object.keys(attrs);
-      if (keys.length === 0) {
+      if (attrs.length === 0) {
         delete props.setAddons;
         delete props.combinationAddons;
         return;
       }
-      const minMax = keys.map((key) =>
-        attrs[key].reduce(([min, max], v) => [Math.min(min, v), Math.max(max, v)] as [number, number], [
-          Number.POSITIVE_INFINITY,
-          Number.NEGATIVE_INFINITY,
-        ] as [number, number])
-      );
-      props.setAddons = keys.map((key, i) =>
-        boxplotAddon(
-          (v) => attrs[key]![elemToIndex.get(v)!],
+      const toAddon = (attr: UpSetAttrSpec, vertical = false) => {
+        const lookup = attr.elems ? new Map(attr.elems.map((e, i) => [e, i])) : elemToIndex;
+        if (attr.type === 'number') {
+          return boxplotAddon<IElem>(
+            (v) => (lookup.has(v) ? attr.values[lookup.get(v)!] : Number.NaN),
+            { min: attr.domain[0], max: attr.domain[1] },
+            {
+              name: attr.name,
+              quantiles: 'hinges',
+              orient: vertical ? 'vertical' : 'horizontal',
+            }
+          );
+        }
+        return categoricalAddon<IElem>(
+          (v) => (lookup.has(v) ? attr.values[lookup.get(v)!] : ''),
           {
-            min: minMax[i][0],
-            max: minMax[i][1],
+            categories: attr.categories,
           },
           {
-            name: key,
+            name: attr.name,
+            orient: vertical ? 'vertical' : 'horizontal',
           }
-        )
-      );
-      props.combinationAddons = keys.map((key, i) =>
-        boxplotAddon(
-          (v) => attrs[key]![elemToIndex.get(v)!],
-          {
-            min: minMax[i][0],
-            max: minMax[i][1],
-          },
-          {
-            name: key,
-            orient: 'vertical',
-          }
-        )
-      );
+        );
+      };
+      props.setAddons = attrs.map((attr) => toAddon(attr, false));
+      props.combinationAddons = attrs.map((attr) => toAddon(attr, true));
     }
 
     function fixProps(props: UpSetProps<IElem> & VennDiagramProps<IElem>, delta: any) {
