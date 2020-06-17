@@ -108,7 +108,7 @@ addNumericAttribute = function(upsetjs,
 #' @return the object given as first argument
 #' @examples
 #' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>%
-#' addCategoricalAttribute('attr', sample(c('male','female'), 3, replace=TRUE))
+#' addCategoricalAttribute('attr', as.factor(sample(c('male','female'), 3, replace=TRUE)))
 #' @export
 addCategoricalAttribute = function(upsetjs,
                                    name,

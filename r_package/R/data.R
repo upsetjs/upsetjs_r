@@ -266,7 +266,7 @@ fromDataFrame = function(upsetjs,
 
   elems = rownames(df)
   toSet = function(key) {
-    sub = elems[df[[key]] = TRUE]
+    sub = elems[df[[key]] == TRUE]
     structure(list(
       name = key,
       type = "set",
