@@ -47,7 +47,8 @@ generateCombinationsImpl = function(sets,
                                     empty,
                                     order.by,
                                     limit,
-                                    symbol = "&") {
+                                    symbol = "&",
+                                    colors = NULL) {
   combinations = list()
   set_f = if (c_type == "union")
     union
@@ -56,6 +57,11 @@ generateCombinationsImpl = function(sets,
   distinct = (c_type == 'distinctIntersection')
   lsets = length(sets)
   all_indices = 1:lsets
+  cc = if (is.null(colors)) {
+    list()
+  } else {
+    colors
+  }
 
   for (l in min:(if (is.null(max))
     lsets
@@ -81,8 +87,10 @@ generateCombinationsImpl = function(sets,
         }
       }
       if (empty || length(elems) > 0) {
+        c_name = paste(set_names, collapse = symbol)
         combination = structure(list(
-          name = paste(set_names, collapse = symbol),
+          name = c_name,
+          color = cc[[c_name]]
           type = c_type,
           elems = elems,
           setNames = set_names
@@ -104,6 +112,7 @@ generateCombinationsImpl = function(sets,
 #' @param limit limit the ordered sets to the given limit
 #' @param shared a crosstalk shared data frame
 #' @param shared.mode whether on 'hover' or 'click' (default) is synced
+#' @param colors the optional list with set name to color
 #' @return the object given as first argument
 #' @examples
 #' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3)))
@@ -114,24 +123,38 @@ fromList = function(upsetjs,
                     order.by = "cardinality",
                     limit = NULL,
                     shared = NULL,
-                    shared.mode = "click") {
+                    shared.mode = "click",
+                    colors = NULL) {
   checkUpSetOrVennArgument(upsetjs)
   stopifnot(is.list(value))
   stopifnot(order.by == "cardinality" || order.by == "degree")
   stopifnot(is.null(limit) ||
               (is.numeric(limit) && length(limit) == 1))
   stopifnot(shared.mode == "click" || shared.mode == "hover")
+  stopifnot(is.null(colors) || is.list(colors))
 
   elems = c()
+  cc = if (is.null(colors)) {
+    list()
+  } else {
+    colors
+  }
   toSet = function(key, value) {
     elems <<- unique(c(elems, value))
-    structure(list(name = key, elems = value),
-              class = "upsetjs_set")
+    structure(list(
+      name = key,
+      type = 'set',
+      elems = value,
+      color = cc[[key]]
+    ),
+    class = "upsetjs_set")
   }
-  sets = mapply(toSet,
-                key = names(value),
-                value = value,
-                SIMPLIFY = FALSE)
+  sets = mapply(
+    toSet,
+    key = names(value),
+    value = value,
+    SIMPLIFY = FALSE
+  )
   # list of list objects
   names(sets) = NULL
   names(elems) = NULL
@@ -143,9 +166,9 @@ fromList = function(upsetjs,
   sets = sortSets(sets, order.by = order.by, limit = limit)
 
   gen = if (isVennDiagram(upsetjs)) {
-    generateCombinationsImpl(sets, 'distinctIntersection', 0, NULL, TRUE, 'degree', NULL)
+    generateCombinationsImpl(sets, 'distinctIntersection', 0, NULL, TRUE, 'degree', NULL, colors = cc)
   } else {
-    generateCombinationsImpl(sets, 'intersection', 0, NULL, FALSE, order.by, NULL)
+    generateCombinationsImpl(sets, 'intersection', 0, NULL, FALSE, order.by, NULL, colors = cc)
   }
   setProperties(upsetjs,
                 list(
@@ -162,6 +185,7 @@ fromList = function(upsetjs,
 #' @param value the expression list input
 #' @param symbol the symbol how to split list names to get the sets
 #' @param order.by order intersections by cardinality or name
+#' @param colors the optional list with set name to color
 #' @return the object given as first argument
 #' @examples
 #' upsetjs() %>% fromExpression(list(a=3, b=2, `a&b`=2))
@@ -170,22 +194,30 @@ fromList = function(upsetjs,
 fromExpression = function(upsetjs,
                           value,
                           symbol = "&",
-                          order.by = "cardinality") {
+                          order.by = "cardinality",
+                          colors = NULL) {
   checkUpSetOrVennArgument(upsetjs)
   stopifnot(is.list(value))
   stopifnot(order.by == "cardinality" || order.by == "degree")
+  stopifnot(is.null(colors) || is.list(colors))
 
   degrees = sapply(names(value), function (x) {
     length(unlist(strsplit(x, symbol)))
   })
+  cc = if (is.null(colors)) {
+    list()
+  } else {
+    colors
+  }
 
   raw_combinations = value
   raw_sets = value[degrees == 1]
 
-  toSet = function(key, value) {
+  toSet = function(key, value, color) {
     structure(list(
       name = key,
       type = "set",
+      color = cc[[key]],
       elems = c(),
       cardinality = value
     ),
@@ -200,12 +232,13 @@ fromExpression = function(upsetjs,
   names(sets) = NULL
   sets = sortSets(sets, order.by = order.by)
 
-  toCombination = function(key, value) {
+  toCombination = function(key, value, color) {
     structure(
       list(
         name = key,
         type = "composite",
         elems = c(),
+        color = cc[[key]],
         cardinality = value,
         setNames = unlist(strsplit(key, symbol))
       ),
@@ -240,6 +273,7 @@ fromExpression = function(upsetjs,
 #' @param limit limit the ordered sets to the given limit
 #' @param shared a crosstalk shared data frame
 #' @param shared.mode whether on 'hover' or 'click' (default) is synced
+#' @param colors the optional list with set name to color
 #' @return the object given as first argument
 #' @examples
 #' df <- as.data.frame(list(a=c(1, 1, 1),b=c(0, 1, 1)),row.names=c('a', 'b', 'c'))
@@ -252,7 +286,8 @@ fromDataFrame = function(upsetjs,
                          order.by = "cardinality",
                          limit = NULL,
                          shared = NULL,
-                         shared.mode = "click") {
+                         shared.mode = "click",
+                         colors = NULL) {
   checkUpSetOrVennArgument(upsetjs)
   stopifnot(is.data.frame(df))
   stopifnot((
@@ -263,6 +298,13 @@ fromDataFrame = function(upsetjs,
   stopifnot(order.by == "cardinality" || order.by == "degree")
   stopifnottype('limit', limit)
   stopifnot(shared.mode == "click" || shared.mode == "hover")
+  stopifnot(is.null(colors) || is.list(colors))
+  
+  cc = if (is.null(colors)) {
+    list()
+  } else {
+    colors
+  }
 
   elems = rownames(df)
   toSet = function(key) {
@@ -270,6 +312,7 @@ fromDataFrame = function(upsetjs,
     structure(list(
       name = key,
       type = "set",
+      color = cc[[key]],
       elems = sub
     ),
     class = "upsetjs_set")
@@ -295,14 +338,15 @@ fromDataFrame = function(upsetjs,
                              NULL,
                              TRUE,
                              'degree',
-                             NULL)
+                             NULL,
+                             colors = cc)
   } else {
-    generateCombinationsImpl(sets, 'intersection', 0, NULL, FALSE, order.by, NULL)
+    generateCombinationsImpl(sets, 'intersection', 0, NULL, FALSE, order.by, NULL, colors = cc)
   }
   props = list(sets = sets,
                combinations = gen,
                elems = elems)
-  
+
   upsetjs = setProperties(upsetjs, props)
 
   if (!is.null(attributes)) {
@@ -363,7 +407,8 @@ generateCombinations = function(upsetjs,
                                 empty,
                                 order.by,
                                 limit,
-                                symbol = '&') {
+                                symbol = '&',
+                                colors = NULL) {
   checkUpSetArgument(upsetjs)
   stopifnot(is.numeric(min), length(min) == 1)
   stopifnottype('max', max)
@@ -371,10 +416,11 @@ generateCombinations = function(upsetjs,
   stopifnot(is.character(order.by), length(order.by) >= 1)
   stopifnot(is.null(limit) ||
               (is.numeric(limit) && length(limit) == 1))
+  stopifnot(is.null(colors) || is.list(colors))
 
   if (inherits(upsetjs, 'upsetjs_common')) {
     sets = upsetjs$x$sets
-    gen = generateCombinationsImpl(sets, c_type, min, max, empty, order.by, limit, symbol)
+    gen = generateCombinationsImpl(sets, c_type, min, max, empty, order.by, limit, symbol, colors)
   } else {
     # proxy
     gen = cleanNull(list(
@@ -396,6 +442,7 @@ generateCombinations = function(upsetjs,
 #' @param empty whether to include empty intersections or not
 #' @param order.by order intersections by cardinality, degree, name or a combination of it
 #' @param limit limit the number of intersections to the top N
+#' @param colors the optional list with set name to color
 #' @return the object given as first argument
 #' @examples
 #' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% generateIntersections(min=2)
@@ -406,8 +453,9 @@ generateIntersections = function(upsetjs,
                                  max = NULL,
                                  empty = FALSE,
                                  order.by = "cardinality",
-                                 limit = NULL) {
-  generateCombinations(upsetjs, "intersection", min, max, empty, order.by, limit)
+                                 limit = NULL,
+                                 colors = NULL) {
+  generateCombinations(upsetjs, "intersection", min, max, empty, order.by, limit, colors)
 }
 #'
 #' configure the generation of the distinct intersections
@@ -417,6 +465,7 @@ generateIntersections = function(upsetjs,
 #' @param empty whether to include empty intersections or not
 #' @param order.by order intersections by cardinality, degree, name or a combination of it
 #' @param limit limit the number of intersections to the top N
+#' @param colors the optional list with set name to color
 #' @return the object given as first argument
 #' @examples
 #' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% generateDistinctIntersections(min=2)
@@ -427,14 +476,16 @@ generateDistinctIntersections = function(upsetjs,
                                          max = NULL,
                                          empty = FALSE,
                                          order.by = "cardinality",
-                                         limit = NULL) {
+                                         limit = NULL,
+                                         colors = NULL) {
   generateCombinations(upsetjs,
                        "distinctIntersection",
                        min,
                        max,
                        empty,
                        order.by,
-                       limit)
+                       limit,
+                       colors)
 }
 
 #'
@@ -445,6 +496,7 @@ generateDistinctIntersections = function(upsetjs,
 #' @param empty whether to include empty intersections or not
 #' @param order.by order intersections by cardinality, degree, name or a combination of it
 #' @param limit limit the number of intersections to the top N
+#' @param colors the optional list with set name to color
 #' @return the object given as first argument
 #' @examples
 #' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% generateUnions()
@@ -455,6 +507,7 @@ generateUnions = function(upsetjs,
                           max = NULL,
                           empty = FALSE,
                           order.by = "cardinality",
-                          limit = NULL) {
-  generateCombinations(upsetjs, "union", min, max, empty, order.by, limit)
+                          limit = NULL,
+                          colors = NULL) {
+  generateCombinations(upsetjs, "union", min, max, empty, order.by, limit, colors)
 }
