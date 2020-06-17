@@ -18,7 +18,7 @@ cleanAttrName = function(col) {
 #' @return the object given as first argument
 #' @examples
 #' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>%
-#' setAttributes(list(attr=runif(3), cat=sample(c('male','female'), 3, replace=TRUE)))
+#' setAttributes(list(attr=runif(3), cat=as.factor(sample(c('male','female'), 3, replace=TRUE))))
 #'
 #' @export
 setAttributes = function(upsetjs, attrs = list()) {
