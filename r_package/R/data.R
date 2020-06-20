@@ -15,28 +15,41 @@ sortSets = function(sets,
         if (length(x$elems) == 0)
           x$cardinality * -1
         else
-          length(x$elems) * -1)
+          length(x$elems) * -1
+        )
     } else if (order.by.attr == 'degree') {
-      sapply(sets, function (x)
-        length(x$setNames))
+      sapply(sets, function (x) length(x$setNames))
     } else {
-      sapply(sets, function (x)
-        x$name)
+      sapply(sets, function (x) x$name)
     }
   }
 
-  if (order.by[1] == 'cardinality') {
+  if (length(order.by) == 1 && order.by[1] == 'cardinality') {
     order.by = c('cardinality', 'name')
-  } else if (order.by[1] == 'degree') {
+  } else if (length(order.by) == 1 && order.by[1] == 'degree') {
     order.by = c('degree', 'name')
   }
-  values = lapply(order.by, set_attr)
-  o = do.call(order, values)
-  r = sets[o]
+  if (length(sets) > 1) {
+    values = lapply(order.by, set_attr)
+    print(values[2])
+    o = do.call(order, values)
+    r = sets[o]
+  } else {
+    r = sets
+  }
   if (is.null(limit) || length(r) <= limit) {
     r
   } else {
     r[1:limit]
+  }
+}
+
+colorLookup = function(colors = NULL) {
+  if (is.null(colors)) {
+    function (c) { NULL }
+  } else {
+    color_names = names(colors)
+    function (c) { if (c %in% color_names) { colors[[c]] } else { NULL } }
   }
 }
 
@@ -57,21 +70,16 @@ generateCombinationsImpl = function(sets,
   distinct = (c_type == 'distinctIntersection')
   lsets = length(sets)
   all_indices = 1:lsets
-  cc = if (is.null(colors)) {
-    list()
-  } else {
-    colors
-  }
+  cc = colorLookup(colors)
 
-  for (l in min:(if (is.null(max))
-    lsets
-    else
-      max)) {
+  for (l in min:(if (is.null(max)) lsets else max)) {
     combos = combn(all_indices, l, simplify = FALSE)
     for (combo in combos) {
       indices = unlist(combo)
-      set_names = sapply(indices, function(i)
-        sets[[i]]$name)
+      set_names = sapply(indices, function(i) sets[[i]]$name)
+      if (is.list(set_names)) {
+        set_names = unlist(set_names)
+      }
       if (length(indices) == 0) {
         elems = c()
       } else {
@@ -87,10 +95,10 @@ generateCombinationsImpl = function(sets,
         }
       }
       if (empty || length(elems) > 0) {
-        c_name = paste(if (length(set_names) > 1) { sort(set_names) } else { set_names }, collapse = symbol)
+        c_name = paste(set_names, collapse = symbol)
         combination = structure(list(
           name = c_name,
-          color = cc[[c_name]],
+          color = cc(c_name),
           type = c_type,
           elems = elems,
           setNames = set_names
@@ -134,18 +142,14 @@ fromList = function(upsetjs,
   stopifnot(is.null(colors) || is.list(colors))
 
   elems = c()
-  cc = if (is.null(colors)) {
-    list()
-  } else {
-    colors
-  }
+  cc = colorLookup(colors)
   toSet = function(key, value) {
     elems <<- unique(c(elems, value))
     structure(list(
       name = key,
       type = 'set',
       elems = value,
-      color = cc[[key]]
+      color = cc(key)
     ),
     class = "upsetjs_set")
   }
@@ -163,16 +167,17 @@ fromList = function(upsetjs,
     upsetjs = enableCrosstalk(upsetjs, shared, mode = shared.mode)
   }
 
-  sets = sortSets(sets, order.by = order.by, limit = limit)
+  sorted_sets = sortSets(sets, order.by = order.by, limit = limit)
+  gen_sets = if (is.null(limit)) sets else sorted_sets
 
   gen = if (isVennDiagram(upsetjs)) {
-    generateCombinationsImpl(sets, 'distinctIntersection', 0, NULL, TRUE, 'degree', NULL, colors = cc)
+    generateCombinationsImpl(gen_sets, 'distinctIntersection', 0, NULL, TRUE, 'degree', NULL, colors)
   } else {
-    generateCombinationsImpl(sets, 'intersection', 0, NULL, FALSE, order.by, NULL, colors = cc)
+    generateCombinationsImpl(gen_sets, 'intersection', 0, NULL, FALSE, order.by, NULL, colors)
   }
   setProperties(upsetjs,
                 list(
-                  sets = sets,
+                  sets = sorted_sets,
                   combinations = gen,
                   elems = elems,
                   attrs = list()
@@ -204,11 +209,7 @@ fromExpression = function(upsetjs,
   degrees = sapply(names(value), function (x) {
     length(unlist(strsplit(x, symbol)))
   })
-  cc = if (is.null(colors)) {
-    list()
-  } else {
-    colors
-  }
+  cc = colorLookup(colors)
 
   raw_combinations = value
   raw_sets = value[degrees == 1]
@@ -217,7 +218,7 @@ fromExpression = function(upsetjs,
     structure(list(
       name = key,
       type = "set",
-      color = cc[[key]],
+      color = cc(key),
       elems = c(),
       cardinality = value
     ),
@@ -238,7 +239,7 @@ fromExpression = function(upsetjs,
         name = key,
         type = "composite",
         elems = c(),
-        color = cc[[key]],
+        color = cc(key),
         cardinality = value,
         setNames = unlist(strsplit(key, symbol))
       ),
@@ -300,11 +301,7 @@ fromDataFrame = function(upsetjs,
   stopifnot(shared.mode == "click" || shared.mode == "hover")
   stopifnot(is.null(colors) || is.list(colors))
   
-  cc = if (is.null(colors)) {
-    list()
-  } else {
-    colors
-  }
+  cc = colorLookup(colors)
 
   elems = rownames(df)
   toSet = function(key) {
@@ -312,7 +309,7 @@ fromDataFrame = function(upsetjs,
     structure(list(
       name = key,
       type = "set",
-      color = cc[[key]],
+      color = cc(key),
       elems = sub
     ),
     class = "upsetjs_set")
@@ -330,20 +327,22 @@ fromDataFrame = function(upsetjs,
     upsetjs = enableCrosstalk(upsetjs, df, mode = shared.mode)
   }
 
-  sets = sortSets(sets, order.by = order.by, limit = limit)
+  sorted_sets = sortSets(sets, order.by = order.by, limit = limit)
+  gen_sets = if (is.null(limit)) sets else sorted_sets
+
   gen = if (isVennDiagram(upsetjs)) {
-    generateCombinationsImpl(sets,
+    generateCombinationsImpl(gen_sets,
                              'distinctIntersection',
                              0,
                              NULL,
                              TRUE,
                              'degree',
                              NULL,
-                             colors = cc)
+                             colors)
   } else {
-    generateCombinationsImpl(sets, 'intersection', 0, NULL, FALSE, order.by, NULL, colors = cc)
+    generateCombinationsImpl(gen_sets, 'intersection', 0, NULL, FALSE, order.by, NULL, colors)
   }
-  props = list(sets = sets,
+  props = list(sets = sorted_sets,
                combinations = gen,
                elems = elems)
 
@@ -407,8 +406,8 @@ generateCombinations = function(upsetjs,
                                 empty,
                                 order.by,
                                 limit,
-                                symbol = '&',
-                                colors = NULL) {
+                                colors = NULL,
+                                symbol = '&') {
   checkUpSetArgument(upsetjs)
   stopifnot(is.numeric(min), length(min) == 1)
   stopifnottype('max', max)
@@ -420,7 +419,7 @@ generateCombinations = function(upsetjs,
 
   if (inherits(upsetjs, 'upsetjs_common')) {
     sets = upsetjs$x$sets
-    gen = generateCombinationsImpl(sets, c_type, min, max, empty, order.by, limit, symbol, colors)
+    gen = generateCombinationsImpl(sets, c_type, min, max, empty, order.by, limit, colors, symbol)
   } else {
     # proxy
     gen = cleanNull(list(

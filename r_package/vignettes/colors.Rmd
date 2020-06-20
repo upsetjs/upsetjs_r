@@ -1,10 +1,10 @@
 ---
-title: "UpSet.js HTMLWidget - Colored Diagrams"
+title: "UpSet.js Coloring"
 author: "Samuel Gratzl"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{UpSet.js Colored Diagrams}
+  %\VignetteIndexEntry{UpSet.js Coloring}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

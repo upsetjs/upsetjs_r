@@ -1,10 +1,10 @@
 ---
-title: "UpSet.js HTMLWidget"
+title: "UpSet.js Introduction"
 author: "Samuel Gratzl"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{UpSet.js Basic Example}
+  %\VignetteIndexEntry{UpSet.js Introduction}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

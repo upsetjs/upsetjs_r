@@ -1,5 +1,5 @@
 ---
-title: "UpSet.js HTMLWidget Combination Modes"
+title: "UpSet.js Combination Modes"
 author: "Samuel Gratzl"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette

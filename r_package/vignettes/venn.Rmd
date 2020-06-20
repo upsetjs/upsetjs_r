@@ -1,5 +1,5 @@
 ---
-title: "UpSet.js HTMLWidget - Venn and Euler Diagrams"
+title: "UpSet.js Venn and Euler Diagrams"
 author: "Samuel Gratzl"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
