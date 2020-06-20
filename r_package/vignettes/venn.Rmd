@@ -1,10 +1,10 @@
 ---
-title: "UpSet.js HTMLWidget - Venn Diagrams"
+title: "UpSet.js HTMLWidget - Venn and Euler Diagrams"
 author: "Samuel Gratzl"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{UpSet.js Venn Diagram Example}
+  %\VignetteIndexEntry{UpSet.js Venn and Euler Diagrams}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # UpSet.js R Widget - Venn Diagrams
 
-UpSet.js has a basic support for classical Venn diagrams for two or three sets.
+UpSet.js has a basic support for classical Venn and Euler diagrams for two or three sets.
 
 ```{r libraries}
 # devtools::install_url("https://github.com/upsetjs/upsetjs_r/releases/latest/download/upsetjs.tar.gz")
@@ -29,6 +29,14 @@ listInput <- list(one = c('a', 'b', 'c', 'e', 'g', 'h', 'k', 'l', 'm'), two = c(
 
 w <- upsetjsVennDiagram() %>% fromList(listInput) %>% interactiveChart()
 w
+```
+
+Euler diagrams are based on [venn.js](https://github.com/@upsetjs/venn.js) 
+thus supporting more than three sets but might result in unexpected results
+
+```{r, fig.width=9, fig.height=5, out.width="850px", tidy=TRUE, fig.align='center'}
+we <- upsetjsEulerDiagram() %>% fromList(listInput) %>% interactiveChart()
+we
 ```
 
 ## Input Formats

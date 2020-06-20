@@ -47,8 +47,8 @@ generateCombinationsImpl = function(sets,
                                     empty,
                                     order.by,
                                     limit,
-                                    symbol = "&",
-                                    colors = NULL) {
+                                    colors = NULL,
+                                    symbol = "&") {
   combinations = list()
   set_f = if (c_type == "union")
     union
@@ -87,10 +87,10 @@ generateCombinationsImpl = function(sets,
         }
       }
       if (empty || length(elems) > 0) {
-        c_name = paste(set_names, collapse = symbol)
+        c_name = paste(if (length(set_names) > 1) { sort(set_names) } else { set_names }, collapse = symbol)
         combination = structure(list(
           name = c_name,
-          color = cc[[c_name]]
+          color = cc[[c_name]],
           type = c_type,
           elems = elems,
           setNames = set_names

@@ -235,6 +235,8 @@ chartStyleFlags = function(upsetjs,
 #' @param theme theme to use 'dark' or 'light'
 #' @param color main bar color
 #' @param has.selection.color main color used when a selection is present
+#' @param opacity main bar opacity
+#' @param has.selection.opacity main opacity used when a selection is present
 #' @param text.color main text color
 #' @param hover.hint.color color of the hover hint
 #' @param not.member.color color of the dot if not a member
@@ -257,7 +259,9 @@ chartTheme = function(upsetjs,
                       hover.hint.color = NULL,
                       not.member.color = NULL,
                       value.text.color = NULL,
-                      stroke.color = NULL) {
+                      stroke.color = NULL,
+                      has.selection.opacity = NULL,
+                      opacity = NULL) {
   checkUpSetOrVennArgument(upsetjs)
   stopifnot(is.null(theme) ||
               theme == 'light' ||
@@ -286,6 +290,8 @@ chartTheme = function(upsetjs,
                 is.character,
                 'string')
   stopifnottype('stroke.color', stroke.color, is.character, 'string')
+  stopifnottype('opacity', opacity)
+  stopifnottype('has.selection.opacity', has.selection.opacity)
 
   props = list(
     theme = theme,
@@ -297,7 +303,9 @@ chartTheme = function(upsetjs,
     hoverHintColor = hover.hint.color,
     notMemberColor = not.member.color,
     valueTextColor = value.text.color,
-    strokeColor = stroke.color
+    strokeColor = stroke.color,
+    opacity = opacity,
+    hasSelectionOpacity = has.selection.opacity
   )
   setProperties(upsetjs, props, clean = TRUE)
 }

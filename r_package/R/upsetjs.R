@@ -150,3 +150,64 @@ upsetjsVennDiagramProxy = function(outputId, session) {
     class = c('upsetjs_proxy', 'upsetjs_venn_proxy', 'upsetjs_common_proxy')
   )
 }
+
+
+#' upsetjs - factory for UpSet.js Euler Diagram HTMLWidget
+#'
+#' @param width width of the element
+#' @param height height of the element
+#' @param elementId unique element id
+#' @param sizingPolicy htmlwidgets sizing policy object. Defaults to \code{\link{upsetjsSizingPolicy}()}
+#'
+#' @return An object of class \code{upsetjs_venn} and \code{htmlwidget}
+#' @examples
+#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3)))
+#' @importFrom htmlwidgets createWidget
+#' @export
+upsetjsEulerDiagram = function(width = '100%',
+                              height = NULL,
+                              elementId = NULL,
+                              sizingPolicy = upsetjsSizingPolicy()) {
+  # forward options using x
+  x = structure(list(
+    renderMode = "euler",
+    mode = 'hover',
+    sets = c()
+  ))
+
+  dependencies = c()
+
+  r = htmlwidgets::createWidget(
+    'upsetjs',
+    x,
+    width = width,
+    height = height,
+    package = 'upsetjs',
+    elementId = elementId,
+    sizingPolicy = sizingPolicy,
+    dependencies = dependencies
+  )
+  class(r) = c(class(r), 'upsetjs_common', 'upsetjs_venn')
+  r
+}
+
+#'
+#' reactive helper to update an upsetjs euler diagram in place
+#' @param outputId the id of the upsetjs widget
+#' @param session current shiny session
+#' @return an object of class \code{upsetjs_proxy}
+#' @examples
+#' \dontrun{
+#' upsetjsEulerDiagramProxy('upsetjs1', session) %>% setSelection('a')
+#' }
+#' @export
+upsetjsEulerDiagramProxy = function(outputId, session) {
+  structure(
+    list(
+      session = session,
+      id = session$ns(outputId),
+      x = structure(list(renderMode = "euler"))
+    ),
+    class = c('upsetjs_proxy', 'upsetjs_venn_proxy', 'upsetjs_common_proxy')
+  )
+}

@@ -10,6 +10,7 @@
 import 'core-js';
 import 'regenerator-runtime/runtime';
 import 'element-closest-polyfill';
+import { layout } from '@upsetjs/venn.js';
 import {
   isElemQuery,
   ISetCombinations,
@@ -21,6 +22,7 @@ import {
   renderVennDiagram,
   VennDiagramProps,
   categoricalAddon,
+  createVennJSAdapter,
 } from '@upsetjs/bundle';
 import { fixCombinations, fixSets, resolveSet, resolveSetByElems } from './utils';
 
@@ -33,7 +35,7 @@ declare type IElem = string;
 
 declare type ShinyUpSetProps = UpSetProps<IElem> &
   VennDiagramProps<IElem> & {
-    renderMode: 'upset' | 'venn';
+    renderMode: 'upset' | 'venn' | 'euler';
     interactive?: boolean;
     crosstalk?: CrosstalkOptions;
 
@@ -64,13 +66,15 @@ declare type UpSetCategoricalAttrSpec = {
 
 declare type UpSetAttrSpec = UpSetNumericAttrSpec | UpSetCategoricalAttrSpec;
 
+const adapter = createVennJSAdapter(layout);
+
 HTMLWidgets.widget({
   name: 'upsetjs',
   type: 'output',
 
   factory(el, width, height) {
     let interactive = false;
-    let renderMode: 'upset' | 'venn' = 'upset';
+    let renderMode: 'upset' | 'venn' | 'euler' = 'upset';
     const elemToIndex = new Map<IElem, number>();
     let attrs: UpSetAttrSpec[] = [];
     const props: UpSetProps<IElem> & VennDiagramProps<IElem> = {
@@ -180,6 +184,10 @@ HTMLWidgets.widget({
         fixProps(props, delta);
       }
       if (renderMode === 'venn') {
+        delete props.layout;
+        renderVennDiagram(el, props);
+      } else if (renderMode === 'euler') {
+        props.layout = adapter;
         renderVennDiagram(el, props);
       } else {
         render(el, props);
