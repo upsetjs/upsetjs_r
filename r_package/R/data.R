@@ -31,7 +31,6 @@ sortSets = function(sets,
   }
   if (length(sets) > 1) {
     values = lapply(order.by, set_attr)
-    print(values[2])
     o = do.call(order, values)
     r = sets[o]
   } else {
