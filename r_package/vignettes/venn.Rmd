@@ -31,7 +31,7 @@ w <- upsetjsVennDiagram() %>% fromList(listInput) %>% interactiveChart()
 w
 ```
 
-Euler diagrams are based on [venn.js](https://github.com/@upsetjs/venn.js) 
+Euler diagrams are based on [venn.js](https://github.com/upsetjs/venn.js) 
 thus supporting more than three sets but might result in unexpected results
 
 ```{r, fig.width=9, fig.height=5, out.width="850px", tidy=TRUE, fig.align='center'}
