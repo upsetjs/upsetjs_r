@@ -80,17 +80,28 @@ chartVennLayout = function(upsetjs,
 #' specify the chart karnaugh map layout
 #' @param upsetjs an object of class \code{upsetjs_kmap} or \code{upsetjs_kmap_proxy}
 #' @param padding padding around the plot
+#' @param numerical.scale numerical scale: linear (default) or log
+#' @param bar.padding padding ratio (default 0.1) for the bar charts
 #' @return the object given as first argument
 #' @examples
 #' upsetjsKarnaughMap() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% chartKarnaughMapLayout(padding=10)
 #'
 #' @export
 chartKarnaughMapLayout = function(upsetjs,
-                           padding = NULL) {
+                           padding = NULL,
+                           bar.padding = NULL,
+                           numerical.scale = NULL) {
   checkKarnaughMapArgument(upsetjs)
   stopifnottype('padding', padding)
+  stopifnottype('bar.padding', bar.padding)
+  stopifnot(
+    is.null(numerical.scale) ||
+      (numerical.scale == 'linear' || numerical.scale == 'log')
+  )
 
-  props = list(padding = padding)
+  props = list(padding = padding,
+               numericalScale = numerical.scale,
+               barPadding = bar.padding)
   setProperties(upsetjs, props, clean = TRUE)
 }
 
@@ -284,7 +295,8 @@ chartStyleFlags = function(upsetjs,
 #' @param selection.color selection color
 #' @param alternating.color alternating background color
 #' @param value.text.color value text color (venn diagram only)
-#' @param stroke.color circle stroke color (venn diagram only)
+#' @param stroke.color circle stroke color (venn diagram and karnaugh map only)
+#' @param filled enforce filled circles (venn diagram only)
 #' @return the object given as first argument
 #' @examples
 #' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% chartTheme(theme="dark")
@@ -302,7 +314,8 @@ chartTheme = function(upsetjs,
                       value.text.color = NULL,
                       stroke.color = NULL,
                       has.selection.opacity = NULL,
-                      opacity = NULL) {
+                      opacity = NULL,
+                      filled = NULL) {
   checkUpSetCommonArgument(upsetjs)
   stopifnot(is.null(theme) ||
               theme == 'light' ||
@@ -333,6 +346,7 @@ chartTheme = function(upsetjs,
   stopifnottype('stroke.color', stroke.color, is.character, 'string')
   stopifnottype('opacity', opacity)
   stopifnottype('has.selection.opacity', has.selection.opacity)
+  stopifnottype('filled', filled, is.logical, 'logical')
 
   props = list(
     theme = theme,
@@ -346,7 +360,8 @@ chartTheme = function(upsetjs,
     valueTextColor = value.text.color,
     strokeColor = stroke.color,
     opacity = opacity,
-    hasSelectionOpacity = has.selection.opacity
+    hasSelectionOpacity = has.selection.opacity,
+    filled = filled
   )
   setProperties(upsetjs, props, clean = TRUE)
 }

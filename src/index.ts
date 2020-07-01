@@ -24,6 +24,7 @@ import {
   VennDiagramProps,
   categoricalAddon,
   createVennJSAdapter,
+  KarnaughMapProps,
 } from '@upsetjs/bundle';
 import { fixCombinations, fixSets, resolveSet, resolveSetByElems } from './utils';
 
@@ -80,7 +81,7 @@ HTMLWidgets.widget({
     let renderMode: 'upset' | 'venn' | 'euler' | 'kmap' = 'upset';
     const elemToIndex = new Map<IElem, number>();
     let attrs: UpSetAttrSpec[] = [];
-    const props: UpSetProps<IElem> & VennDiagramProps<IElem> = {
+    const props: UpSetProps<IElem> & VennDiagramProps<IElem> & KarnaughMapProps<IElem> = {
       sets: [],
       width,
       height,
