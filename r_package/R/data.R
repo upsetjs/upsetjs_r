@@ -169,7 +169,7 @@ fromList = function(upsetjs,
   sorted_sets = sortSets(sets, order.by = order.by, limit = limit)
   gen_sets = if (is.null(limit)) sets else sorted_sets
 
-  gen = if (isVennDiagram(upsetjs)) {
+  gen = if (isVennDiagram(upsetjs) || isKarnaughMap(upsetjs)) {
     generateCombinationsImpl(gen_sets, 'distinctIntersection', 0, NULL, TRUE, 'degree', NULL, colors)
   } else {
     generateCombinationsImpl(gen_sets, 'intersection', 0, NULL, FALSE, order.by, NULL, colors)
@@ -332,7 +332,7 @@ fromDataFrame = function(upsetjs,
   sorted_sets = sortSets(sets, order.by = order.by, limit = limit)
   gen_sets = if (is.null(limit)) sets else sorted_sets
 
-  gen = if (isVennDiagram(upsetjs)) {
+  gen = if (isVennDiagram(upsetjs) || isKarnaughMap(upsetjs)) {
     generateCombinationsImpl(gen_sets,
                              'distinctIntersection',
                              0,
