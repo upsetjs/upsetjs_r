@@ -5,6 +5,13 @@
 # Copyright (c) 2020 Samuel Gratzl <sam@sgratzl.com>
 #
 
+checkUpSetCommonArgument = function(upsetjs) {
+  if (!inherits(upsetjs, 'upsetjs_common') &&
+      !inherits(upsetjs, 'upsetjs_common_proxy')) {
+    stop('first argument needs to be an upsetjs or upsetjs_venn instance')
+  }
+}
+
 checkUpSetArgument = function(upsetjs) {
   if (!inherits(upsetjs, 'upsetjs_upset') &&
       !inherits(upsetjs, 'upsetjs_upset_proxy')) {
@@ -19,17 +26,23 @@ checkVennDiagramArgument = function(upsetjs) {
   }
 }
 
-checkUpSetOrVennArgument = function(upsetjs) {
-  if (!inherits(upsetjs, 'upsetjs_common') &&
-      !inherits(upsetjs, 'upsetjs_common_proxy')) {
-    stop('first argument needs to be an upsetjs or upsetjs_venn instance')
+checkKarnaughMapArgument = function(upsetjs) {
+  if (!inherits(upsetjs, 'upsetjs_kmap') &&
+      !inherits(upsetjs, 'upsetjs_kmap_proxy')) {
+    stop('first argument needs to be an upsetjs_kmap instance')
   }
 }
 
 isVennDiagram = function(upsetjs) {
-  checkUpSetOrVennArgument(upsetjs)
+  checkUpSetCommonArgument(upsetjs)
   inherits(upsetjs, 'upsetjs_venn') ||
     inherits(upsetjs, 'upsetjs_venn_proxy')
+}
+
+isKarnaughMap = function(upsetjs) {
+  checkUpSetCommonArgument(upsetjs)
+  inherits(upsetjs, 'upsetjs_kmap') ||
+    inherits(upsetjs, 'upsetjs_kmap_proxy')
 }
 
 stopifnottype = function(name,
@@ -66,7 +79,7 @@ enableCrosstalk = function(upsetjs, shared, mode) {
 }
 
 setProperty = function(upsetjs, prop, value) {
-  checkUpSetOrVennArgument(upsetjs)
+  checkUpSetCommonArgument(upsetjs)
 
   if (inherits(upsetjs, 'upsetjs_common')) {
     upsetjs$x[[prop]] = value
@@ -79,7 +92,7 @@ setProperty = function(upsetjs, prop, value) {
 }
 
 appendProperty = function(upsetjs, prop, value) {
-  checkUpSetOrVennArgument(upsetjs)
+  checkUpSetCommonArgument(upsetjs)
 
   if (inherits(upsetjs, 'upsetjs_common')) {
     if (is.null(upsetjs$x[[prop]])) {
@@ -96,7 +109,7 @@ appendProperty = function(upsetjs, prop, value) {
 }
 
 setProperties = function(upsetjs, props, clean = FALSE) {
-  checkUpSetOrVennArgument(upsetjs)
+  checkUpSetCommonArgument(upsetjs)
 
   if (clean) {
     props = cleanNull(props)

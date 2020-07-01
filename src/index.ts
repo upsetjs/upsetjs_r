@@ -20,6 +20,7 @@ import {
   UpSetProps,
   boxplotAddon,
   renderVennDiagram,
+  renderKarnaughMap,
   VennDiagramProps,
   categoricalAddon,
   createVennJSAdapter,
@@ -35,7 +36,8 @@ declare type IElem = string;
 
 declare type ShinyUpSetProps = UpSetProps<IElem> &
   VennDiagramProps<IElem> & {
-    renderMode: 'upset' | 'venn' | 'euler';
+    renderMode: 'upset' | 'venn' | 'euler' | 'kmap';
+    expressionData?: boolean;
     interactive?: boolean;
     crosstalk?: CrosstalkOptions;
 
@@ -74,7 +76,8 @@ HTMLWidgets.widget({
 
   factory(el, width, height) {
     let interactive = false;
-    let renderMode: 'upset' | 'venn' | 'euler' = 'upset';
+    let expressionData = false;
+    let renderMode: 'upset' | 'venn' | 'euler' | 'kmap' = 'upset';
     const elemToIndex = new Map<IElem, number>();
     let attrs: UpSetAttrSpec[] = [];
     const props: UpSetProps<IElem> & VennDiagramProps<IElem> = {
@@ -84,6 +87,7 @@ HTMLWidgets.widget({
       exportButtons: HTMLWidgets.shinyMode,
     };
     let crosstalkHandler: CrosstalkHandler | null = null;
+    console.log(expressionData);
 
     function syncAddons() {
       if (attrs.length === 0) {
@@ -123,11 +127,15 @@ HTMLWidgets.widget({
       if (typeof delta.interactive === 'boolean') {
         interactive = delta.interactive;
       }
+      if (typeof delta.expressionData === 'boolean') {
+        expressionData = delta.expressionData;
+      }
       if (typeof delta.renderMode === 'string') {
         renderMode = delta.renderMode;
       }
       delete (props as any).renderMode;
       delete (props as any).interactive;
+      delete (props as any).expressionData;
       delete (props as any).crosstalk;
       if (delta.elems) {
         // elems = delta.elems;
@@ -186,6 +194,8 @@ HTMLWidgets.widget({
       if (renderMode === 'venn') {
         delete props.layout;
         renderVennDiagram(el, props);
+      } else if (renderMode === 'kmap') {
+        renderKarnaughMap(el, props);
       } else if (renderMode === 'euler') {
         props.layout = adapter;
         renderVennDiagram(el, props);

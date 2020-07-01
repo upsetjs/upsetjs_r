@@ -132,7 +132,7 @@ fromList = function(upsetjs,
                     shared = NULL,
                     shared.mode = "click",
                     colors = NULL) {
-  checkUpSetOrVennArgument(upsetjs)
+  checkUpSetCommonArgument(upsetjs)
   stopifnot(is.list(value))
   stopifnot(order.by == "cardinality" || order.by == "degree")
   stopifnot(is.null(limit) ||
@@ -200,15 +200,18 @@ fromExpression = function(upsetjs,
                           symbol = "&",
                           order.by = "cardinality",
                           colors = NULL) {
-  checkUpSetOrVennArgument(upsetjs)
+  checkUpSetCommonArgument(upsetjs)
   stopifnot(is.list(value))
   stopifnot(order.by == "cardinality" || order.by == "degree")
   stopifnot(is.null(colors) || is.list(colors))
 
+  cc = colorLookup(colors)
+
   degrees = sapply(names(value), function (x) {
     length(unlist(strsplit(x, symbol)))
   })
-  cc = colorLookup(colors)
+
+  # TODO
 
   raw_combinations = value
   raw_sets = value[degrees == 1]
@@ -288,7 +291,7 @@ fromDataFrame = function(upsetjs,
                          shared = NULL,
                          shared.mode = "click",
                          colors = NULL) {
-  checkUpSetOrVennArgument(upsetjs)
+  checkUpSetCommonArgument(upsetjs)
   stopifnot(is.data.frame(df))
   stopifnot((
     is.null(attributes) ||
@@ -299,7 +302,7 @@ fromDataFrame = function(upsetjs,
   stopifnottype('limit', limit)
   stopifnot(shared.mode == "click" || shared.mode == "hover")
   stopifnot(is.null(colors) || is.list(colors))
-  
+
   cc = colorLookup(colors)
 
   elems = rownames(df)

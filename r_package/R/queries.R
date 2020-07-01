@@ -18,7 +18,7 @@
 #'
 #' @export
 setQueries = function(upsetjs, queries = list()) {
-  checkUpSetOrVennArgument(upsetjs)
+  checkUpSetCommonArgument(upsetjs)
   stopifnot(is.list(queries))
   setProperty(upsetjs, "queries", queries)
 }
@@ -40,7 +40,7 @@ addQuery = function(upsetjs,
                     color,
                     elems = NULL,
                     set = NULL) {
-  checkUpSetOrVennArgument(upsetjs)
+  checkUpSetCommonArgument(upsetjs)
   stopifnot(is.character(name), length(name) == 1)
   stopifnot(is.character(color), length(color) == 1)
   stopifnot((is.character(set) &&
@@ -65,7 +65,7 @@ addQuery = function(upsetjs,
 #'
 #' @export
 clearQueries = function(upsetjs) {
-  checkUpSetOrVennArgument(upsetjs)
+  checkUpSetCommonArgument(upsetjs)
 
   setProperty(upsetjs, "queries", NULL)
 }
@@ -82,7 +82,7 @@ clearQueries = function(upsetjs) {
 #'
 #' @export
 queryLegend = function(upsetjs, value = TRUE) {
-  checkUpSetOrVennArgument(upsetjs)
+  checkUpSetCommonArgument(upsetjs)
   stopifnot(is.logical(value), length(value) == 1)
 
   setProperty(upsetjs, "queryLegend", value)

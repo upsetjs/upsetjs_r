@@ -22,7 +22,7 @@ cleanAttrName = function(col) {
 #'
 #' @export
 setAttributes = function(upsetjs, attrs = list()) {
-  checkUpSetOrVennArgument(upsetjs)
+  checkUpSetCommonArgument(upsetjs)
   stopifnot(is.list(attrs) || is.data.frame(attrs))
   rows = if (is.list(attrs)) {
     NULL

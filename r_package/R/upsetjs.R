@@ -211,3 +211,64 @@ upsetjsEulerDiagramProxy = function(outputId, session) {
     class = c('upsetjs_proxy', 'upsetjs_venn_proxy', 'upsetjs_common_proxy')
   )
 }
+
+
+#' upsetjs - factory for UpSet.js Karnaugh Map HTMLWidget
+#'
+#' @param width width of the element
+#' @param height height of the element
+#' @param elementId unique element id
+#' @param sizingPolicy htmlwidgets sizing policy object. Defaults to \code{\link{upsetjsSizingPolicy}()}
+#'
+#' @return An object of class \code{upsetjs_venn} and \code{htmlwidget}
+#' @examples
+#' upsetjsKarnaughMap() %>% fromList(list(a=c(1,2,3), b=c(2,3)))
+#' @importFrom htmlwidgets createWidget
+#' @export
+upsetjsKarnaughMap = function(width = '100%',
+                              height = NULL,
+                              elementId = NULL,
+                              sizingPolicy = upsetjsSizingPolicy()) {
+  # forward options using x
+  x = structure(list(
+    renderMode = "kmap",
+    mode = 'hover',
+    sets = c()
+  ))
+
+  dependencies = c()
+
+  r = htmlwidgets::createWidget(
+    'upsetjs',
+    x,
+    width = width,
+    height = height,
+    package = 'upsetjs',
+    elementId = elementId,
+    sizingPolicy = sizingPolicy,
+    dependencies = dependencies
+  )
+  class(r) = c(class(r), 'upsetjs_common', 'upsetjs_kmap')
+  r
+}
+
+#'
+#' reactive helper to update an upsetjs karnaugh map diagram in place
+#' @param outputId the id of the upsetjs widget
+#' @param session current shiny session
+#' @return an object of class \code{upsetjs_proxy}
+#' @examples
+#' \dontrun{
+#' upsetjsKarnaughMapProxy('upsetjs1', session) %>% setSelection('a')
+#' }
+#' @export
+upsetjsKarnaughMapProxy = function(outputId, session) {
+  structure(
+    list(
+      session = session,
+      id = session$ns(outputId),
+      x = structure(list(renderMode = "kmap"))
+    ),
+    class = c('upsetjs_proxy', 'upsetjs_kmap_proxy', 'upsetjs_common_proxy')
+  )
+}

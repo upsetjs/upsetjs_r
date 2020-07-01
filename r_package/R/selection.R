@@ -17,7 +17,7 @@
 #'
 #' @export
 setSelection = function(upsetjs, name = NULL) {
-  checkUpSetOrVennArgument(upsetjs)
+  checkUpSetCommonArgument(upsetjs)
   stopifnot(is.null(name) ||
               (is.character(name) && length(name) >= 1))
 
@@ -34,7 +34,7 @@ setSelection = function(upsetjs, name = NULL) {
 #'
 #' @export
 interactiveChart = function(upsetjs, value = TRUE) {
-  checkUpSetOrVennArgument(upsetjs)
+  checkUpSetCommonArgument(upsetjs)
   stopifnot(is.logical(value), length(value) == 1)
 
   setProperty(upsetjs, "interactive", value)

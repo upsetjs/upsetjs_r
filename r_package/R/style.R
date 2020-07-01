@@ -77,6 +77,24 @@ chartVennLayout = function(upsetjs,
 }
 
 #'
+#' specify the chart karnaugh map layout
+#' @param upsetjs an object of class \code{upsetjs_kmap} or \code{upsetjs_kmap_proxy}
+#' @param padding padding around the plot
+#' @return the object given as first argument
+#' @examples
+#' upsetjsKarnaughMap() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% chartKarnaughMapLayout(padding=10)
+#'
+#' @export
+chartKarnaughMapLayout = function(upsetjs,
+                           padding = NULL) {
+  checkKarnaughMapArgument(upsetjs)
+  stopifnottype('padding', padding)
+
+  props = list(padding = padding)
+  setProperties(upsetjs, props, clean = TRUE)
+}
+
+#'
 #' specify chart labels
 #' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
 #' @param title the chart title
@@ -123,6 +141,7 @@ chartLabels = function(upsetjs,
   )
   setProperties(upsetjs, props, clean = TRUE)
 }
+
 #'
 #' specify chart labels
 #' @param upsetjs an object of class \code{upsetjs_venn} or \code{upsetjs_venn_proxy}
@@ -137,6 +156,28 @@ chartVennLabels = function(upsetjs,
                            title = NULL,
                            description = NULL) {
   checkVennDiagramArgument(upsetjs)
+  stopifnottype('title', title, is.character, 'string')
+  stopifnottype('description', description, is.character, 'string')
+
+  props = list(title = title,
+               description = description)
+  setProperties(upsetjs, props, clean = TRUE)
+}
+
+#'
+#' specify chart labels
+#' @param upsetjs an object of class \code{upsetjs_kamp} or \code{upsetjs_kmap_proxy}
+#' @param title the chart title
+#' @param description the chart description
+#' @return the object given as first argument
+#' @examples
+#' upsetjsKanaughMap() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% chartKanaughMapLabels(title="Test")
+#'
+#' @export
+chartKanaughMapLabels = function(upsetjs,
+                           title = NULL,
+                           description = NULL) {
+  checkKanaughMapArgument(upsetjs)
   stopifnottype('title', title, is.character, 'string')
   stopifnottype('description', description, is.character, 'string')
 
@@ -174,7 +215,7 @@ chartFontSizes = function(upsetjs,
                           description = NULL,
                           export.label = NULL,
                           value.label = NULL) {
-  checkUpSetOrVennArgument(upsetjs)
+  checkUpSetCommonArgument(upsetjs)
   stopifnottype('font.family', font.family, is.character, 'string')
   stopifnottype('chart.label', chart.label, is.character, 'string')
   stopifnottype('set.label', set.label, is.character, 'string')
@@ -218,7 +259,7 @@ chartStyleFlags = function(upsetjs,
                            id = NULL,
                            export.buttons = NULL,
                            class.name = NULL) {
-  checkUpSetOrVennArgument(upsetjs)
+  checkUpSetCommonArgument(upsetjs)
   stopifnottype('export.buttons', export.buttons, is.logical, 'boolean')
   stopifnottype('class.name', class.name, is.character, 'string')
   stopifnottype('id', id, is.character, 'string')
@@ -262,7 +303,7 @@ chartTheme = function(upsetjs,
                       stroke.color = NULL,
                       has.selection.opacity = NULL,
                       opacity = NULL) {
-  checkUpSetOrVennArgument(upsetjs)
+  checkUpSetCommonArgument(upsetjs)
   stopifnot(is.null(theme) ||
               theme == 'light' ||
               theme == 'dark' || theme == 'vega')
