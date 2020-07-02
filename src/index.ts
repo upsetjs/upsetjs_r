@@ -77,7 +77,6 @@ HTMLWidgets.widget({
 
   factory(el, width, height) {
     let interactive = false;
-    let expressionData = false;
     let renderMode: 'upset' | 'venn' | 'euler' | 'kmap' = 'upset';
     const elemToIndex = new Map<IElem, number>();
     let attrs: UpSetAttrSpec[] = [];
@@ -88,7 +87,6 @@ HTMLWidgets.widget({
       exportButtons: HTMLWidgets.shinyMode,
     };
     let crosstalkHandler: CrosstalkHandler | null = null;
-    console.log(expressionData);
 
     function syncAddons() {
       if (attrs.length === 0) {
@@ -128,9 +126,7 @@ HTMLWidgets.widget({
       if (typeof delta.interactive === 'boolean') {
         interactive = delta.interactive;
       }
-      if (typeof delta.expressionData === 'boolean') {
-        expressionData = delta.expressionData;
-      }
+      const expressionData = delta.expressionData;
       if (typeof delta.renderMode === 'string') {
         renderMode = delta.renderMode;
       }
@@ -154,11 +150,14 @@ HTMLWidgets.widget({
         props.sets = fixSets(props.sets);
       }
       if (delta.combinations != null) {
-        const c = fixCombinations(delta.combinations, props.sets);
-        if (c == null) {
-          delete props.combinations;
+        if (expressionData) {
         } else {
-          props.combinations = c;
+          const c = fixCombinations(delta.combinations, props.sets);
+          if (c == null) {
+            delete props.combinations;
+          } else {
+            props.combinations = c;
+          }
         }
       }
       if (typeof delta.selection === 'string' || Array.isArray(delta.selection)) {

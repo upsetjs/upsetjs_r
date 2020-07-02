@@ -179,6 +179,7 @@ fromList = function(upsetjs,
                   sets = sorted_sets,
                   combinations = gen,
                   elems = elems,
+                  expressionData = FALSE,
                   attrs = list()
                 ))
 }
@@ -190,6 +191,7 @@ fromList = function(upsetjs,
 #' @param symbol the symbol how to split list names to get the sets
 #' @param order.by order intersections by cardinality or name
 #' @param colors the optional list with set name to color
+#' @param type the type of intersections this data represents (intersection,union,distinctIntersection)
 #' @return the object given as first argument
 #' @examples
 #' upsetjs() %>% fromExpression(list(a=3, b=2, `a&b`=2))
@@ -199,11 +201,13 @@ fromExpression = function(upsetjs,
                           value,
                           symbol = "&",
                           order.by = "cardinality",
-                          colors = NULL) {
+                          colors = NULL,
+                          type = 'intersection') {
   checkUpSetCommonArgument(upsetjs)
   stopifnot(is.list(value))
   stopifnot(order.by == "cardinality" || order.by == "degree")
   stopifnot(is.null(colors) || is.list(colors))
+  stopifnot(type == "intersection" || type == "union" || type == "distinctIntersection")
 
   cc = colorLookup(colors)
 
@@ -211,11 +215,10 @@ fromExpression = function(upsetjs,
     length(unlist(strsplit(x, symbol)))
   })
 
-  # TODO
-
   raw_combinations = value
   raw_sets = value[degrees == 1]
 
+  # TODO extract properly
   toSet = function(key, value, color) {
     structure(list(
       name = key,
@@ -261,7 +264,8 @@ fromExpression = function(upsetjs,
     sets = sets,
     combinations = combinations,
     elems = c(),
-    attrs = list()
+    attrs = list(),
+    expressionData = TRUE
   )
   setProperties(upsetjs, props)
 }
@@ -346,7 +350,8 @@ fromDataFrame = function(upsetjs,
   }
   props = list(sets = sorted_sets,
                combinations = gen,
-               elems = elems)
+               elems = elems,
+               expressionData = FALSE)
 
   upsetjs = setProperties(upsetjs, props)
 

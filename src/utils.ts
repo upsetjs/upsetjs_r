@@ -56,6 +56,32 @@ export function fixCombinations(
   );
 }
 
+export function fixCombinations(
+  combinations: GenerateSetCombinationsOptions | ISetCombinations<any> | undefined,
+  sets: ISets<any>
+) {
+  if (!combinations || (Array.isArray(combinations) && combinations.length === 0)) {
+    return null;
+  }
+  if (!Array.isArray(combinations)) {
+    return generateCombinations(sets, combinations as GenerateSetCombinationsOptions);
+  }
+  const lookup = new Map(sets.map((s) => [s.name, s]));
+  return asCombinations(
+    combinations.map((set) => {
+      if (!Array.isArray(set.elems)) {
+        (set as any).elems = set.elems == null ? [] : [set.elems];
+      }
+      if (!Array.isArray(set.setNames)) {
+        set.setNames = set.setNames == null ? [] : [set.setNames];
+      }
+      return set;
+    }),
+    'composite',
+    (s: any) => s.setNames.map((si: string) => lookup.get(si)).filter(Boolean)
+  );
+}
+
 function toUnifiedCombinationName(c: ISetCombination<any>) {
   return Array.from(c.sets)
     .map((s) => s.name)
