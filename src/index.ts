@@ -25,8 +25,9 @@ import {
   categoricalAddon,
   createVennJSAdapter,
   KarnaughMapProps,
+  ISets,
 } from '@upsetjs/bundle';
-import { fixCombinations, fixSets, resolveSet, resolveSetByElems } from './utils';
+import { fixCombinations, fixSets, resolveSet, resolveSetByElems, fromExpression } from './utils';
 
 declare type CrosstalkOptions = {
   group: string;
@@ -151,6 +152,9 @@ HTMLWidgets.widget({
       }
       if (delta.combinations != null) {
         if (expressionData) {
+          const r = fromExpression(delta.combinations);
+          props.combinations = r.combinations as ISetCombinations<string>;
+          props.sets = r.sets as ISets<string>;
         } else {
           const c = fixCombinations(delta.combinations, props.sets);
           if (c == null) {

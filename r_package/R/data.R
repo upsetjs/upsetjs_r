@@ -216,33 +216,12 @@ fromExpression = function(upsetjs,
   })
 
   raw_combinations = value
-  raw_sets = value[degrees == 1]
-
-  # TODO extract properly
-  toSet = function(key, value, color) {
-    structure(list(
-      name = key,
-      type = "set",
-      color = cc(key),
-      elems = c(),
-      cardinality = value
-    ),
-    class = "upsetjs_set")
-  }
-  sets = mapply(
-    toSet,
-    key = names(raw_sets),
-    value = raw_sets,
-    SIMPLIFY = FALSE
-  )
-  names(sets) = NULL
-  sets = sortSets(sets, order.by = order.by)
 
   toCombination = function(key, value, color) {
     structure(
       list(
         name = key,
-        type = "composite",
+        type = type,
         elems = c(),
         color = cc(key),
         cardinality = value,
@@ -259,6 +238,39 @@ fromExpression = function(upsetjs,
   )
   names(combinations) = NULL
   combinations = sortSets(combinations, order.by = order.by)
+
+  sets = list()
+  defined_sets = c()
+  for(c in combinations) {
+    for(s in c$setNames) {
+      if (!(s %in% defined_sets)) {
+        defined_sets = c(defined_sets, s)
+        sets[[s]] = structure(list(
+          name = s,
+          type = "set",
+          color = cc(s),
+          elems = c(),
+          cardinality = 0
+        ),
+        class = "upsetjs_set")
+      }
+      # determine base set based on type and value
+      set = sets[[s]]
+      if (type == 'distinctIntersection') {
+        set$cardinality = set$cardinality + c$cardinality
+      } else if (length(c$setNames) == 1) {
+        set$cardinality = c$cardinality
+      } else if (type == 'intersection') {
+        set$cardinality = max(set$cardinality, c$cardinality)
+      } else if (type == 'union') {
+        set$cardinality = min(set$cardinality, c$cardinality)
+      }
+      sets[[s]] = set
+    }
+  }
+  names(sets) = NULL
+  sets = sortSets(sets, order.by = order.by)
+
 
   props = list(
     sets = sets,
