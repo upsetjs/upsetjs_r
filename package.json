@@ -25,7 +25,7 @@
     "prettier": "npm run prettier:impl -- --check",
     "eslint": "eslint src --ext .ts,.tsx",
     "eslint:fix": "npm run eslint -- --fix",
-    "clean": "rimraf r_package/inst/htmlwidgets/upsetjs.js",
+    "clean": "rimraf r_package/inst/htmlwidgets/upsetjs.js*",
     "build:dev": "webpack-cli -d --devtool source-map",
     "build": "npm run clean && webpack-cli -p",
     "check:r": "Rscript -e 'devtools::check(\"r_package\", error_on = \"error\")'",

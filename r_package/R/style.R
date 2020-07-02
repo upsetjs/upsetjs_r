@@ -182,7 +182,8 @@ chartVennLabels = function(upsetjs,
 #' @param description the chart description
 #' @return the object given as first argument
 #' @examples
-#' upsetjsKarnaughMap() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% chartKarnaughMapLabels(title="Test")
+#' upsetjsKarnaughMap() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>%
+#' chartKarnaughMapLabels(title="Test")
 #'
 #' @export
 chartKarnaughMapLabels = function(upsetjs,
