@@ -188,7 +188,7 @@ chartVennLabels = function(upsetjs,
 chartKarnaughMapLabels = function(upsetjs,
                            title = NULL,
                            description = NULL) {
-  checkKanaughMapArgument(upsetjs)
+  checkKarnaughMapArgument(upsetjs)
   stopifnottype('title', title, is.character, 'string')
   stopifnottype('description', description, is.character, 'string')
 
