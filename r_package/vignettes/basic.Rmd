@@ -73,7 +73,7 @@ The second version is a a variant in which not the elements are given but their 
 expressionInput <- list(one = 9, two = 5, three = 9, `one&two` = 3, `one&three` = 6, `two&three` = 3, `one&two&three` = 2)
 
 
-upsetjs() %>% fromExpression(expressionInput)
+upsetjs() %>% fromExpression(expressionInput) %>% interactiveChart()
 ```
 
 
