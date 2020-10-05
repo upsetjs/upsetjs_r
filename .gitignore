@@ -13,3 +13,4 @@ node_modules
 docs
 /*.tar.gz
 *.Rcheck
+.pnp.js
