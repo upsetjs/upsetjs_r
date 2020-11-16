@@ -26,7 +26,7 @@ upsetjs() %>% fromList(listInput) %>% interactiveChart()
 
 ![List Input Example](https://user-images.githubusercontent.com/4129778/79375541-10dda700-7f59-11ea-933a-a3ffbca1bfd2.png)
 
-see also [Basic.Rmd](./master/vignettes/basic.Rmd)
+see also [UpSetJS.Rmd](./master/vignettes/upsetjs.Rmd)
 
 ## Shiny Example
 
