@@ -52,9 +52,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages('devtools')
-          install.packages('pkgdown')
-          install.packages('webshot')
+          install.packages(c('devtools', 'pkgdown', 'webshot', 'textshaping'))
           devtools::install_deps('r_package', dependencies = TRUE)
         shell: Rscript {0}
 
