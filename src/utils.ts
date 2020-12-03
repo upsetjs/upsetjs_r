@@ -50,7 +50,10 @@ export function fromExpression(
 }
 
 export function fixCombinations(
-  combinations: GenerateSetCombinationsOptions | ISetCombinations<any> | undefined,
+  combinations:
+    | GenerateSetCombinationsOptions
+    | readonly (ISetCombination<any> & { setNames?: string[] })[]
+    | undefined,
   sets: ISets<any>
 ) {
   if (!combinations || (Array.isArray(combinations) && combinations.length === 0)) {
