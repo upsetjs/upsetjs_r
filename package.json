@@ -65,7 +65,7 @@
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
-    "@upsetjs/bundle": "~1.6.2",
+    "@upsetjs/bundle": "~1.7.0",
     "@upsetjs/venn.js": "^1.3.0",
     "core-js": "^2",
     "element-closest-polyfill": "^1.0.2",
