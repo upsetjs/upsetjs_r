@@ -2,7 +2,7 @@
 # @upsetjs/r
 # https://github.com/upsetjs/upsetjs_r
 #
-# Copyright (c) 2020 Samuel Gratzl <sam@sgratzl.com>
+# Copyright (c) 2021 Samuel Gratzl <sam@sgratzl.com>
 #
 
 #' Games of Thrones Character dataset for UpSet.js

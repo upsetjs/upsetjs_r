@@ -2,7 +2,7 @@
 # @upsetjs/r
 # https://github.com/upsetjs/upsetjs_r
 #
-# Copyright (c) 2020 Samuel Gratzl <sam@sgratzl.com>
+# Copyright (c) 2021 Samuel Gratzl <sam@sgratzl.com>
 #
 
 
@@ -171,6 +171,7 @@ fromList = function(upsetjs,
       name = key,
       type = 'set',
       elems = value,
+      cardinality = length(value),
       color = cc(key)
     ),
     class = "upsetjs_set")
@@ -327,6 +328,59 @@ fromExpression = function(upsetjs,
   setProperties(upsetjs, props)
 }
 
+#'
+#' extract the sets from a data frame (rows = elems, columns = sets, cell = contained)
+#' @param df the data.frame like structure
+#' @param attributes the optional column list or data frame
+#' @param order.by order intersections by cardinality or degree
+#' @param limit limit the ordered sets to the given limit
+#' @param colors the optional list with set name to color
+#' @param store.elems store the elements in the sets (default TRUE)
+#' @export
+extractSetsFromDataFrame = function(df,
+                         attributes = NULL,
+                         order.by = "cardinality",
+                         limit = NULL,
+                         colors = NULL,
+                         c_type = NULL,
+                         store.elems = TRUE) {
+  stopifnot(is.data.frame(df))
+  stopifnot((
+    is.null(attributes) ||
+      is.data.frame(attributes) ||
+      is.list(attributes) || is.character(attributes)
+  ))
+  stopifnot(order.by == "cardinality" || order.by == "degree")
+  stopifnottype("limit", limit)
+  stopifnot(is.null(colors) || is.list(colors))
+
+  cc = colorLookup(colors)
+
+  elems = rownames(df)
+  toSet = function(key) {
+    sub = elems[df[[key]] == TRUE]
+    structure(list(
+      name = key,
+      type = "set",
+      color = cc(key),
+      cardinality = length(sub),
+      elems = if(store.elems) { sub } else { c() }
+    ),
+    class = "upsetjs_set")
+  }
+
+  set_names = setdiff(colnames(df), if (is.character(attributes))
+    attributes
+    else
+      c())
+  sets = lapply(set_names, toSet)
+
+  sorted_sets = sortSets(sets, order.by = order.by, limit = limit)
+  if (is.null(limit))
+    sets
+  else
+    sorted_sets
+}
 
 #'
 #' extract the sets from a data frame (rows = elems, columns = sets, cell = contained)
@@ -374,36 +428,15 @@ fromDataFrame = function(upsetjs,
 
   cc = colorLookup(colors)
 
-  elems = rownames(df)
-  toSet = function(key) {
-    sub = elems[df[[key]] == TRUE]
-    structure(list(
-      name = key,
-      type = "set",
-      color = cc(key),
-      elems = sub
-    ),
-    class = "upsetjs_set")
-  }
+  sorted_sets = extractSetsFromDataFrame(df, attributes, order.by, limit, colors)
 
-  set_names = setdiff(colnames(df), if (is.character(attributes))
-    attributes
-    else
-      c())
-  sets = lapply(set_names, toSet)
-
-  if (!is.null(shared)) {
-    upsetjs = enableCrosstalk(upsetjs, shared, mode = shared.mode)
-  } else {
-    upsetjs = enableCrosstalk(upsetjs, df, mode = shared.mode)
-  }
-
-  sorted_sets = sortSets(sets, order.by = order.by, limit = limit)
   gen_sets = if (is.null(limit))
     sets
   else
     sorted_sets
 
+  elems = rownames(df)
+  
   gen = if (c_type == "none") list() else if (isVennDiagram(upsetjs) || isKarnaughMap(upsetjs)) {
     generateCombinationsImpl(
       gen_sets,
@@ -442,6 +475,12 @@ fromDataFrame = function(upsetjs,
     else
       attributes
     upsetjs = setAttributes(upsetjs, attr_df)
+  }
+
+  if (!is.null(shared)) {
+    upsetjs = enableCrosstalk(upsetjs, shared, mode = shared.mode)
+  } else {
+    upsetjs = enableCrosstalk(upsetjs, df, mode = shared.mode)
   }
 
   upsetjs
