@@ -194,10 +194,10 @@ fromList = function(upsetjs,
   else
     sorted_sets
 
-  gen = if (c_type == "none") list() else if (isVennDiagram(upsetjs) || isKarnaughMap(upsetjs)) {
+  gen = if (!is.null(c_type) && c_type == "none") list() else if (isVennDiagram(upsetjs) || isKarnaughMap(upsetjs)) {
     generateCombinationsImpl(
       gen_sets,
-      if_else(is.null(c_type), 'distinctIntersection', c_type),
+      ifelse(is.null(c_type), 'distinctIntersection', c_type),
       0,
       NULL,
       TRUE,
@@ -208,7 +208,7 @@ fromList = function(upsetjs,
   } else {
     generateCombinationsImpl(
       gen_sets,
-      if_else(is.null(c_type), 'intersection', c_type),
+      ifelse(is.null(c_type), 'intersection', c_type),
       0,
       NULL,
       FALSE,
@@ -437,10 +437,10 @@ fromDataFrame = function(upsetjs,
 
   elems = rownames(df)
   
-  gen = if (c_type == "none") list() else if (isVennDiagram(upsetjs) || isKarnaughMap(upsetjs)) {
+  gen = if (!is.null(c_type) && c_type == "none") list() else if (isVennDiagram(upsetjs) || isKarnaughMap(upsetjs)) {
     generateCombinationsImpl(
       gen_sets,
-      if_else(is.null(c_type), 'distinctIntersection', c_type),
+      ifelse(is.null(c_type), 'distinctIntersection', c_type),
       0,
       NULL,
       TRUE,
@@ -451,7 +451,7 @@ fromDataFrame = function(upsetjs,
   } else {
     generateCombinationsImpl(
       gen_sets,
-      if_else(is.null(c_type), 'intersection', c_type),
+      ifelse(is.null(c_type), 'intersection', c_type),
       0,
       NULL,
       FALSE,

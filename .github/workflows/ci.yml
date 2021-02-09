@@ -62,6 +62,12 @@ jobs:
         run: devtools::check('r_package', args = c("--no-manual", "--as-cran"), error_on = "error", check_dir = "check")
         shell: Rscript {0}
 
+      - name: Test
+        env:
+          _R_CHECK_CRAN_INCOMING_REMOTE_: false
+        run: devtools::test('r_package')
+        shell: Rscript {0}
+
       - name: Upload check results
         if: failure()
         uses: actions/upload-artifact@master
