@@ -114,6 +114,7 @@ generateCombinationsImpl = function(sets,
             color = cc(c_name),
             type = c_type,
             elems = elems,
+            cardinality = length(elems),
             setNames = set_names
           ),
           class = "upsetjs_combination"
