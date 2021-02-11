@@ -69,7 +69,8 @@ generateCombinationsImpl = function(sets,
                                     order.by,
                                     limit,
                                     colors = NULL,
-                                    symbol = "&") {
+                                    symbol = "&",
+                                    store.elems = TRUE) {
   combinations = list()
   set_f = if (c_type == "union")
     union
@@ -79,11 +80,9 @@ generateCombinationsImpl = function(sets,
   lsets = length(sets)
   all_indices = 1:lsets
   cc = colorLookup(colors)
+  max_sets = ifelse(is.null(max), lsets, max)
 
-  for (l in min:(if (is.null(max))
-    lsets
-    else
-      max)) {
+  for (l in min:max_sets) {
     combos = combn(all_indices, l, simplify = FALSE)
     for (combo in combos) {
       indices = unlist(combo)
@@ -113,7 +112,7 @@ generateCombinationsImpl = function(sets,
             name = c_name,
             color = cc(c_name),
             type = c_type,
-            elems = elems,
+            elems = ifelse(store.elems, elems, c()),
             cardinality = length(elems),
             setNames = set_names
           ),
@@ -195,7 +194,9 @@ fromList = function(upsetjs,
   else
     sorted_sets
 
-  gen = if (!is.null(c_type) && c_type == "none") list() else if (isVennDiagram(upsetjs) || isKarnaughMap(upsetjs)) {
+  gen = if (!is.null(c_type) && c_type == "none") {
+    list() 
+  } else if (isVennDiagram(upsetjs) || isKarnaughMap(upsetjs)) {
     generateCombinationsImpl(
       gen_sets,
       ifelse(is.null(c_type), 'distinctIntersection', c_type),
@@ -343,7 +344,6 @@ extractSetsFromDataFrame = function(df,
                          order.by = "cardinality",
                          limit = NULL,
                          colors = NULL,
-                         c_type = NULL,
                          store.elems = TRUE) {
   stopifnot(is.data.frame(df))
   stopifnot((
@@ -376,11 +376,51 @@ extractSetsFromDataFrame = function(df,
       c())
   sets = lapply(set_names, toSet)
 
-  sorted_sets = sortSets(sets, order.by = order.by, limit = limit)
-  if (is.null(limit))
-    sets
-  else
-    sorted_sets
+  sortSets(sets, order.by = order.by, limit = limit)
+}
+
+
+extractCombinationsImpl = function(df, 
+                                   sets,
+                                   empty,
+                                   order.by,
+                                   colors = NULL,
+                                   symbol = "&",
+                                   store.elems = TRUE) {
+  combination_names = c()
+  lookup = new.env(hash=TRUE, parent=emptyenv())
+  all_set_names = sapply(1:length(sets), function(i) sets[[i]]$name)
+  if (is.list(all_set_names)) {
+    all_set_names = unlist(all_set_names)
+  }
+  cc = colorLookup(colors)
+
+  elems = rownames(df)
+  df_sets = df[, all_set_names]
+  c_name = apply(df_sets, 1, function(r) paste(all_set_names[as.logical(r)], collapse=symbol))
+
+  dd = aggregate(elems, list(c_name = c_name), function(r) {
+    r
+  })
+  set_names = str_split(dd$c_name, fixed(symbol))
+  set_colors = cc(dd$c_name)
+
+  combinations = lapply(1:nrow(dd), function(i) {
+    elems = as.character(unlist(dd[i, 'x']))
+    structure(
+      list(
+        name = dd[i, 'c_name'],
+        color = set_colors[i],
+        type = 'distinctIntersection',
+        elems = elems,
+        cardinality = length(elems),
+        setNames = unlist(set_names[i])
+      ),
+      class = "upsetjs_combination"
+    )
+  })
+  names(combinations) = NULL
+  sortSets(combinations, order.by, limit)
 }
 
 #'
@@ -408,7 +448,8 @@ fromDataFrame = function(upsetjs,
                          shared = NULL,
                          shared.mode = "click",
                          colors = NULL,
-                         c_type = NULL) {
+                         c_type = NULL,
+                         store.elems = TRUE) {
   checkUpSetCommonArgument(upsetjs)
   stopifnot(is.data.frame(df))
   stopifnot((
@@ -429,36 +470,55 @@ fromDataFrame = function(upsetjs,
 
   cc = colorLookup(colors)
 
-  sorted_sets = extractSetsFromDataFrame(df, attributes, order.by, limit, colors)
-
-  gen_sets = if (is.null(limit))
-    sets
-  else
-    sorted_sets
+  sorted_sets = extractSetsFromDataFrame(df, attributes, order.by, limit, colors, store.elems = store.elems)
 
   elems = rownames(df)
   
-  gen = if (!is.null(c_type) && c_type == "none") list() else if (isVennDiagram(upsetjs) || isKarnaughMap(upsetjs)) {
-    generateCombinationsImpl(
-      gen_sets,
-      ifelse(is.null(c_type), 'distinctIntersection', c_type),
-      0,
-      NULL,
-      TRUE,
-      'degree',
-      NULL,
-      colors
+  gen = if (!is.null(c_type) && c_type == "none") {
+    list() 
+  } else if (isVennDiagram(upsetjs) || isKarnaughMap(upsetjs)) {
+    if (is.null(c_type) || c_type == 'distinctIntersection') {
+      extractCombinationsImpl(
+        df,
+        sorted_sets,
+        TRUE,
+        order.by,
+        colors,
+        store.elems = store.elems
+      )
+    } else {
+      generateCombinationsImpl(
+        sorted_sets,
+        ifelse(is.null(c_type), 'distinctIntersection', c_type),
+        0,
+        NULL,
+        TRUE,
+        'degree',
+        NULL,
+        colors,
+        store.elems = store.elems
+      )
+    }
+  } else if (!is.null(c_type) && c_type == 'distinctIntersection') {
+    extractCombinationsImpl(
+      df,
+      sorted_sets,
+      FALSE,
+      order.by,
+      colors,
+      store.elems = store.elems
     )
   } else {
     generateCombinationsImpl(
-      gen_sets,
+      sorted_sets,
       ifelse(is.null(c_type), 'intersection', c_type),
       0,
       NULL,
       FALSE,
       order.by,
       NULL,
-      colors
+      colors,
+      store.elems = store.elems
     )
   }
   props = list(

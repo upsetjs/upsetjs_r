@@ -75,10 +75,35 @@ test_that("fromDataFrame", {
   cc = u %>% getCombinations()
   expect_equal(length(cc), 7)
   expect_set(cc[[1]], 'one', 9)
-  expect_set(cc[[2]], 'two', 9)
-  expect_set(cc[[3]], 'three', 5)
+  expect_set(cc[[2]], 'three', 9)
+  expect_set(cc[[3]], 'two', 5)
   expect_set(cc[[4]], 'one&three', 6)
   expect_set(cc[[5]], 'one&two', 3)
   expect_set(cc[[6]], 'three&two', 3)
-  expect_set(cc[[7]], 'one&three&two', 2)  
+  expect_set(cc[[7]], 'one&three&two', 2)
+})
+
+test_that("fromDataFrame - distinctIntersection", {
+  dataFrame <- as.data.frame(list(
+    one=c(1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1),
+    two=c(1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0),
+    three=c(1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)),
+    row.names=c('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'))
+
+  u = upsetjs_mock() %>% fromDataFrame(dataFrame, c_type = 'distinctIntersection', order.by='degree')
+  sets = u %>% getSets()
+  expect_equal(length(sets), 3)
+  expect_set(sets[[1]], 'one', 9)
+  expect_set(sets[[2]], 'three', 9)
+  expect_set(sets[[3]], 'two', 5)
+
+  cc = u %>% getCombinations()
+  expect_equal(length(cc), 7)
+  expect_set(cc[[1]], 'one', 2)
+  expect_set(cc[[2]], 'three', 2)
+  expect_set(cc[[3]], 'two', 1)
+  expect_set(cc[[4]], 'one&three', 4)
+  expect_set(cc[[5]], 'one&two', 1)
+  expect_set(cc[[6]], 'three&two', 1)
+  expect_set(cc[[7]], 'one&three&two', 2)
 })
