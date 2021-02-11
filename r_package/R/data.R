@@ -5,7 +5,6 @@
 # Copyright (c) 2021 Samuel Gratzl <sam@sgratzl.com>
 #
 
-
 sortSets = function(sets,
                     order.by = 'cardinality',
                     limit = NULL) {
@@ -384,6 +383,7 @@ extractCombinationsImpl = function(df,
                                    sets,
                                    empty,
                                    order.by,
+                                   limit = NULL,
                                    colors = NULL,
                                    symbol = "&",
                                    store.elems = TRUE) {
@@ -402,7 +402,7 @@ extractCombinationsImpl = function(df,
   dd = aggregate(elems, list(c_name = c_name), function(r) {
     r
   })
-  set_names = str_split(dd$c_name, fixed(symbol))
+  set_names = strsplit(dd$c_name, symbol, fixed = TRUE)
   set_colors = cc(dd$c_name)
 
   combinations = lapply(1:nrow(dd), function(i) {
@@ -483,6 +483,7 @@ fromDataFrame = function(upsetjs,
         sorted_sets,
         TRUE,
         order.by,
+        limit,
         colors,
         store.elems = store.elems
       )
@@ -494,7 +495,7 @@ fromDataFrame = function(upsetjs,
         NULL,
         TRUE,
         'degree',
-        NULL,
+        limit,
         colors,
         store.elems = store.elems
       )
@@ -505,6 +506,7 @@ fromDataFrame = function(upsetjs,
       sorted_sets,
       FALSE,
       order.by,
+      limit,
       colors,
       store.elems = store.elems
     )
@@ -516,7 +518,7 @@ fromDataFrame = function(upsetjs,
       NULL,
       FALSE,
       order.by,
-      NULL,
+      limit,
       colors,
       store.elems = store.elems
     )
