@@ -126,6 +126,55 @@ generateCombinationsImpl = function(sets,
 }
 
 #'
+#' creates a new UpSet set structure
+#' @param name name of the set
+#' @param elems the elements of the set
+#' @param cardinality the cardinality of the set, default to `length(elems)`
+#' @param color the color of the set
+#' @return the set object
+#' @examples
+#' asSet('a', c(1,2,3))
+#'
+#' @export
+asSet = function(name, elems = c(), cardinality = length(elems), color = NULL) {
+  structure(list(
+      name = name,
+      type = 'set',
+      elems = elems,
+      cardinality = cardinality,
+      color = color
+    ),
+    class = "upsetjs_set")
+}
+
+#'
+#' creates a new UpSet set combination structure
+#' @param name name of the set combination
+#' @param elems the elements of the set combination
+#' @param type the set combination type (intersection,distinctIntersection,union,combination)
+#' @param sets the sets this combination is part of
+#' @param cardinality the cardinality of the set, default to `length(elems)`
+#' @param color the color of the set
+#' @return the set object
+#' @examples
+#' asSet('a', c(1,2,3))
+#'
+#' @export
+asCombination = function(name, elems = c(), type = 'intersection', sets = strsplit(name, '&'), cardinality = length(elems), color = NULL) {
+  structure(
+      list(
+        name = name,
+        type = type,
+        elems = elems,
+        color = color,
+        cardinality = cardinality,
+        setNames = sets
+      ),
+      class = "upsetjs_combination"
+    )
+}
+
+#'
 #' generates the sets from a lists object
 #' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
 #' @param value the list input value
@@ -564,6 +613,20 @@ getElements = function(upsetjs) {
 }
 
 #'
+#' set the vector of elements
+#' @param upsetjs an object of class \code{upsetjs}
+#' @param value the vector of elements
+#' @return the object given as first argument
+#' @examples
+#' upsetjs() %>% setElements(c(1,2,3,4,5)) %>% getElements()
+#'
+#' @export
+setElements = function(upsetjs, value) {
+  stopifnot(inherits(upsetjs, 'upsetjs_common'))
+  setProperty(upsetjs, 'elems', value)
+}
+
+#'
 #' extract the vector of sets
 #' @param upsetjs an object of class \code{upsetjs}
 #' @return vector of sets
@@ -577,6 +640,20 @@ getSets = function(upsetjs) {
 }
 
 #'
+#' set the vector of sets
+#' @param upsetjs an object of class \code{upsetjs}
+#' @param value the vector of sets
+#' @return the object given as first argument
+#' @examples
+#' upsetjs() %>% setCombinations(list(asSet('a', c(1,2,3)))) %>% getSets()
+#'
+#' @export
+setSets = function(upsetjs, value) {
+  stopifnot(inherits(upsetjs, 'upsetjs_common'))
+  setProperty(upsetjs, 'sets', value)
+}
+
+#'
 #' extract the vector of combinations
 #' @param upsetjs an object of class \code{upsetjs}
 #' @return vector of sets
@@ -587,6 +664,20 @@ getSets = function(upsetjs) {
 getCombinations = function(upsetjs) {
   stopifnot(inherits(upsetjs, 'upsetjs_common'))
   upsetjs$x$combinations
+}
+
+#'
+#' set the vector of combinations
+#' @param upsetjs an object of class \code{upsetjs}
+#' @param value the vector of combinations
+#' @return the object given as first argument
+#' @examples
+#' upsetjs() %>% setCombinations(list(asCombination('a', c(1,2,3)))) %>% getCombinations()
+#'
+#' @export
+setCombinations = function(upsetjs, value) {
+  stopifnot(inherits(upsetjs, 'upsetjs_common'))
+  setProperty(upsetjs, 'combinations', value)
 }
 
 generateCombinations = function(upsetjs,
