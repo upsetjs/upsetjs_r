@@ -17,7 +17,10 @@ upsetjs_mock = function() {
   r
 }
 
-expect_set = function(s, name, cardinality) {
+expect_set = function(s, name, cardinality, check.length=TRUE) {
   expect_equal(s$name, name)
   expect_equal(s$cardinality, cardinality)
+  if (check.length) {
+    expect_equal(length(s$elems), cardinality)
+  }
 }

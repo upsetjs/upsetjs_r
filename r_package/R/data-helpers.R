@@ -75,7 +75,7 @@ generateCombinationsImpl = function(sets,
   cc = colorLookup(colors)
 
   mergeUnion = function(a, b) {
-    ab_sets = sort(union(a$setNames, b$setNames))
+    ab_sets = union(a$setNames, b$setNames)
     ab_name = paste(ab_sets, collapse = symbol)
     ab_elems = c()
     if (a$cardinality == 0) {
@@ -89,7 +89,7 @@ generateCombinationsImpl = function(sets,
   }
 
   mergeIntersect = function(a, b) {
-    ab_sets = sort(union(a$setNames, b$setNames))
+    ab_sets = union(a$setNames, b$setNames)
     ab_name = paste(ab_sets, collapse = symbol)
     ab_elems = c()
     if (a$cardinality > 0 && b$cardinality > 0) {
@@ -103,6 +103,9 @@ generateCombinationsImpl = function(sets,
   push_combination = function(s) {
     if (s$degree < min || (!is.null(max) && s$degree > max) || (s$cardinality == 0 && !empty)) {
       return()
+    }
+    if (!store.elems) {
+      s <<- asCombination(s$name, c(), 'distinctIntersection', s$setNames, cardinality=s$cardinality, color=s$color)
     }
     if (!distinct || s$degree == 1) {
       combinations <<- c(combinations, list(s))
@@ -125,7 +128,7 @@ generateCombinationsImpl = function(sets,
       return()
     }
 
-    sDistinct = asCombination(s$name, dElems, 'distinctIntersection', s$setNames, color=s$color)
+    sDistinct = asCombination(s$name, if (store.elems) { dElems } else { c() }, 'distinctIntersection', s$setNames, cardinality=length(dElems), color=s$color)
     if (sDistinct$cardinality > 0 || empty) {
       combinations <<- c(combinations, list(sDistinct))
     }
@@ -185,8 +188,14 @@ extractCombinationsImpl = function(df,
 
   elems = rownames(df)
   df_sets = df[, all_set_names]
-  c_name = apply(df_sets, 1, function(r) paste(all_set_names[as.logical(r)], collapse=symbol))
-
+  c_name = apply(df_sets, 1, function(r) {
+    nn = all_set_names[as.logical(r)]
+    if (length(nn) == 1) {
+      nn
+    } else {
+      paste(nn, collapse=symbol)
+    }
+  })
   dd = aggregate(elems, list(c_name = c_name), function(r) {
     r
   })
@@ -194,15 +203,15 @@ extractCombinationsImpl = function(df,
   set_colors = cc(dd$c_name)
 
   combinations = lapply(1:nrow(dd), function(i) {
-    elems = as.character(unlist(dd[i, 'x']))
+    elems = as.character(dd[i, 'x'][[1]])
     structure(
       list(
         name = dd[i, 'c_name'],
         color = set_colors[i],
         type = 'distinctIntersection',
-        elems = elems,
+        elems = if (store.elems) elems else c(),
         cardinality = length(elems),
-        setNames = unlist(set_names[i])
+        setNames = set_names[i][[1]]
       ),
       class = "upsetjs_combination"
     )

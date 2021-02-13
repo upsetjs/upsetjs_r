@@ -111,33 +111,29 @@ fromList = function(upsetjs,
   }
 
   sorted_sets = sortSets(sets, order.by = order.by, limit = limit)
-  gen_sets = if (is.null(limit))
-    sets
-  else
-    sorted_sets
 
   gen = if (!is.null(c_type) && c_type == "none") {
     list() 
   } else if (isVennDiagram(upsetjs) || isKarnaughMap(upsetjs)) {
     generateCombinationsImpl(
-      gen_sets,
+      sorted_sets,
       ifelse(is.null(c_type), 'distinctIntersection', c_type),
       0,
       NULL,
       TRUE,
       'degree',
-      NULL,
+      limit,
       colors
     )
   } else {
     generateCombinationsImpl(
-      gen_sets,
+      sorted_sets,
       ifelse(is.null(c_type), 'intersection', c_type),
       0,
       NULL,
       FALSE,
       order.by,
-      NULL,
+      limit,
       colors
     )
   }
@@ -326,14 +322,15 @@ fromDataFrame = function(upsetjs,
 
   cc = colorLookup(colors)
 
-  sorted_sets = extractSetsFromDataFrame(df, attributes, order.by, limit, colors, store.elems = store.elems)
+  gen_type = ifelse(!is.null(c_type), c_type, ifelse(isVennDiagram(upsetjs) || isKarnaughMap(upsetjs), 'distinctIntersection', 'intersection'))
+  sorted_sets = extractSetsFromDataFrame(df, attributes, order.by, limit, colors, store.elems = store.elems || gen_type != 'distinctIntersection')
 
   elems = rownames(df)
   
   gen = if (!is.null(c_type) && c_type == "none") {
     list() 
   } else if (isVennDiagram(upsetjs) || isKarnaughMap(upsetjs)) {
-    if (is.null(c_type) || c_type == 'distinctIntersection') {
+    if (gen_type == 'distinctIntersection') {
       extractCombinationsImpl(
         df,
         sorted_sets,
@@ -346,7 +343,7 @@ fromDataFrame = function(upsetjs,
     } else {
       generateCombinationsImpl(
         sorted_sets,
-        ifelse(is.null(c_type), 'distinctIntersection', c_type),
+        gen_type,
         0,
         NULL,
         TRUE,
@@ -356,7 +353,7 @@ fromDataFrame = function(upsetjs,
         store.elems = store.elems
       )
     }
-  } else if (!is.null(c_type) && c_type == 'distinctIntersection') {
+  } else if (gen_type == 'distinctIntersection') {
     extractCombinationsImpl(
       df,
       sorted_sets,
@@ -369,7 +366,7 @@ fromDataFrame = function(upsetjs,
   } else {
     generateCombinationsImpl(
       sorted_sets,
-      ifelse(is.null(c_type), 'intersection', c_type),
+      gen_type,
       0,
       NULL,
       FALSE,
@@ -379,6 +376,14 @@ fromDataFrame = function(upsetjs,
       store.elems = store.elems
     )
   }
+
+  if (!store.elems && gen_type != 'distinctIntersection') {
+    # delete
+    for(i in 1:length(sorted_sets)) {
+      sorted_sets[[i]]$elems = c()
+    }
+  }
+
   props = list(
     sets = sorted_sets,
     combinations = gen,
