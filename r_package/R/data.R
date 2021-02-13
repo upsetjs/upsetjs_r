@@ -95,14 +95,7 @@ fromList = function(upsetjs,
   cc = colorLookup(colors)
   toSet = function(key, value) {
     elems <<- unique(c(elems, value))
-    structure(list(
-      name = key,
-      type = 'set',
-      elems = value,
-      cardinality = length(value),
-      color = cc(key)
-    ),
-    class = "upsetjs_set")
+    asSet(key, value, color=cc(key))
   }
   sets = mapply(toSet,
                 key = names(value),
@@ -194,17 +187,7 @@ fromExpression = function(upsetjs,
   raw_combinations = value
 
   toCombination = function(key, value, color) {
-    structure(
-      list(
-        name = key,
-        type = type,
-        elems = c(),
-        color = cc(key),
-        cardinality = value,
-        setNames = unlist(strsplit(key, symbol))
-      ),
-      class = "upsetjs_combination"
-    )
+    asCombination(key, c(), type, sets = unlist(strsplit(key, symbol)), cardinality = value, color=cc(key))
   }
   combinations = mapply(
     toCombination,
@@ -221,14 +204,7 @@ fromExpression = function(upsetjs,
     for (s in c$setNames) {
       if (!(s %in% defined_sets)) {
         defined_sets = c(defined_sets, s)
-        sets[[s]] = structure(list(
-          name = s,
-          type = "set",
-          color = cc(s),
-          elems = c(),
-          cardinality = 0
-        ),
-        class = "upsetjs_set")
+        sets[[s]] = asSet(s, c(), color=cc(s))
       }
       # determine base set based on type and value
       set = sets[[s]]
@@ -288,14 +264,7 @@ extractSetsFromDataFrame = function(df,
   elems = rownames(df)
   toSet = function(key) {
     sub = elems[df[[key]] == TRUE]
-    structure(list(
-      name = key,
-      type = "set",
-      color = cc(key),
-      cardinality = length(sub),
-      elems = if(store.elems) { sub } else { c() }
-    ),
-    class = "upsetjs_set")
+    asSet(key, ifelse(store.elems, sub, c()), cardinality=length(sub), color=cc(key))
   }
 
   set_names = setdiff(colnames(df), if (is.character(attributes))
@@ -512,6 +481,43 @@ getCombinations = function(upsetjs) {
 setCombinations = function(upsetjs, value) {
   stopifnot(inherits(upsetjs, 'upsetjs_common'))
   setProperty(upsetjs, 'combinations', value)
+}
+
+generateCombinations = function(upsetjs,
+                                c_type,
+                                min,
+                                max,
+                                empty,
+                                order.by,
+                                limit,
+                                colors = NULL,
+                                symbol = '&') {
+  checkUpSetArgument(upsetjs)
+  stopifnot(is.numeric(min), length(min) == 1)
+  stopifnottype('max', max)
+  stopifnot(is.logical(empty), length(empty) == 1)
+  stopifnot(is.character(order.by), length(order.by) >= 1)
+  stopifnot(is.null(limit) ||
+              (is.numeric(limit) && length(limit) == 1))
+  stopifnot(is.null(colors) || is.list(colors))
+  stopifnot(c_type == "intersection" ||
+              c_type == "union" || c_type == "distinctIntersection")
+
+  if (inherits(upsetjs, 'upsetjs_common')) {
+    sets = upsetjs$x$sets
+    gen = generateCombinationsImpl(sets, c_type, min, max, empty, order.by, limit, colors, symbol)
+  } else {
+    # proxy
+    gen = cleanNull(list(
+      type = c_type,
+      min = min,
+      max = max,
+      empty = empty,
+      order = order.by,
+      limit = limit
+    ))
+  }
+  setProperty(upsetjs, 'combinations', gen)
 }
 
 #'
