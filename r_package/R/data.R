@@ -37,7 +37,7 @@ asSet = function(name, elems = c(), cardinality = length(elems), color = NULL) {
 #' @param color the color of the set
 #' @return the set object
 #' @examples
-#' asSet('a', c(1,2,3))
+#' asCombination('a', c(1,2,3))
 #'
 #' @export
 asCombination = function(name, elems = c(), type = 'intersection', sets = strsplit(name, '&'), cardinality = length(elems), color = NULL) {
@@ -48,7 +48,8 @@ asCombination = function(name, elems = c(), type = 'intersection', sets = strspl
         elems = elems,
         color = color,
         cardinality = cardinality,
-        setNames = sets
+        setNames = sets,
+        degree = length(sets)
       ),
       class = "upsetjs_combination"
     )
@@ -262,9 +263,11 @@ extractSetsFromDataFrame = function(df,
   cc = colorLookup(colors)
 
   elems = rownames(df)
+
   toSet = function(key) {
     sub = elems[df[[key]] == TRUE]
-    asSet(key, ifelse(store.elems, sub, c()), cardinality=length(sub), color=cc(key))
+    x = if(store.elems) sub else c()
+     asSet(key, x, cardinality=length(sub), color=cc(key))
   }
 
   set_names = setdiff(colnames(df), if (is.character(attributes))

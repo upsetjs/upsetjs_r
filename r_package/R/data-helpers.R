@@ -71,61 +71,103 @@ generateCombinationsImpl = function(sets,
                                     symbol = "&",
                                     store.elems = TRUE) {
   combinations = list()
-  set_f = if (c_type == "union")
-    union
-  else
-    intersect
   distinct = (c_type == 'distinctIntersection')
-  lsets = length(sets)
-  all_indices = 1:lsets
   cc = colorLookup(colors)
-  max_sets = ifelse(is.null(max), lsets, max)
 
-  for (l in min:max_sets) {
-    combos = combn(all_indices, l, simplify = FALSE)
-    for (combo in combos) {
-      indices = unlist(combo)
-      set_names = sapply(indices, function(i)
-        sets[[i]]$name)
-      if (is.list(set_names)) {
-        set_names = unlist(set_names)
-      }
-      if (length(indices) == 0) {
-        elems = c()
-      } else {
-        elems = sets[[indices[1]]]$elems
-        for (index in indices) {
-          elems = set_f(elems, sets[[index]]$elems)
+  mergeUnion = function(a, b) {
+    ab_sets = sort(union(a$setNames, b$setNames))
+    ab_name = paste(ab_sets, collapse = symbol)
+    ab_elems = c()
+    if (a$cardinality == 0) {
+      ab_elems = b$elems
+    } else if (b$cardinality == 0) {
+      ab_elems = a$elems
+    } else {
+      ab_elems = union(a$elems, b$elems)
+    }
+    asCombination(ab_name, ab_elems, 'union', ab_sets, color=cc(ab_name))
+  }
+
+  mergeIntersect = function(a, b) {
+    ab_sets = sort(union(a$setNames, b$setNames))
+    ab_name = paste(ab_sets, collapse = symbol)
+    ab_elems = c()
+    if (a$cardinality > 0 && b$cardinality > 0) {
+      ab_elems = intersect(a$elems, b$elems)
+    }
+    asCombination(ab_name, ab_elems, 'intersect', ab_sets, color=cc(ab_name))
+  }
+
+  calc = ifelse(c_type == "union", mergeUnion, mergeIntersect)
+
+  push_combination = function(s) {
+    if (s$degree < min || (!is.null(max) && s$degree > max) || (s$cardinality == 0 && !empty)) {
+      return()
+    }
+    if (!distinct || s$degree == 1) {
+      combinations <<- c(combinations, list(s))
+      return()
+    }
+    otherSets = Filter(function(ss) {
+      !(ss$name %in% s$setNames)
+    }, sets)
+    dElems = Filter(function(e) {
+      for(o in otherSets) {
+        if (e %in% o$elems) {
+          return(FALSE)
         }
       }
-      if (distinct) {
-        not_indices = setdiff(all_indices, indices)
-        for (index in not_indices) {
-          elems = setdiff(elems, sets[[index]]$elems)
+      TRUE
+     }, s$elems)
+
+    if (s$cardinality == length(dElems)) {
+      combinations <<- c(combinations, list(s))
+      return()
+    }
+
+    sDistinct = asCombination(s$name, dElems, 'distinctIntersection', s$setNames, color=s$color)
+    if (sDistinct$cardinality > 0 || empty) {
+      combinations <<- c(combinations, list(sDistinct))
+    }
+  }
+
+  generateLevel = function(arr, degree) {
+    if (!is.null(max) && degree > max) {
+      return()
+    }
+    l = length(arr)
+    for(i in 1:l) {
+      a = arr[[i]]
+      sub = list()
+      if (i < l) {
+        for(j in (i+1):l) {
+          b = arr[[j]]
+          ab = calc(a,b)
+          push_combination(ab)
+          if (c_type == 'union' || ab$cardinality > 0 || empty) {
+            sub[[length(sub) + 1]] = ab
+          }
         }
       }
-      if (empty || length(elems) > 0) {
-        c_name = paste(set_names, collapse = symbol)
-        combination = structure(
-          list(
-            name = c_name,
-            color = cc(c_name),
-            type = c_type,
-            elems = ifelse(store.elems, elems, c()),
-            cardinality = length(elems),
-            setNames = set_names
-          ),
-          class = "upsetjs_combination"
-        )
-        combinations = c(combinations, list(combination))
+      if (length(sub) > 1) {
+        generateLevel(sub, degree + 1)
       }
     }
   }
+
+  degree1 = lapply(1:length(sets), function(i) {
+    s = sets[[i]]
+    s_c = asCombination(s$name, s$elems, c_type, c(s$name), s$cardinality, s$color)
+    push_combination(s_c)
+    s_c
+  })
+  generateLevel(degree1, 2)
+
   names(combinations) = NULL
   sortSets(combinations, order.by, limit)
 }
 
-extractCombinationsImpl = function(df, 
+extractCombinationsImpl = function(df,
                                    sets,
                                    empty,
                                    order.by,
