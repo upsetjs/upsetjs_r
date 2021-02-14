@@ -100,7 +100,7 @@ requirements:
 npm i -g yarn
 yarn set version berry
 yarn install
-yarn pnpify --sdk
+yarn pnpify --sdk vscode
 ```
 
 ### Building
@@ -145,9 +145,8 @@ devtools::build_site("r_package)
 use `release-it`
 
 ```sh
-yarn release:major
-yarn release:minor
-yarn release:patch
+yarn release
+Rscript -e "devtools::release('r_package')"
 ```
 
 ## Privacy Policy
