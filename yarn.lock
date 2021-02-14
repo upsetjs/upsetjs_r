@@ -1782,10 +1782,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@upsetjs/bundle@npm:~1.8.0":
-  version: 1.8.0
-  resolution: "@upsetjs/bundle@npm:1.8.0"
-  checksum: 2deecf42f36d362a29f2994bf7e87351f4d4be1747b1379d459c8c192cc7c7fd68a4b16e32a54f7566f46ba3d2215d62202cb3daa91fecae96c8b768298eb5ba
+"@upsetjs/bundle@npm:~1.9.1":
+  version: 1.9.1
+  resolution: "@upsetjs/bundle@npm:1.9.1"
+  checksum: 8847f32b05d1da9145b7a20293394e27e7a1ae319571320d911e103da3f3dc84a23e5d176d4f70ad9cee1ea4e33bc35f23e7ae4945c5e83282a86c141e13ea52
   languageName: node
   linkType: hard
 
@@ -1797,7 +1797,7 @@ __metadata:
     "@babel/preset-env": ^7.12.16
     "@typescript-eslint/eslint-plugin": ^4.15.0
     "@typescript-eslint/parser": ^4.15.0
-    "@upsetjs/bundle": ~1.8.0
+    "@upsetjs/bundle": ~1.9.1
     "@upsetjs/venn.js": ^1.4.1
     "@yarnpkg/pnpify": ^2.4.0
     babel-loader: ^8.2.2
