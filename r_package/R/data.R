@@ -286,7 +286,9 @@ extractSetsFromDataFrame = function(df,
 #' @param shared.mode whether on 'hover' or 'click' (default) is synced
 #' @param colors the optional list with set name to color
 #' @param c_type the combination type to use
+#' @param store.elems whether to store the set elements within the structures (set to false for big data frames)
 #' @return the object given as first argument
+#' @importFrom stats aggregate
 #' @examples
 #' df <- as.data.frame(list(a=c(1, 1, 1),b=c(0, 1, 1)),row.names=c('a', 'b', 'c'))
 #' upsetjs() %>% fromDataFrame(df)
