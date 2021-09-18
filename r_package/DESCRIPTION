@@ -17,12 +17,14 @@ Imports:
   htmlwidgets,
   magrittr
 Suggests:
-    knitr,
-    crosstalk,
-    rmarkdown,
-    formatR,
-    tibble,
-    testthat
+  knitr,
+  crosstalk,
+  rmarkdown,
+  formatR,
+  tibble,
+  testthat,
+  styler,
+  lintr
 LazyData: true
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
