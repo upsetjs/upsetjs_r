@@ -25,7 +25,7 @@
     "prettier": "yarn run prettier:impl --check",
     "eslint": "eslint src --ext .ts,.tsx",
     "eslint:fix": "yarn run eslint --fix",
-    "clean": "rimraf r_package/inst/htmlwidgets/upsetjs.js*",
+    "clean": "rimraf \"r_package/inst/htmlwidgets/upsetjs.js*\"",
     "build:dev": "webpack-cli --mode development --devtool source-map",
     "build": "yarn run clean && webpack-cli --mode production",
     "test:r": "Rscript -e 'devtools::test(\"r_package\")'",
