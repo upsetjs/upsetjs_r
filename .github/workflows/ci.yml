@@ -54,7 +54,7 @@ jobs:
 
       - name: Style / Format
         shell: Rscript {0}
-        run: styler::style_package('r_package', dry="fail")
+        run: styler::style_pkg('r_package', dry="fail")
 
       - name: Lint
         shell: Rscript {0}
