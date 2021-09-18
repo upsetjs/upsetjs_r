@@ -208,12 +208,8 @@ HTMLWidgets.widget({
       }
     }
 
-    let bakSelection:
-      | ISetLike<IElem>
-      | null
-      | undefined
-      | ReadonlyArray<IElem>
-      | ((s: ISetLike<string>) => number) = null;
+    let bakSelection: ISetLike<IElem> | null | undefined | ReadonlyArray<IElem> | ((s: ISetLike<string>) => number) =
+      null;
 
     const onHover = (set: ISetLike<IElem> | null) => {
       if (HTMLWidgets.shinyMode) {
