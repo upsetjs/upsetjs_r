@@ -5,7 +5,7 @@
 # Copyright (c) 2021 Samuel Gratzl <sam@sgratzl.com>
 #
 
-toyset_2 = as.data.frame(read.delim(
+toyset_2 <- as.data.frame(read.delim(
   file = testthat::test_path("data", "toyset_2.tsv.gz"),
   sep = "\t"
 ))
