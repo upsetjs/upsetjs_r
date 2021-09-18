@@ -37,9 +37,9 @@ chartLayout <- function(upsetjs,
   stopifnot(is.null(width.ratios) ||
     (is.numeric(width.ratios) &&
       length(width.ratios) == 3))
-  stopifnottype("padding", padding)
-  stopifnottype("bar.padding", bar.padding)
-  stopifnottype("dot.padding", dot.padding)
+  stopIfNotType("padding", padding)
+  stopIfNotType("bar.padding", bar.padding)
+  stopIfNotType("dot.padding", dot.padding)
   stopifnot(
     is.null(numerical.scale) ||
       (numerical.scale == "linear" || numerical.scale == "log")
@@ -72,7 +72,7 @@ chartLayout <- function(upsetjs,
 chartVennLayout <- function(upsetjs,
                             padding = NULL) {
   checkVennDiagramArgument(upsetjs)
-  stopifnottype("padding", padding)
+  stopIfNotType("padding", padding)
 
   props <- list(padding = padding)
   setProperties(upsetjs, props, clean = TRUE)
@@ -95,8 +95,8 @@ chartKarnaughMapLayout <- function(upsetjs,
                                    bar.padding = NULL,
                                    numerical.scale = NULL) {
   checkKarnaughMapArgument(upsetjs)
-  stopifnottype("padding", padding)
-  stopifnottype("bar.padding", bar.padding)
+  stopIfNotType("padding", padding)
+  stopIfNotType("bar.padding", bar.padding)
   stopifnot(
     is.null(numerical.scale) ||
       (numerical.scale == "linear" || numerical.scale == "log")
@@ -135,21 +135,21 @@ chartLabels <- function(upsetjs,
                         set.name.axis.offset = NULL,
                         bar.label.offset = NULL) {
   checkUpSetArgument(upsetjs)
-  stopifnottype("title", title, is.character, "string")
-  stopifnottype("description", description, is.character, "string")
-  stopifnottype(
+  stopIfNotType("title", title, is.character, "string")
+  stopIfNotType("description", description, is.character, "string")
+  stopIfNotType(
     "combination.name",
     combination.name,
     is.character,
     "string"
   )
-  stopifnottype(
+  stopIfNotType(
     "combination.name.axis.offset",
     combination.name.axis.offset
   )
-  stopifnottype("set.name", set.name, is.character, "string")
-  stopifnottype("set.name.axis.offset", set.name.axis.offset)
-  stopifnottype("bar.label.offset", bar.label.offset)
+  stopIfNotType("set.name", set.name, is.character, "string")
+  stopIfNotType("set.name.axis.offset", set.name.axis.offset)
+  stopIfNotType("bar.label.offset", bar.label.offset)
 
   props <- list(
     title = title,
@@ -178,8 +178,8 @@ chartVennLabels <- function(upsetjs,
                             title = NULL,
                             description = NULL) {
   checkVennDiagramArgument(upsetjs)
-  stopifnottype("title", title, is.character, "string")
-  stopifnottype("description", description, is.character, "string")
+  stopIfNotType("title", title, is.character, "string")
+  stopIfNotType("description", description, is.character, "string")
 
   props <- list(
     title = title,
@@ -203,8 +203,8 @@ chartKarnaughMapLabels <- function(upsetjs,
                                    title = NULL,
                                    description = NULL) {
   checkKarnaughMapArgument(upsetjs)
-  stopifnottype("title", title, is.character, "string")
-  stopifnottype("description", description, is.character, "string")
+  stopIfNotType("title", title, is.character, "string")
+  stopIfNotType("description", description, is.character, "string")
 
   props <- list(
     title = title,
@@ -244,16 +244,16 @@ chartFontSizes <- function(upsetjs,
                            export.label = NULL,
                            value.label = NULL) {
   checkUpSetCommonArgument(upsetjs)
-  stopifnottype("font.family", font.family, is.character, "string")
-  stopifnottype("chart.label", chart.label, is.character, "string")
-  stopifnottype("set.label", set.label, is.character, "string")
-  stopifnottype("axis.tick", axis.tick, is.character, "string")
-  stopifnottype("bar.label", bar.label, is.character, "string")
-  stopifnottype("legend", legend, is.character, "string")
-  stopifnottype("title", title, is.character, "string")
-  stopifnottype("description", description, is.character, "string")
-  stopifnottype("export.label", export.label, is.character, "string")
-  stopifnottype("value.label", value.label, is.character, "string")
+  stopIfNotType("font.family", font.family, is.character, "string")
+  stopIfNotType("chart.label", chart.label, is.character, "string")
+  stopIfNotType("set.label", set.label, is.character, "string")
+  stopIfNotType("axis.tick", axis.tick, is.character, "string")
+  stopIfNotType("bar.label", bar.label, is.character, "string")
+  stopIfNotType("legend", legend, is.character, "string")
+  stopIfNotType("title", title, is.character, "string")
+  stopIfNotType("description", description, is.character, "string")
+  stopIfNotType("export.label", export.label, is.character, "string")
+  stopIfNotType("value.label", value.label, is.character, "string")
 
   font.sizes <- list(
     chartLabel = chart.label,
@@ -291,9 +291,9 @@ chartStyleFlags <- function(upsetjs,
                             export.buttons = NULL,
                             class.name = NULL) {
   checkUpSetCommonArgument(upsetjs)
-  stopifnottype("export.buttons", export.buttons, is.logical, "boolean")
-  stopifnottype("class.name", class.name, is.character, "string")
-  stopifnottype("id", id, is.character, "string")
+  stopIfNotType("export.buttons", export.buttons, is.logical, "boolean")
+  stopIfNotType("class.name", class.name, is.character, "string")
+  stopIfNotType("id", id, is.character, "string")
 
   props <- list(
     exportButtons = export.buttons,
@@ -343,43 +343,43 @@ chartTheme <- function(upsetjs,
   stopifnot(is.null(theme) ||
     theme == "light" ||
     theme == "dark" || theme == "vega")
-  stopifnottype("selection.color", selection.color, is.character, "string")
-  stopifnottype(
+  stopIfNotType("selection.color", selection.color, is.character, "string")
+  stopIfNotType(
     "alternating.color",
     alternating.color,
     is.character,
     "string"
   )
-  stopifnottype("color", color, is.character, "string")
-  stopifnottype(
+  stopIfNotType("color", color, is.character, "string")
+  stopIfNotType(
     "has.selection.color",
     has.selection.color,
     is.character,
     "string"
   )
-  stopifnottype("text.color", text.color, is.character, "string")
-  stopifnottype(
+  stopIfNotType("text.color", text.color, is.character, "string")
+  stopIfNotType(
     "hover.hint.color",
     hover.hint.color,
     is.character,
     "string"
   )
-  stopifnottype(
+  stopIfNotType(
     "not.member.color",
     not.member.color,
     is.character,
     "string"
   )
-  stopifnottype(
+  stopIfNotType(
     "value.text.color",
     value.text.color,
     is.character,
     "string"
   )
-  stopifnottype("stroke.color", stroke.color, is.character, "string")
-  stopifnottype("opacity", opacity)
-  stopifnottype("has.selection.opacity", has.selection.opacity)
-  stopifnottype("filled", filled, is.logical, "logical")
+  stopIfNotType("stroke.color", stroke.color, is.character, "string")
+  stopIfNotType("opacity", opacity)
+  stopIfNotType("has.selection.opacity", has.selection.opacity)
+  stopIfNotType("filled", filled, is.logical, "logical")
 
   props <- list(
     theme = theme,

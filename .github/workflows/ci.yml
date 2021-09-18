@@ -59,6 +59,7 @@ jobs:
       - name: Lint
         shell: Rscript {0}
         run: |
+          devtools::load_all('r_package')
           lintr::lint_pkg('r_package')
 
       - name: Check

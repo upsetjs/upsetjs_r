@@ -33,7 +33,6 @@ setAttributes <- function(upsetjs, attrs = list()) {
 
   toDescription <- function(col, colname) {
     clazz <- class(col)
-    clean_name <- cleanAttrName(colname)
     if (clazz == "numeric") {
       list(
         type = "number",

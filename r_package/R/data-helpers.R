@@ -8,7 +8,7 @@
 sortSets <- function(sets,
                      order.by = "cardinality",
                      limit = NULL) {
-  set_attr <- function(order.by.attr) {
+  setAttr <- function(order.by.attr) {
     if (order.by.attr == "cardinality") {
       sapply(sets, function(x) {
         if (length(x$elems) == 0) {
@@ -34,7 +34,7 @@ sortSets <- function(sets,
     order.by <- c("degree", "name")
   }
   if (length(sets) > 1) {
-    values <- lapply(order.by, set_attr)
+    values <- lapply(order.by, setAttr)
     o <- do.call(order, values)
     r <- sets[o]
   } else {
@@ -53,9 +53,9 @@ colorLookup <- function(colors = NULL) {
       NULL
     }
   } else {
-    color_names <- names(colors)
+    colorNames <- names(colors)
     function(c) {
-      if (c %in% color_names) {
+      if (c %in% colorNames) {
         colors[[c]]
       } else {
         NULL
@@ -79,32 +79,32 @@ generateCombinationsImpl <- function(sets,
   cc <- colorLookup(colors)
 
   mergeUnion <- function(a, b) {
-    ab_sets <- union(a$setNames, b$setNames)
-    ab_name <- paste(ab_sets, collapse = symbol)
-    ab_elems <- c()
+    abSets <- union(a$setNames, b$setNames)
+    abName <- paste(abSets, collapse = symbol)
+    abElems <- c()
     if (a$cardinality == 0) {
-      ab_elems <- b$elems
+      abElems <- b$elems
     } else if (b$cardinality == 0) {
-      ab_elems <- a$elems
+      abElems <- a$elems
     } else {
-      ab_elems <- union(a$elems, b$elems)
+      abElems <- union(a$elems, b$elems)
     }
-    asCombination(ab_name, ab_elems, "union", ab_sets, color = cc(ab_name))
+    asCombination(abName, abElems, "union", abSets, color = cc(abName))
   }
 
   mergeIntersect <- function(a, b) {
-    ab_sets <- union(a$setNames, b$setNames)
-    ab_name <- paste(ab_sets, collapse = symbol)
-    ab_elems <- c()
+    abSets <- union(a$setNames, b$setNames)
+    abName <- paste(abSets, collapse = symbol)
+    abElems <- c()
     if (a$cardinality > 0 && b$cardinality > 0) {
-      ab_elems <- intersect(a$elems, b$elems)
+      abElems <- intersect(a$elems, b$elems)
     }
-    asCombination(ab_name, ab_elems, "intersect", ab_sets, color = cc(ab_name))
+    asCombination(abName, abElems, "intersect", abSets, color = cc(abName))
   }
 
   calc <- ifelse(c_type == "union", mergeUnion, mergeIntersect)
 
-  push_combination <- function(s) {
+  pushCombination <- function(s) {
     if (s$degree < min || (!is.null(max) && s$degree > max) || (s$cardinality == 0 && !empty)) {
       return()
     }
@@ -154,7 +154,7 @@ generateCombinationsImpl <- function(sets,
         for (j in (i + 1):l) {
           b <- arr[[j]]
           ab <- calc(a, b)
-          push_combination(ab)
+          pushCombination(ab)
           if (c_type == "union" || ab$cardinality > 0 || empty) {
             sub[[length(sub) + 1]] <- ab
           }
@@ -166,11 +166,11 @@ generateCombinationsImpl <- function(sets,
     }
   }
 
-  degree1 <- lapply(1:length(sets), function(i) {
+  degree1 <- lapply(seq_along(sets), function(i) {
     s <- sets[[i]]
-    s_c <- asCombination(s$name, s$elems, c_type, c(s$name), s$cardinality, s$color)
-    push_combination(s_c)
-    s_c
+    sC <- asCombination(s$name, s$elems, c_type, c(s$name), s$cardinality, s$color)
+    pushCombination(sC)
+    sC
   })
   generateLevel(degree1, 2)
 
@@ -186,40 +186,38 @@ extractCombinationsImpl <- function(df,
                                     colors = NULL,
                                     symbol = "&",
                                     store.elems = TRUE) {
-  combination_names <- c()
-  lookup <- new.env(hash = TRUE, parent = emptyenv())
-  all_set_names <- sapply(1:length(sets), function(i) sets[[i]]$name)
-  if (is.list(all_set_names)) {
-    all_set_names <- unlist(all_set_names)
+  allSetNames <- sapply(seq_along(sets), function(i) sets[[i]]$name)
+  if (is.list(allSetNames)) {
+    allSetNames <- unlist(allSetNames)
   }
   cc <- colorLookup(colors)
 
   elems <- rownames(df)
-  df_sets <- df[, all_set_names]
-  c_name <- apply(df_sets, 1, function(r) {
-    nn <- all_set_names[as.logical(r)]
+  dfSets <- df[, allSetNames]
+  cName <- apply(dfSets, 1, function(r) {
+    nn <- allSetNames[as.logical(r)]
     if (length(nn) == 1) {
       nn
     } else {
       paste(nn, collapse = symbol)
     }
   })
-  dd <- aggregate(elems, list(c_name = c_name), function(r) {
+  dd <- aggregate(elems, list(c_name = cName), function(r) {
     r
   })
-  set_names <- strsplit(dd$c_name, symbol, fixed = TRUE)
-  set_colors <- cc(dd$c_name)
+  setNames <- strsplit(dd$c_name, symbol, fixed = TRUE)
+  setColors <- cc(dd$c_name)
 
-  combinations <- lapply(1:nrow(dd), function(i) {
+  combinations <- lapply(seq_len(nrow(dd)), function(i) {
     elems <- as.character(dd[i, "x"][[1]])
     structure(
       list(
         name = dd[i, "c_name"],
-        color = set_colors[i],
+        color = setColors[i],
         type = "distinctIntersection",
         elems = if (store.elems) elems else c(),
         cardinality = length(elems),
-        setNames = set_names[i][[1]]
+        setNames = setNames[i][[1]],
       ),
       class = "upsetjs_combination"
     )

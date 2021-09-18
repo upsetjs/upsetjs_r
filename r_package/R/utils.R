@@ -45,7 +45,7 @@ isKarnaughMap <- function(upsetjs) {
     inherits(upsetjs, "upsetjs_kmap_proxy")
 }
 
-stopifnottype <- function(name,
+stopIfNotType <- function(name,
                           value,
                           type_f = is.numeric,
                           type_s = "number") {
@@ -54,9 +54,9 @@ stopifnottype <- function(name,
   }
 }
 
-sendMessage <- function(upsetjs_proxy, props, ...) {
-  session <- upsetjs_proxy$session
-  id <- upsetjs_proxy$id
+sendMessage <- function(upsetjsProxy, props, ...) {
+  session <- upsetjsProxy$session
+  id <- upsetjsProxy$id
 
   msg <- structure(list(
     id = id,
@@ -68,7 +68,7 @@ sendMessage <- function(upsetjs_proxy, props, ...) {
 
   session$sendCustomMessage("upsetjs-update", msg)
 
-  upsetjs_proxy
+  upsetjsProxy
 }
 
 enableCrosstalk <- function(upsetjs, shared, mode) {

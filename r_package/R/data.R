@@ -39,7 +39,8 @@ asSet <- function(name, elems = c(), cardinality = length(elems), color = NULL) 
 #' @examples
 #' asCombination("a", c(1, 2, 3))
 #' @export
-asCombination <- function(name, elems = c(), type = "intersection", sets = strsplit(name, "&"), cardinality = length(elems), color = NULL) {
+asCombination <- function(name, elems = c(), type = "intersection",
+                          sets = strsplit(name, "&"), cardinality = length(elems), color = NULL) {
   structure(
     list(
       name = name,
@@ -109,13 +110,13 @@ fromList <- function(upsetjs,
     upsetjs <- enableCrosstalk(upsetjs, shared, mode = shared.mode)
   }
 
-  sorted_sets <- sortSets(sets, order.by = order.by, limit = limit)
+  sortedSets <- sortSets(sets, order.by = order.by, limit = limit)
 
   gen <- if (!is.null(c_type) && c_type == "none") {
     list()
   } else if (isVennDiagram(upsetjs) || isKarnaughMap(upsetjs)) {
     generateCombinationsImpl(
-      sorted_sets,
+      sortedSets,
       ifelse(is.null(c_type), "distinctIntersection", c_type),
       0,
       NULL,
@@ -126,7 +127,7 @@ fromList <- function(upsetjs,
     )
   } else {
     generateCombinationsImpl(
-      sorted_sets,
+      sortedSets,
       ifelse(is.null(c_type), "intersection", c_type),
       0,
       NULL,
@@ -139,7 +140,7 @@ fromList <- function(upsetjs,
   setProperties(
     upsetjs,
     list(
-      sets = sorted_sets,
+      sets = sortedSets,
       combinations = gen,
       elems = elems,
       expressionData = FALSE,
@@ -179,26 +180,26 @@ fromExpression <- function(upsetjs,
     length(unlist(strsplit(x, symbol)))
   })
 
-  raw_combinations <- value
+  rawCombinations <- value
 
   toCombination <- function(key, value, color) {
     asCombination(key, c(), type, sets = unlist(strsplit(key, symbol)), cardinality = value, color = cc(key))
   }
   combinations <- mapply(
     toCombination,
-    key = names(raw_combinations),
-    value = raw_combinations,
+    key = names(rawCombinations),
+    value = rawCombinations,
     SIMPLIFY = FALSE
   )
   names(combinations) <- NULL
   combinations <- sortSets(combinations, order.by = order.by)
 
   sets <- list()
-  defined_sets <- c()
+  definedSets <- c()
   for (c in combinations) {
     for (s in c$setNames) {
-      if (!(s %in% defined_sets)) {
-        defined_sets <- c(defined_sets, s)
+      if (!(s %in% definedSets)) {
+        definedSets <- c(definedSets, s)
         sets[[s]] <- asSet(s, c(), color = cc(s))
       }
       # determine base set based on type and value
@@ -251,7 +252,7 @@ extractSetsFromDataFrame <- function(df,
       is.list(attributes) || is.character(attributes)
   ))
   stopifnot(order.by == "cardinality" || order.by == "degree")
-  stopifnottype("limit", limit)
+  stopIfNotType("limit", limit)
   stopifnot(is.null(colors) || is.list(colors))
 
   cc <- colorLookup(colors)
@@ -264,12 +265,12 @@ extractSetsFromDataFrame <- function(df,
     asSet(key, x, cardinality = length(sub), color = cc(key))
   }
 
-  set_names <- setdiff(colnames(df), if (is.character(attributes)) {
+  setNames <- setdiff(colnames(df), if (is.character(attributes)) {
     attributes
   } else {
     c()
   })
-  sets <- lapply(set_names, toSet)
+  sets <- lapply(setNames, toSet)
 
   sortSets(sets, order.by = order.by, limit = limit)
 }
@@ -310,7 +311,7 @@ fromDataFrame <- function(upsetjs,
       is.list(attributes) || is.character(attributes)
   ))
   stopifnot(order.by == "cardinality" || order.by == "degree")
-  stopifnottype("limit", limit)
+  stopIfNotType("limit", limit)
   stopifnot(shared.mode == "click" || shared.mode == "hover")
   stopifnot(is.null(colors) || is.list(colors))
   stopifnot(
@@ -320,20 +321,21 @@ fromDataFrame <- function(upsetjs,
       c_type == "none"
   )
 
-  cc <- colorLookup(colors)
-
-  gen_type <- ifelse(!is.null(c_type), c_type, ifelse(isVennDiagram(upsetjs) || isKarnaughMap(upsetjs), "distinctIntersection", "intersection"))
-  sorted_sets <- extractSetsFromDataFrame(df, attributes, order.by, limit, colors, store.elems = store.elems || gen_type != "distinctIntersection")
+  genType <- ifelse(!is.null(c_type), c_type, ifelse(isVennDiagram(upsetjs) || isKarnaughMap(upsetjs), "distinctIntersection", "intersection"))
+  sortedSets <- extractSetsFromDataFrame(df, attributes, order.by, limit,
+    colors,
+    store.elems = store.elems || genType != "distinctIntersection"
+  )
 
   elems <- rownames(df)
 
   gen <- if (!is.null(c_type) && c_type == "none") {
     list()
   } else if (isVennDiagram(upsetjs) || isKarnaughMap(upsetjs)) {
-    if (gen_type == "distinctIntersection") {
+    if (genType == "distinctIntersection") {
       extractCombinationsImpl(
         df,
-        sorted_sets,
+        sortedSets,
         TRUE,
         order.by,
         limit,
@@ -342,8 +344,8 @@ fromDataFrame <- function(upsetjs,
       )
     } else {
       generateCombinationsImpl(
-        sorted_sets,
-        gen_type,
+        sortedSets,
+        genType,
         0,
         NULL,
         TRUE,
@@ -353,10 +355,10 @@ fromDataFrame <- function(upsetjs,
         store.elems = store.elems
       )
     }
-  } else if (gen_type == "distinctIntersection") {
+  } else if (genType == "distinctIntersection") {
     extractCombinationsImpl(
       df,
-      sorted_sets,
+      sortedSets,
       FALSE,
       order.by,
       limit,
@@ -365,8 +367,8 @@ fromDataFrame <- function(upsetjs,
     )
   } else {
     generateCombinationsImpl(
-      sorted_sets,
-      gen_type,
+      sortedSets,
+      genType,
       0,
       NULL,
       FALSE,
@@ -377,15 +379,15 @@ fromDataFrame <- function(upsetjs,
     )
   }
 
-  if (!store.elems && gen_type != "distinctIntersection") {
+  if (!store.elems && genType != "distinctIntersection") {
     # delete
-    for (i in 1:length(sorted_sets)) {
-      sorted_sets[[i]]$elems <- c()
+    for (i in seq_along(sortedSets)) {
+      sortedSets[[i]]$elems <- c()
     }
   }
 
   props <- list(
-    sets = sorted_sets,
+    sets = sortedSets,
     combinations = gen,
     elems = elems,
     expressionData = FALSE
@@ -394,12 +396,12 @@ fromDataFrame <- function(upsetjs,
   upsetjs <- setProperties(upsetjs, props)
 
   if (!is.null(attributes)) {
-    attr_df <- if (is.character(attributes)) {
+    attrDf <- if (is.character(attributes)) {
       df[, attributes]
     } else {
       attributes
     }
-    upsetjs <- setAttributes(upsetjs, attr_df)
+    upsetjs <- setAttributes(upsetjs, attrDf)
   }
 
   if (!is.null(shared)) {
@@ -509,7 +511,7 @@ generateCombinations <- function(upsetjs,
                                  symbol = "&") {
   checkUpSetArgument(upsetjs)
   stopifnot(is.numeric(min), length(min) == 1)
-  stopifnottype("max", max)
+  stopIfNotType("max", max)
   stopifnot(is.logical(empty), length(empty) == 1)
   stopifnot(is.character(order.by), length(order.by) >= 1)
   stopifnot(is.null(limit) ||
