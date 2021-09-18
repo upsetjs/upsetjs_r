@@ -25,10 +25,10 @@ Suggests:
   testthat,
   styler,
   lintr,
-  roxygen2,
   pkgdown
 LazyData: true
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 Language: en-US
+KeepSource: true
