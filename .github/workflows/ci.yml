@@ -52,7 +52,7 @@ jobs:
       - name: Install dependencies
         shell: Rscript {0}
         run: |
-          install.packages(c('devtools', 'webshot', 'textshaping'))
+          install.packages(c('devtools', 'webshot', 'textshaping', 'stringi'))
           devtools::install_deps('r_package', dependencies = TRUE)
 
       - name: Style / Format

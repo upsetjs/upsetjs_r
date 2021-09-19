@@ -11,6 +11,4 @@
 #'
 #' @docType package
 #' @name upsetjs
-#' @importFrom utils installed.packages
-#' @importFrom utils combn
 NULL
