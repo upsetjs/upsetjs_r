@@ -121,12 +121,12 @@ yarn build:r
 or in R
 
 ```R
-devtools::load_all("r_package")
-styler::style_pkg("r_package")
-lintr::lint_pkg("r_package")
-devtools::check("r_package")
-devtools::document("r_package")
-devtools::build("r_package")
+devtools::load_all()
+styler::style_pkg()
+lintr::lint_pkg()
+devtools::check()
+devtools::document()
+devtools::build()
 ```
 
 **R Package Website**
@@ -140,7 +140,7 @@ yarn docs:r
 or in R
 
 ```R
-devtools::build_site("r_package)
+devtools::build_site()
 ```
 
 ## Release
@@ -149,7 +149,7 @@ use `release-it`
 
 ```sh
 yarn release
-Rscript -e "devtools::release('r_package')"
+Rscript -e "devtools::release()"
 ```
 
 ## Privacy Policy

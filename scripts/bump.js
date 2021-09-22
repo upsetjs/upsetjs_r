@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 function bumpImpl(version) {
-  const desc = path.resolve('./r_package/DESCRIPTION');
+  const desc = path.resolve('./DESCRIPTION');
   const content = fs.readFileSync(desc).toString();
   const s = new Date().toISOString();
   const now = s.slice(0, s.indexOf('T'));

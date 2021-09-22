@@ -32,7 +32,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-r-v2-${{ hashFiles('r_package/DESCRIPTION')}}
+          key: ${{ runner.os }}-r-v2-${{ hashFiles('DESCRIPTION')}}
           restore-keys: ${{ runner.os }}-r-v2-
 
       # - name: Install system dependencies
@@ -50,34 +50,34 @@ jobs:
         shell: Rscript {0}
         run: |
           install.packages(c('devtools', 'webshot', 'textshaping', 'stringi'))
-          devtools::install_deps('r_package', dependencies = TRUE)
+          devtools::install_deps(dependencies = TRUE)
 
       - name: Style / Format
         shell: Rscript {0}
-        run: styler::style_pkg('r_package', dry="fail")
+        run: styler::style_pkg( dry="fail")
 
       - name: Lint
         shell: Rscript {0}
         run: |
-          devtools::load_all('r_package')
-          lintr::lint_package('r_package')
+          devtools::load_all()
+          lintr::lint_package()
 
       - name: Check
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         shell: Rscript {0}
-        run: devtools::check('r_package', args = c("--no-manual", "--as-cran"), error_on = "error", check_dir = "check")
+        run: devtools::check( args = c("--no-manual", "--as-cran"), error_on = "error", check_dir = "check")
 
       - name: Test
         shell: Rscript {0}
-        run: devtools::test('r_package')
+        run: devtools::test()
 
       - name: Upload check results
         if: failure()
         uses: actions/upload-artifact@v2
         with:
           name: ${{ runner.os }}-results
-          path: r_package/check
+          path: check
 
       - name: Build Package
         run: yarn build:r
@@ -85,12 +85,11 @@ jobs:
         run: |
           mkdir -p public/integrations/r
           cp ./upsetjs.tar.gz public/integrations/r/
-          cp README.md r_package/
       - name: Build Website
         run: yarn docs:r
       - name: Copy Docs
         run: |
-          mv r_package/docs/* public/integrations/r/
+          mv docs/* public/integrations/r/
 
       - name: Deploy Main
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'

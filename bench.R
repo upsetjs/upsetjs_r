@@ -4,7 +4,7 @@ library(upsetjs)
 
 # loading example files
 toyset_1 <- read_delim(
-  file = gzfile("./r_package/tests/testthat/data/toyset_1.tsv.gz"),
+  file = gzfile("./tests/testthat/data/toyset_1.tsv.gz"),
   delim = "\t",
   escape_double = FALSE,
   trim_ws = TRUE
@@ -12,7 +12,7 @@ toyset_1 <- read_delim(
   data.frame()
 
 toyset_2 <- read_delim(
-  file = gzfile("./r_package/tests/testthat/data/toyset_2.tsv.gz"),
+  file = gzfile("./tests/testthat/data/toyset_2.tsv.gz"),
   delim = "\t",
   escape_double = FALSE,
   trim_ws = TRUE

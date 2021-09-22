@@ -6,10 +6,22 @@
 ^shiny$
 ^docs$
 ^Meta$
+^js$
+^scripts$
+^types$
+^\.github$
+^\.vscode$
+^binder$
+^node_modules$
+^\.yarn$
 
 ^.*\.map$
+^.*\.js$
+^.*\.json$
+^.*\.cjs$
 
 ^_pkgdown\.yml$
 ^pkgdown$
 ^data-raw$
 ^cran-comments.md$
+^.editorconfig$
