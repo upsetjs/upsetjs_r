@@ -24,6 +24,7 @@ jobs:
             ${{ runner.os }}-yarn2-v4
       - run: yarn install
       - run: yarn build
+      - run: yarn clean:r
       - uses: r-lib/actions/setup-r@v1
         with:
           use-public-rspm: true

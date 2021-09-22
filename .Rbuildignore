@@ -19,6 +19,10 @@
 ^.*\.js$
 ^.*\.json$
 ^.*\.cjs$
+^\.lintr$
+^yarn\.lock$
+^bench\.R$
+^\.yarnrc\.yml$
 
 ^_pkgdown\.yml$
 ^pkgdown$
