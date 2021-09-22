@@ -20,10 +20,10 @@
   "scripts": {
     "lint": "yarn run eslint && yarn run prettier",
     "fix": "yarn run eslint:fix && yarn run prettier:write",
-    "prettier:impl": "prettier \"*.md\" \"*.json\" .eslintrc.js \"webpack*\" .prettierrc.js \"{src,types,scripts,.github}/**\" \"{r_package,binder}/*.yml\" ",
+    "prettier:impl": "prettier \"*.md\" \"*.json\" .eslintrc.js \"webpack*\" .prettierrc.js \"{js,types,scripts,.github}/**\" \"{r_package,binder}/*.yml\" ",
     "prettier:write": "yarn run prettier:impl --write",
     "prettier": "yarn run prettier:impl --check",
-    "eslint": "eslint src --ext .ts,.tsx",
+    "eslint": "eslint js --ext .ts,.tsx",
     "eslint:fix": "yarn run eslint --fix",
     "clean": "rimraf \"r_package/inst/htmlwidgets/upsetjs.js*\"",
     "build:dev": "webpack-cli --mode development --devtool source-map",

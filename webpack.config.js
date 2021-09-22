@@ -21,7 +21,7 @@ const babel = {
 
 module.exports = {
   entry: {
-    app: './src/htmlwidget.ts',
+    app: './js/htmlwidget.ts',
   },
   output: {
     filename: 'upsetjs.js',
