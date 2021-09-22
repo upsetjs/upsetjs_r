@@ -30,7 +30,7 @@ jobs:
           use-public-rspm: true
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
-          extra_packages: webshot,textshaping
+          extra_packages: webshot,textshaping,devtools
 
       - name: Style / Format
         shell: Rscript {0}
