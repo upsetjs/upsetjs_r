@@ -6,3 +6,5 @@
 /inst/htmlwidgets/upsetjs.js.LICENSE.txt
 doc
 Meta
+/vignettes/*.R
+/vignettes/*.html

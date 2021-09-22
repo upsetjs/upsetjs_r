@@ -216,8 +216,7 @@ extractCombinationsImpl <- function(df,
         color = setColors[i],
         type = "distinctIntersection",
         elems = if (store.elems) elems else c(),
-        cardinality = length(elems),
-        setNames = setNames[i][[1]],
+        setNames = setNames[i][[1]], cardinality = length(elems)
       ),
       class = "upsetjs_combination"
     )
