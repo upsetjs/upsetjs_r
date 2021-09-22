@@ -20,7 +20,7 @@
   "scripts": {
     "lint": "yarn run eslint && yarn run prettier",
     "fix": "yarn run eslint:fix && yarn run prettier:write",
-    "prettier:impl": "prettier \"*.md\" \"*.json\" .eslintrc.js \"*.yml\" \"webpack*\" .prettierrc.js \"{js,types,scripts,.github}/**\" \"{binder}/*.yml\" ",
+    "prettier:impl": "prettier \"*.md\" \"*.json\" .eslintrc.js \"*.yml\" \"webpack*\" .prettierrc.js \"{js,types,scripts,.github}/**\" \"binder/*.yml\" ",
     "prettier:write": "yarn run prettier:impl --write",
     "prettier": "yarn run prettier:impl --check",
     "eslint": "eslint js --ext .ts,.tsx",
