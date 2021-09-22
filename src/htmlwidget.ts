@@ -7,21 +7,10 @@
 
 /// <reference path="../types/index.d.ts" />
 
-import { RBindingUpSetProps, Elem, adapter, syncAddons, UpSetAttrSpec } from './model';
-import {
-  isElemQuery,
-  ISetCombinations,
-  ISetLike,
-  isSetQuery,
-  render,
-  UpSetProps,
-  renderVennDiagram,
-  renderKarnaughMap,
-  VennDiagramProps,
-  KarnaughMapProps,
-  ISets,
-} from '@upsetjs/bundle';
-import { fixCombinations, fixSets, resolveSet, resolveSetByElems, fromExpression } from './utils';
+import './_polyfills';
+import { ISetCombinations, ISetLike, render, renderKarnaughMap, renderVennDiagram } from '@upsetjs/bundle';
+import { adapter, createContext, Elem, fixProps, RBindingUpSetProps } from './model';
+import { resolveSetByElems } from './utils';
 
 declare type CrosstalkOptions = {
   group: string;
@@ -38,105 +27,35 @@ declare type CrosstalkHandler = {
   trigger(elems?: ReadonlyArray<string>): void;
 };
 
+function isShinyMode(): boolean {
+  return HTMLWidgets && HTMLWidgets.shinyMode;
+}
+
 HTMLWidgets.widget({
   name: 'upsetjs',
   type: 'output',
 
   factory(el, width, height) {
-    let interactive = false;
-    let renderMode: 'upset' | 'venn' | 'euler' | 'kmap' = 'upset';
-    const elemToIndex = new Map<Elem, number>();
-    let attrs: UpSetAttrSpec[] = [];
-    const props: UpSetProps<Elem> & VennDiagramProps<Elem> & KarnaughMapProps<Elem> = {
-      sets: [],
-      width,
-      height,
-      exportButtons: HTMLWidgets.shinyMode,
-    };
+    const context = createContext(width, height, {
+      exportButtons: isShinyMode(),
+    });
     let crosstalkHandler: CrosstalkHandler | null = null;
-
-    function fixProps(props: UpSetProps<Elem> & VennDiagramProps<Elem>, delta: any) {
-      if (typeof delta.interactive === 'boolean') {
-        interactive = delta.interactive;
-      }
-      const expressionData = delta.expressionData;
-      if (typeof delta.renderMode === 'string') {
-        renderMode = delta.renderMode;
-      }
-      delete (props as any).renderMode;
-      delete (props as any).interactive;
-      delete (props as any).expressionData;
-      delete (props as any).crosstalk;
-      if (delta.elems) {
-        // elems = delta.elems;
-        elemToIndex.clear();
-        delta.elems.forEach((elem: Elem, i: number) => elemToIndex.set(elem, i));
-      }
-      delete (props as any).elems;
-      if (delta.attrs) {
-        attrs = delta.attrs;
-        syncAddons(props, elemToIndex, attrs);
-      }
-      delete (props as any).attrs;
-
-      if (delta.sets != null) {
-        props.sets = fixSets(props.sets);
-      }
-      if (delta.combinations != null) {
-        if (expressionData) {
-          const r = fromExpression(delta.combinations);
-          props.combinations = r.combinations as ISetCombinations<string>;
-          props.sets = r.sets as ISets<string>;
-        } else {
-          const c = fixCombinations(delta.combinations, props.sets);
-          if (c == null) {
-            delete props.combinations;
-          } else {
-            props.combinations = c;
-          }
-        }
-      }
-      if (typeof delta.selection === 'string' || Array.isArray(delta.selection)) {
-        props.selection = resolveSet(delta.selection, props.sets, props.combinations as ISetCombinations<Elem>);
-      }
-      props.onHover = interactive || HTMLWidgets.shinyMode ? onHover : undefined;
-
-      if (delta.queries) {
-        props.queries = delta.queries.map((query: any) => {
-          const base = Object.assign({}, query);
-          if (isSetQuery(query) && (typeof query.set === 'string' || Array.isArray(query.set))) {
-            base.set = resolveSet(query.set, props.sets, props.combinations as ISetCombinations<Elem>)!;
-          } else if (isElemQuery(query) && typeof query.elems !== 'undefined' && !Array.isArray(query.elems)) {
-            base.elems = [query.elems];
-          }
-          return base;
-        });
-      }
-    }
 
     function update(delta?: any, append = false) {
       if (delta) {
-        if (append) {
-          Object.keys(delta).forEach((key) => {
-            const p = props as any;
-            const old = p[key] || [];
-            p[key] = old.concat(delta[key]);
-          });
-        } else {
-          Object.assign(props, delta);
-        }
-        fixProps(props, delta);
+        fixProps(context, delta, append);
+        context.props.onHover = context.interactive || isShinyMode() ? onHover : undefined;
       }
-      if (renderMode === 'venn') {
-        delete props.layout;
-        renderVennDiagram(el, props);
-      } else if (renderMode === 'kmap') {
-        renderKarnaughMap(el, props);
-      } else if (renderMode === 'euler') {
-        props.layout = adapter;
-        renderVennDiagram(el, props);
+      if (context.renderMode === 'venn') {
+        delete context.props.layout;
+        renderVennDiagram(el, context.props);
+      } else if (context.renderMode === 'kmap') {
+        renderKarnaughMap(el, context.props);
+      } else if (context.renderMode === 'euler') {
+        context.props.layout = adapter;
+        renderVennDiagram(el, context.props);
       } else {
-        render(el, props);
+        render(el, context.props);
       }
     }
 
@@ -144,14 +63,14 @@ HTMLWidgets.widget({
       null;
 
     const onHover = (set: ISetLike<Elem> | null) => {
-      if (HTMLWidgets.shinyMode) {
+      if (isShinyMode()) {
         Shiny.onInputChange(`${el.id}_hover`, {
           name: set ? set.name : null,
           elems: set ? set.elems || [] : [],
         });
       }
       const crosstalk = crosstalkHandler && crosstalkHandler.mode === 'hover';
-      if (!interactive && !crosstalk) {
+      if (!context.interactive && !crosstalk) {
         return;
       }
       if (crosstalk && crosstalkHandler) {
@@ -159,11 +78,11 @@ HTMLWidgets.widget({
       }
       if (set) {
         // hover on
-        bakSelection = props.selection;
-        props.selection = set;
+        bakSelection = context.props.selection;
+        context.props.selection = set;
       } else {
         // hover off
-        props.selection = bakSelection;
+        context.props.selection = bakSelection;
         bakSelection = null;
       }
       update();
@@ -176,16 +95,18 @@ HTMLWidgets.widget({
         if (event.sender === sel) {
           return;
         }
-        props.selection = !event.value
+        context.props.selection = !event.value
           ? null
-          : resolveSetByElems(event.value, props.sets, props.combinations as ISetCombinations<Elem>) || event.value;
+          : resolveSetByElems(event.value, context.props.sets, context.props.combinations as ISetCombinations<Elem>) ||
+            event.value;
         update();
       });
 
       // show current state
-      props.selection = !sel.value
+      context.props.selection = !sel.value
         ? null
-        : resolveSetByElems(sel.value, props.sets, props.combinations as ISetCombinations<Elem>) || sel.value;
+        : resolveSetByElems(sel.value, context.props.sets, context.props.combinations as ISetCombinations<Elem>) ||
+          sel.value;
       update();
 
       return {
@@ -204,8 +125,8 @@ HTMLWidgets.widget({
       };
     }
 
-    if (HTMLWidgets.shinyMode) {
-      props.onClick = (set: ISetLike<Elem> | null) => {
+    if (isShinyMode()) {
+      context.props.onClick = (set: ISetLike<Elem> | null) => {
         Shiny.onInputChange(`${el.id}_click`, {
           name: set ? set.name : null,
           elems: set ? set.elems || [] : [],
@@ -213,11 +134,11 @@ HTMLWidgets.widget({
 
         if (crosstalkHandler && crosstalkHandler.mode === 'click') {
           crosstalkHandler.trigger(set?.elems);
-          props.selection = set;
+          context.props.selection = set;
           update();
         }
       };
-      props.onContextMenu = (set: ISetLike<Elem> | null) => {
+      context.props.onContextMenu = (set: ISetLike<Elem> | null) => {
         Shiny.onInputChange(`${el.id}_contextMenu`, {
           name: set ? set.name : null,
           elems: set ? set.elems || [] : [],
@@ -225,7 +146,7 @@ HTMLWidgets.widget({
 
         if (crosstalkHandler && crosstalkHandler.mode === 'contextMenu') {
           crosstalkHandler.trigger(set?.elems);
-          props.selection = set;
+          context.props.selection = set;
           update();
         }
       };
@@ -236,7 +157,7 @@ HTMLWidgets.widget({
     return {
       renderValue(x: ShinyUpSetProps) {
         update(x);
-        if (x.crosstalk && (window as any).crosstalk && HTMLWidgets.shinyMode) {
+        if (x.crosstalk && (window as any).crosstalk && isShinyMode()) {
           if (!crosstalkHandler) {
             crosstalkHandler = enableCrosstalk(x.crosstalk);
           } else {
@@ -254,7 +175,7 @@ HTMLWidgets.widget({
   },
 });
 
-if (HTMLWidgets.shinyMode) {
+if (isShinyMode()) {
   Shiny.addCustomMessageHandler('upsetjs-update', (msg) => {
     const el = document.getElementById(msg.id);
     const update: (props: any, append: boolean) => void = (el as any)?.__update;

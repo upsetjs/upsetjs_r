@@ -4,19 +4,20 @@
  *
  * Copyright (c) 2021 Samuel Gratzl <sam@sgratzl.com>
  */
-
 import {
   boxplotAddon,
   categoricalAddon,
   createVennJSAdapter,
+  isElemQuery,
+  ISetCombinations,
+  ISets,
+  isSetQuery,
   KarnaughMapProps,
   UpSetProps,
   VennDiagramProps,
 } from '@upsetjs/bundle';
 import { layout } from '@upsetjs/venn.js';
-import 'core-js';
-import 'element-closest-polyfill';
-import 'regenerator-runtime/runtime';
+import { fixCombinations, fixSets, fromExpression, resolveSet } from './utils';
 
 export declare type Elem = string;
 
@@ -85,4 +86,102 @@ export function syncAddons(
   };
   props.setAddons = attrs.map((attr) => toAddon(attr, false));
   props.combinationAddons = attrs.map((attr) => toAddon(attr, true));
+}
+
+export interface RenderContext {
+  props: UpSetProps<Elem> & VennDiagramProps<Elem> & KarnaughMapProps<Elem>;
+  elemToIndex: Map<Elem, number>;
+  attrs: UpSetAttrSpec[];
+  interactive: boolean;
+  renderMode: 'upset' | 'venn' | 'euler' | 'kmap';
+}
+
+export function createContext(
+  width: number,
+  height: number,
+  extra: Partial<RenderContext['props']> = {}
+): RenderContext {
+  return {
+    interactive: false,
+    renderMode: 'upset',
+    elemToIndex: new Map<Elem, number>(),
+    attrs: [],
+    props: {
+      sets: [],
+      width,
+      height,
+      ...extra,
+    },
+  };
+}
+
+export function fixProps(context: RenderContext, delta: any, append = false) {
+  if (append) {
+    Object.keys(delta).forEach((key) => {
+      const p = context.props as any;
+      const old = p[key] || [];
+      p[key] = old.concat(delta[key]);
+    });
+  } else {
+    Object.assign(context.props, delta);
+  }
+
+  if (typeof delta.interactive === 'boolean') {
+    context.interactive = delta.interactive;
+  }
+  const expressionData = delta.expressionData;
+  if (typeof delta.renderMode === 'string') {
+    context.renderMode = delta.renderMode;
+  }
+  delete (context.props as any).renderMode;
+  delete (context.props as any).interactive;
+  delete (context.props as any).expressionData;
+  delete (context.props as any).crosstalk;
+  if (delta.elems) {
+    // elems = delta.elems;
+    context.elemToIndex.clear();
+    delta.elems.forEach((elem: Elem, i: number) => context.elemToIndex.set(elem, i));
+  }
+  delete (context.props as any).elems;
+  if (delta.attrs) {
+    context.attrs = delta.attrs;
+    syncAddons(context.props, context.elemToIndex, context.attrs);
+  }
+  delete (context.props as any).attrs;
+
+  if (delta.sets != null) {
+    context.props.sets = fixSets(context.props.sets);
+  }
+  if (delta.combinations != null) {
+    if (expressionData) {
+      const r = fromExpression(delta.combinations);
+      context.props.combinations = r.combinations as ISetCombinations<string>;
+      context.props.sets = r.sets as ISets<string>;
+    } else {
+      const c = fixCombinations(delta.combinations, context.props.sets);
+      if (c == null) {
+        delete context.props.combinations;
+      } else {
+        context.props.combinations = c;
+      }
+    }
+  }
+  if (typeof delta.selection === 'string' || Array.isArray(delta.selection)) {
+    context.props.selection = resolveSet(
+      delta.selection,
+      context.props.sets,
+      context.props.combinations as ISetCombinations<Elem>
+    );
+  }
+  if (delta.queries) {
+    context.props.queries = delta.queries.map((query: any) => {
+      const base = Object.assign({}, query);
+      if (isSetQuery(query) && (typeof query.set === 'string' || Array.isArray(query.set))) {
+        base.set = resolveSet(query.set, context.props.sets, context.props.combinations as ISetCombinations<Elem>)!;
+      } else if (isElemQuery(query) && typeof query.elems !== 'undefined' && !Array.isArray(query.elems)) {
+        base.elems = [query.elems];
+      }
+      return base;
+    });
+  }
 }
