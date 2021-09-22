@@ -7,10 +7,7 @@
 
 /// <reference path="../types/index.d.ts" />
 
-import 'core-js';
-import 'regenerator-runtime/runtime';
-import 'element-closest-polyfill';
-import { layout } from '@upsetjs/venn.js';
+import { RBindingUpSetProps, Elem, adapter, syncAddons, UpSetAttrSpec } from './model';
 import {
   isElemQuery,
   ISetCombinations,
@@ -18,12 +15,9 @@ import {
   isSetQuery,
   render,
   UpSetProps,
-  boxplotAddon,
   renderVennDiagram,
   renderKarnaughMap,
   VennDiagramProps,
-  categoricalAddon,
-  createVennJSAdapter,
   KarnaughMapProps,
   ISets,
 } from '@upsetjs/bundle';
@@ -34,43 +28,15 @@ declare type CrosstalkOptions = {
   mode: 'click' | 'hover' | 'contextMenu';
 };
 
-declare type IElem = string;
-
-declare type ShinyUpSetProps = UpSetProps<IElem> &
-  VennDiagramProps<IElem> & {
-    renderMode: 'upset' | 'venn' | 'euler' | 'kmap';
-    expressionData?: boolean;
-    interactive?: boolean;
-    crosstalk?: CrosstalkOptions;
-
-    elems: ReadonlyArray<IElem>;
-    attrs: ReadonlyArray<UpSetAttrSpec>;
-  };
+declare type ShinyUpSetProps = RBindingUpSetProps & {
+  crosstalk?: CrosstalkOptions;
+};
 
 declare type CrosstalkHandler = {
   mode: 'click' | 'hover' | 'contextMenu';
   update(options: CrosstalkOptions): void;
   trigger(elems?: ReadonlyArray<string>): void;
 };
-
-declare type UpSetNumericAttrSpec = {
-  type: 'number';
-  name: string;
-  domain: [number, number];
-  values: ReadonlyArray<number>;
-  elems?: ReadonlyArray<IElem>;
-};
-declare type UpSetCategoricalAttrSpec = {
-  type: 'categorical';
-  name: string;
-  categories: ReadonlyArray<string>;
-  values: ReadonlyArray<string>;
-  elems?: ReadonlyArray<IElem>;
-};
-
-declare type UpSetAttrSpec = UpSetNumericAttrSpec | UpSetCategoricalAttrSpec;
-
-const adapter = createVennJSAdapter(layout);
 
 HTMLWidgets.widget({
   name: 'upsetjs',
@@ -79,9 +45,9 @@ HTMLWidgets.widget({
   factory(el, width, height) {
     let interactive = false;
     let renderMode: 'upset' | 'venn' | 'euler' | 'kmap' = 'upset';
-    const elemToIndex = new Map<IElem, number>();
+    const elemToIndex = new Map<Elem, number>();
     let attrs: UpSetAttrSpec[] = [];
-    const props: UpSetProps<IElem> & VennDiagramProps<IElem> & KarnaughMapProps<IElem> = {
+    const props: UpSetProps<Elem> & VennDiagramProps<Elem> & KarnaughMapProps<Elem> = {
       sets: [],
       width,
       height,
@@ -89,41 +55,7 @@ HTMLWidgets.widget({
     };
     let crosstalkHandler: CrosstalkHandler | null = null;
 
-    function syncAddons() {
-      if (attrs.length === 0) {
-        delete props.setAddons;
-        delete props.combinationAddons;
-        return;
-      }
-      const toAddon = (attr: UpSetAttrSpec, vertical = false) => {
-        const lookup = attr.elems ? new Map(attr.elems.map((e, i) => [e, i])) : elemToIndex;
-        if (attr.type === 'number') {
-          return boxplotAddon<IElem>(
-            (v) => (lookup.has(v) ? attr.values[lookup.get(v)!] : Number.NaN),
-            { min: attr.domain[0], max: attr.domain[1] },
-            {
-              name: attr.name,
-              quantiles: 'hinges',
-              orient: vertical ? 'vertical' : 'horizontal',
-            }
-          );
-        }
-        return categoricalAddon<IElem>(
-          (v) => (lookup.has(v) ? attr.values[lookup.get(v)!] : ''),
-          {
-            categories: attr.categories,
-          },
-          {
-            name: attr.name,
-            orient: vertical ? 'vertical' : 'horizontal',
-          }
-        );
-      };
-      props.setAddons = attrs.map((attr) => toAddon(attr, false));
-      props.combinationAddons = attrs.map((attr) => toAddon(attr, true));
-    }
-
-    function fixProps(props: UpSetProps<IElem> & VennDiagramProps<IElem>, delta: any) {
+    function fixProps(props: UpSetProps<Elem> & VennDiagramProps<Elem>, delta: any) {
       if (typeof delta.interactive === 'boolean') {
         interactive = delta.interactive;
       }
@@ -138,12 +70,12 @@ HTMLWidgets.widget({
       if (delta.elems) {
         // elems = delta.elems;
         elemToIndex.clear();
-        delta.elems.forEach((elem: IElem, i: number) => elemToIndex.set(elem, i));
+        delta.elems.forEach((elem: Elem, i: number) => elemToIndex.set(elem, i));
       }
       delete (props as any).elems;
       if (delta.attrs) {
         attrs = delta.attrs;
-        syncAddons();
+        syncAddons(props, elemToIndex, attrs);
       }
       delete (props as any).attrs;
 
@@ -165,7 +97,7 @@ HTMLWidgets.widget({
         }
       }
       if (typeof delta.selection === 'string' || Array.isArray(delta.selection)) {
-        props.selection = resolveSet(delta.selection, props.sets, props.combinations as ISetCombinations<IElem>);
+        props.selection = resolveSet(delta.selection, props.sets, props.combinations as ISetCombinations<Elem>);
       }
       props.onHover = interactive || HTMLWidgets.shinyMode ? onHover : undefined;
 
@@ -173,7 +105,7 @@ HTMLWidgets.widget({
         props.queries = delta.queries.map((query: any) => {
           const base = Object.assign({}, query);
           if (isSetQuery(query) && (typeof query.set === 'string' || Array.isArray(query.set))) {
-            base.set = resolveSet(query.set, props.sets, props.combinations as ISetCombinations<IElem>)!;
+            base.set = resolveSet(query.set, props.sets, props.combinations as ISetCombinations<Elem>)!;
           } else if (isElemQuery(query) && typeof query.elems !== 'undefined' && !Array.isArray(query.elems)) {
             base.elems = [query.elems];
           }
@@ -208,10 +140,10 @@ HTMLWidgets.widget({
       }
     }
 
-    let bakSelection: ISetLike<IElem> | null | undefined | ReadonlyArray<IElem> | ((s: ISetLike<string>) => number) =
+    let bakSelection: ISetLike<Elem> | null | undefined | ReadonlyArray<Elem> | ((s: ISetLike<string>) => number) =
       null;
 
-    const onHover = (set: ISetLike<IElem> | null) => {
+    const onHover = (set: ISetLike<Elem> | null) => {
       if (HTMLWidgets.shinyMode) {
         Shiny.onInputChange(`${el.id}_hover`, {
           name: set ? set.name : null,
@@ -246,14 +178,14 @@ HTMLWidgets.widget({
         }
         props.selection = !event.value
           ? null
-          : resolveSetByElems(event.value, props.sets, props.combinations as ISetCombinations<IElem>) || event.value;
+          : resolveSetByElems(event.value, props.sets, props.combinations as ISetCombinations<Elem>) || event.value;
         update();
       });
 
       // show current state
       props.selection = !sel.value
         ? null
-        : resolveSetByElems(sel.value, props.sets, props.combinations as ISetCombinations<IElem>) || sel.value;
+        : resolveSetByElems(sel.value, props.sets, props.combinations as ISetCombinations<Elem>) || sel.value;
       update();
 
       return {
@@ -273,7 +205,7 @@ HTMLWidgets.widget({
     }
 
     if (HTMLWidgets.shinyMode) {
-      props.onClick = (set: ISetLike<IElem> | null) => {
+      props.onClick = (set: ISetLike<Elem> | null) => {
         Shiny.onInputChange(`${el.id}_click`, {
           name: set ? set.name : null,
           elems: set ? set.elems || [] : [],
@@ -285,7 +217,7 @@ HTMLWidgets.widget({
           update();
         }
       };
-      props.onContextMenu = (set: ISetLike<IElem> | null) => {
+      props.onContextMenu = (set: ISetLike<Elem> | null) => {
         Shiny.onInputChange(`${el.id}_contextMenu`, {
           name: set ? set.name : null,
           elems: set ? set.elems || [] : [],
