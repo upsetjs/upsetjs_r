@@ -9,7 +9,10 @@
 #' create a new upsetjs dash adapter
 #' @export
 upsetjsDash <- function(children = NULL, id = NULL, width = NULL, height = NULL) {
-  props <- list(children = children, id = id, height = height, width = width)
+  props <- list(
+    children = children, id = id, height = height, width = width,
+    renderMode = "upset", mode = "hover"
+  )
   if (length(props) > 0) {
     props <- props[!vapply(props, is.null, logical(1))]
   }
@@ -17,11 +20,18 @@ upsetjsDash <- function(children = NULL, id = NULL, width = NULL, height = NULL)
     props = props,
     type = "DashUpSetJS",
     namespace = "upsetjs",
-    propNames = c("children", "id", "height", "width"),
+    propNames = c(
+      "children", "id", "height", "width", "renderMode", "mode",
+      "attrs", "sets", "combinations", "queryLegend", "queries", "interactive", "selection",
+      "heightRatios", "widthRatios", "padding", "barPadding", "dotPadding", "numericalScale", "bandScale",
+      "title", "description", "setName", "combinationName", "combinationNameAxisOffset", "barLabelOffset", "setNameAxisOffset",
+      "fontFamily", "fontSizes", "exportButtons", "className",
+      "theme", "selectionColor", "alternatingBackgroundColor", "color",
+      "hasSelectionColor", "textColor", "hoverHintColor", "notMemberColor", "valueTextColor", "strokeColor", "opacity", "hasSelectionOpacity", "filled"),
     package = "upsetjs"
   )
 
-  structure(component, class = c("dash_component", "list"))
+  structure(component, class = c("dash_component", "upsetjs_upset_dash", "upsetjs_common_dash", "list"))
 }
 
 

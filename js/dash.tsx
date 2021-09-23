@@ -6,11 +6,22 @@
  */
 import React from 'react';
 
-import { UpSetJS } from '@upsetjs/react';
-import { RBindingUpSetProps } from './model';
+import { KarnaughMap, UpSetJS, VennDiagram } from '@upsetjs/react';
+import { createContext, fixProps, RBindingUpSetProps, adapter } from './model';
 
 declare type DashUpSetJSProps = RBindingUpSetProps & {};
 
-export function DashUpSetJS(_props: DashUpSetJSProps) {
-  return <UpSetJS width={100} height={100} sets={[]} />;
+export function DashUpSetJS(props: DashUpSetJSProps) {
+  const context = createContext(300, 300); // TODO
+  fixProps(context, props);
+  if (context.renderMode === 'venn') {
+    delete context.props.layout;
+    return <VennDiagram {...(context.props as any)} />;
+  } else if (context.renderMode === 'kmap') {
+    return <KarnaughMap {...(context.props as any)} />;
+  } else if (context.renderMode === 'euler') {
+    context.props.layout = adapter;
+    return <VennDiagram {...(context.props as any)} />;
+  }
+  return <UpSetJS {...(context.props as any)} />;
 }
