@@ -75,7 +75,8 @@
     "@upsetjs/venn.js": "^1.4.1",
     "core-js": "^2",
     "element-closest-polyfill": "^1.0.4",
-    "regenerator-runtime": "^0.13.9"
+    "regenerator-runtime": "^0.13.9",
+    "use-resize-observer": "^8.0.0"
   },
   "peerDependencies": {
     "react": "^16.8"

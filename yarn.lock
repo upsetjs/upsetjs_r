@@ -1459,6 +1459,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@juggle/resize-observer@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "@juggle/resize-observer@npm:3.3.1"
+  checksum: ddabc4044276a2cb57d469c4917206c7e39f2463aa8e3430e33e4eda554412afe29c22afa40e6708b49dad5d56768dc83acd68a704b1dcd49a0906bb96b991b2
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.3":
   version: 2.1.3
   resolution: "@nodelib/fs.scandir@npm:2.1.3"
@@ -2034,6 +2041,7 @@ __metadata:
     ts-loader: ^9.2.5
     tslib: ^2.3.1
     typescript: ^4.4.3
+    use-resize-observer: ^8.0.0
     webpack: ^5.53.0
     webpack-cli: ^4.8.0
   peerDependencies:
@@ -8510,6 +8518,18 @@ typescript@^4.4.3:
   dependencies:
     prepend-http: ^2.0.0
   checksum: 1040e357750451173132228036aff1fd04abbd43eac1fb3e4fca7495a078bcb8d33cb765fe71ad7e473d9c94d98fd67adca63bd2716c815a2da066198dd37217
+  languageName: node
+  linkType: hard
+
+"use-resize-observer@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "use-resize-observer@npm:8.0.0"
+  dependencies:
+    "@juggle/resize-observer": ^3.3.1
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 944ce47811f6056b481ce2f1550c2881bd5c25838cae2e0fb0bc0ed4aad7b5f2e55dcc0fc52107998ecfb602446465f94b2e728d3f3259fe8e6d4a3031cfb24a
   languageName: node
   linkType: hard
 
