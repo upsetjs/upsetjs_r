@@ -51,7 +51,6 @@ upsetjs <- function(width = "100%",
                     sizingPolicy = upsetjsSizingPolicy()) {
   # forward options using x
   x <- structure(list(
-    mode = "hover",
     sets = c()
   ))
 
@@ -112,7 +111,6 @@ upsetjsVennDiagram <- function(width = "100%",
   # forward options using x
   x <- structure(list(
     renderMode = "venn",
-    mode = "hover",
     sets = c()
   ))
 
@@ -173,7 +171,6 @@ upsetjsEulerDiagram <- function(width = "100%",
   # forward options using x
   x <- structure(list(
     renderMode = "euler",
-    mode = "hover",
     sets = c()
   ))
 
@@ -234,7 +231,6 @@ upsetjsKarnaughMap <- function(width = "100%",
   # forward options using x
   x <- structure(list(
     renderMode = "kmap",
-    mode = "hover",
     sets = c()
   ))
 

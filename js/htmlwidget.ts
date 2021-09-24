@@ -36,7 +36,7 @@ HTMLWidgets.widget({
   type: 'output',
 
   factory(el, width, height) {
-    const context = createContext(width, height, {
+    const context = createContext(width, height, isShinyMode(), {
       exportButtons: isShinyMode(),
     });
     let crosstalkHandler: CrosstalkHandler | null = null;
@@ -44,7 +44,6 @@ HTMLWidgets.widget({
     function update(delta?: any, append = false) {
       if (delta) {
         fixProps(context, delta, append);
-        context.props.onHover = context.interactive || isShinyMode() ? onHover : undefined;
       }
       if (context.renderMode === 'venn') {
         delete context.props.layout;
@@ -62,31 +61,41 @@ HTMLWidgets.widget({
     let bakSelection: ISetLike<Elem> | null | undefined | ReadonlyArray<Elem> | ((s: ISetLike<string>) => number) =
       null;
 
-    const onHover = (set: ISetLike<Elem> | null) => {
-      if (isShinyMode()) {
-        Shiny.onInputChange(`${el.id}_hover`, {
-          name: set ? set.name : null,
-          elems: set ? set.elems || [] : [],
-        });
-      }
-      const crosstalk = crosstalkHandler && crosstalkHandler.mode === 'hover';
-      if (!context.interactive && !crosstalk) {
-        return;
-      }
-      if (crosstalk && crosstalkHandler) {
-        crosstalkHandler.trigger(set?.elems as string[]);
-      }
-      if (set) {
-        // hover on
-        bakSelection = context.props.selection;
-        context.props.selection = set;
-      } else {
-        // hover off
-        context.props.selection = bakSelection;
-        bakSelection = null;
-      }
-      update();
-    };
+    function createHandler(mode: 'hover' | 'click' | 'contextMenu') {
+      return (set: ISetLike<Elem> | null) => {
+        if (isShinyMode()) {
+          Shiny.onInputChange(`${el.id}_${mode}`, {
+            name: set ? set.name : null,
+            elems: set ? set.elems || [] : [],
+          });
+        }
+        const crosstalk = crosstalkHandler && crosstalkHandler.mode === mode;
+        if (crosstalk && crosstalkHandler) {
+          crosstalkHandler.trigger(set?.elems as string[]);
+        }
+        if (context.interactive !== mode) {
+          return;
+        }
+        if (mode === 'hover') {
+          if (set) {
+            // hover on
+            bakSelection = context.props.selection;
+            context.props.selection = set;
+          } else {
+            // hover off
+            context.props.selection = bakSelection;
+            bakSelection = null;
+          }
+        } else {
+          context.props.selection = set;
+        }
+        update();
+      };
+    }
+
+    context.props.onHover = createHandler('hover');
+    context.props.onClick = createHandler('click');
+    context.props.onContextMenu = createHandler('contextMenu');
 
     function enableCrosstalk(config: CrosstalkOptions): CrosstalkHandler {
       const sel = new crosstalk.SelectionHandle();
@@ -125,33 +134,6 @@ HTMLWidgets.widget({
       };
     }
 
-    if (isShinyMode()) {
-      context.props.onClick = (set: ISetLike<Elem> | null) => {
-        Shiny.onInputChange(`${el.id}_click`, {
-          name: set ? set.name : null,
-          elems: set ? set.elems || [] : [],
-        });
-
-        if (crosstalkHandler && crosstalkHandler.mode === 'click') {
-          crosstalkHandler.trigger(set?.elems);
-          context.props.selection = set;
-          update();
-        }
-      };
-      context.props.onContextMenu = (set: ISetLike<Elem> | null) => {
-        Shiny.onInputChange(`${el.id}_contextMenu`, {
-          name: set ? set.name : null,
-          elems: set ? set.elems || [] : [],
-        });
-
-        if (crosstalkHandler && crosstalkHandler.mode === 'contextMenu') {
-          crosstalkHandler.trigger(set?.elems);
-          context.props.selection = set;
-          update();
-        }
-      };
-    }
-
     (el as any).__update = update;
 
     return {
@@ -174,13 +156,3 @@ HTMLWidgets.widget({
     };
   },
 });
-
-if (isShinyMode()) {
-  Shiny.addCustomMessageHandler('upsetjs-update', (msg) => {
-    const el = document.getElementById(msg.id);
-    const update: (props: any, append: boolean) => void = (el as any)?.__update;
-    if (typeof update === 'function') {
-      update(msg.props, msg.append);
-    }
-  });
-}

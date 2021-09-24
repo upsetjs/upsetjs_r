@@ -11,7 +11,7 @@
 upsetjsDash <- function(children = NULL, id = NULL, width = NULL, height = NULL) {
   props <- list(
     children = children, id = id, height = height, width = width,
-    renderMode = "upset", mode = "hover"
+    renderMode = "upset"
   )
   if (length(props) > 0) {
     props <- props[!vapply(props, is.null, logical(1))]
