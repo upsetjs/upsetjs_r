@@ -41,14 +41,14 @@ isVennDiagram <- function(upsetjs) {
   checkUpSetCommonArgument(upsetjs)
   inherits(upsetjs, "upsetjs_venn") ||
     inherits(upsetjs, "upsetjs_venn_proxy") ||
-      inherits(upsetjs, "upsetjs_venn_dash")
+    inherits(upsetjs, "upsetjs_venn_dash")
 }
 
 isKarnaughMap <- function(upsetjs) {
   checkUpSetCommonArgument(upsetjs)
   inherits(upsetjs, "upsetjs_kmap") ||
     inherits(upsetjs, "upsetjs_kmap_proxy") ||
-      inherits(upsetjs, "upsetjs_kmap_dash")
+    inherits(upsetjs, "upsetjs_kmap_dash")
 }
 
 stopIfNotType <- function(name,

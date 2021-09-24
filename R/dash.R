@@ -27,7 +27,8 @@ upsetjsDash <- function(children = NULL, id = NULL, width = NULL, height = NULL)
       "title", "description", "setName", "combinationName", "combinationNameAxisOffset", "barLabelOffset", "setNameAxisOffset",
       "fontFamily", "fontSizes", "exportButtons", "className",
       "theme", "selectionColor", "alternatingBackgroundColor", "color",
-      "hasSelectionColor", "textColor", "hoverHintColor", "notMemberColor", "valueTextColor", "strokeColor", "opacity", "hasSelectionOpacity", "filled"),
+      "hasSelectionColor", "textColor", "hoverHintColor", "notMemberColor", "valueTextColor", "strokeColor", "opacity", "hasSelectionOpacity", "filled"
+    ),
     package = "upsetjs"
   )
 

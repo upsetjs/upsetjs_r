@@ -4,6 +4,7 @@
 
 ^doc$
 ^shiny$
+^dash$
 ^docs$
 ^Meta$
 ^js$
