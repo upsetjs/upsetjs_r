@@ -2,7 +2,7 @@
 
 [![CRAN][cran-image]][cran-url] [![Github Actions][github-actions-image]][github-actions-url] [![Open in Binder][binder]][binder-r-url] [![Open Docs][docs]][docs-r-url] [![Open example][example]][example-r-url]
 
-This is a [HTMLWidget](http://www.htmlwidgets.org/) wrapper around the JavaScript library [UpSet.js](https://github.com/upsetjs/upsetjs) and an alternative implementation of [UpSetR](https://www.rdocumentation.org/packages/UpSetR).
+This is a [HTMLWidget](http://www.htmlwidgets.org/) and [Plot.ly Dash](https://dashr.plotly.com/) wrapper around the JavaScript library [UpSet.js](https://github.com/upsetjs/upsetjs) and an alternative implementation of [UpSetR](https://www.rdocumentation.org/packages/UpSetR).
 
 This package is part of the UpSet.js ecosystem located at the main [Github Monorepo](https://github.com/upsetjs/upsetjs).
 
@@ -57,7 +57,41 @@ shinyApp(ui = ui, server = server)
 
 ![shiny](https://user-images.githubusercontent.com/4129778/79375695-51d5bb80-7f59-11ea-8437-40fa60ce425c.png)
 
-see also [Shiny Examples](./master/shiny)
+see also [Shiny Examples](./main/shiny)
+
+## Dash Example
+
+```R
+library(dash)
+library(dashHtmlComponents)
+library(upsetjs)
+
+app <- Dash$new()
+
+app$layout(
+    htmlDiv(
+        list(
+            htmlH1("Hello UpSet.js + Dash"),
+            upsetjsDash(id = "upset") %>% fromList(list(a = c(1, 2, 3), b = c(2, 3)))
+                %>% interactiveChart(),
+            htmlDiv(id = "output")
+        )
+    )
+)
+app$callback(
+    output = list(id = "output", property = "children"),
+    params = list(input(id = "upset", property = "selection")),
+    function(selection) {
+        sprintf("You selected \"%s\"", selection$name)
+    }
+)
+
+app$run_server()
+```
+
+TODO
+
+see also [Dash Examples](./main/dash)
 
 ## Documentation
 
