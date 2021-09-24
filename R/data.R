@@ -13,18 +13,18 @@
 #' @param color the color of the set
 #' @return the set object
 #' @examples
-#' asSet('a', c(1,2,3))
-#'
+#' asSet("a", c(1, 2, 3))
 #' @export
-asSet = function(name, elems = c(), cardinality = length(elems), color = NULL) {
+asSet <- function(name, elems = c(), cardinality = length(elems), color = NULL) {
   structure(list(
-      name = name,
-      type = 'set',
-      elems = elems,
-      cardinality = cardinality,
-      color = color
-    ),
-    class = "upsetjs_set")
+    name = name,
+    type = "set",
+    elems = elems,
+    cardinality = cardinality,
+    color = color
+  ),
+  class = "upsetjs_set"
+  )
 }
 
 #'
@@ -37,22 +37,22 @@ asSet = function(name, elems = c(), cardinality = length(elems), color = NULL) {
 #' @param color the color of the set
 #' @return the set object
 #' @examples
-#' asCombination('a', c(1,2,3))
-#'
+#' asCombination("a", c(1, 2, 3))
 #' @export
-asCombination = function(name, elems = c(), type = 'intersection', sets = strsplit(name, '&'), cardinality = length(elems), color = NULL) {
+asCombination <- function(name, elems = c(), type = "intersection",
+                          sets = strsplit(name, "&"), cardinality = length(elems), color = NULL) {
   structure(
-      list(
-        name = name,
-        type = type,
-        elems = elems,
-        color = color,
-        cardinality = cardinality,
-        setNames = sets,
-        degree = length(sets)
-      ),
-      class = "upsetjs_combination"
-    )
+    list(
+      name = name,
+      type = type,
+      elems = elems,
+      color = color,
+      cardinality = cardinality,
+      setNames = sets,
+      degree = length(sets)
+    ),
+    class = "upsetjs_combination"
+  )
 }
 
 #'
@@ -67,22 +67,21 @@ asCombination = function(name, elems = c(), type = 'intersection', sets = strspl
 #' @param c_type the combination type to use or "none" for disabling initial generation
 #' @return the object given as first argument
 #' @examples
-#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3)))
-#'
+#' upsetjs() %>% fromList(list(a = c(1, 2, 3), b = c(2, 3)))
 #' @export
-fromList = function(upsetjs,
-                    value,
-                    order.by = "cardinality",
-                    limit = NULL,
-                    shared = NULL,
-                    shared.mode = "click",
-                    colors = NULL,
-                    c_type = NULL) {
+fromList <- function(upsetjs,
+                     value,
+                     order.by = "cardinality",
+                     limit = NULL,
+                     shared = NULL,
+                     shared.mode = "click",
+                     colors = NULL,
+                     c_type = NULL) {
   checkUpSetCommonArgument(upsetjs)
   stopifnot(is.list(value))
   stopifnot(order.by == "cardinality" || order.by == "degree")
   stopifnot(is.null(limit) ||
-              (is.numeric(limit) && length(limit) == 1))
+    (is.numeric(limit) && length(limit) == 1))
   stopifnot(shared.mode == "click" || shared.mode == "hover")
   stopifnot(is.null(colors) || is.list(colors))
   stopifnot(
@@ -92,43 +91,44 @@ fromList = function(upsetjs,
       c_type == "none"
   )
 
-  elems = c()
-  cc = colorLookup(colors)
-  toSet = function(key, value) {
+  elems <- c()
+  cc <- colorLookup(colors)
+  toSet <- function(key, value) {
     elems <<- unique(c(elems, value))
-    asSet(key, value, color=cc(key))
+    asSet(key, value, color = cc(key))
   }
-  sets = mapply(toSet,
-                key = names(value),
-                value = value,
-                SIMPLIFY = FALSE)
+  sets <- mapply(toSet,
+    key = names(value),
+    value = value,
+    SIMPLIFY = FALSE
+  )
   # list of list objects
-  names(sets) = NULL
-  names(elems) = NULL
+  names(sets) <- NULL
+  names(elems) <- NULL
 
   if (!is.null(shared)) {
-    upsetjs = enableCrosstalk(upsetjs, shared, mode = shared.mode)
+    upsetjs <- enableCrosstalk(upsetjs, shared, mode = shared.mode)
   }
 
-  sorted_sets = sortSets(sets, order.by = order.by, limit = limit)
+  sortedSets <- sortSets(sets, order.by = order.by, limit = limit)
 
-  gen = if (!is.null(c_type) && c_type == "none") {
-    list() 
+  gen <- if (!is.null(c_type) && c_type == "none") {
+    list()
   } else if (isVennDiagram(upsetjs) || isKarnaughMap(upsetjs)) {
     generateCombinationsImpl(
-      sorted_sets,
-      ifelse(is.null(c_type), 'distinctIntersection', c_type),
+      sortedSets,
+      ifelse(is.null(c_type), "distinctIntersection", c_type),
       0,
       NULL,
       TRUE,
-      'degree',
+      "degree",
       limit,
       colors
     )
   } else {
     generateCombinationsImpl(
-      sorted_sets,
-      ifelse(is.null(c_type), 'intersection', c_type),
+      sortedSets,
+      ifelse(is.null(c_type), "intersection", c_type),
       0,
       NULL,
       FALSE,
@@ -140,7 +140,7 @@ fromList = function(upsetjs,
   setProperties(
     upsetjs,
     list(
-      sets = sorted_sets,
+      sets = sortedSets,
       combinations = gen,
       elems = elems,
       expressionData = FALSE,
@@ -159,69 +159,68 @@ fromList = function(upsetjs,
 #' @param type the type of intersections this data represents (intersection,union,distinctIntersection)
 #' @return the object given as first argument
 #' @examples
-#' upsetjs() %>% fromExpression(list(a=3, b=2, `a&b`=2))
-#'
+#' upsetjs() %>% fromExpression(list(a = 3, b = 2, `a&b` = 2))
 #' @export
-fromExpression = function(upsetjs,
-                          value,
-                          symbol = "&",
-                          order.by = "cardinality",
-                          colors = NULL,
-                          type = 'intersection') {
+fromExpression <- function(upsetjs,
+                           value,
+                           symbol = "&",
+                           order.by = "cardinality",
+                           colors = NULL,
+                           type = "intersection") {
   checkUpSetCommonArgument(upsetjs)
   stopifnot(is.list(value))
   stopifnot(order.by == "cardinality" || order.by == "degree")
   stopifnot(is.null(colors) || is.list(colors))
   stopifnot(type == "intersection" ||
-              type == "union" || type == "distinctIntersection")
+    type == "union" || type == "distinctIntersection")
 
-  cc = colorLookup(colors)
+  cc <- colorLookup(colors)
 
-  degrees = sapply(names(value), function (x) {
+  degrees <- sapply(names(value), function(x) {
     length(unlist(strsplit(x, symbol)))
   })
 
-  raw_combinations = value
+  rawCombinations <- value
 
-  toCombination = function(key, value, color) {
-    asCombination(key, c(), type, sets = unlist(strsplit(key, symbol)), cardinality = value, color=cc(key))
+  toCombination <- function(key, value, color) {
+    asCombination(key, c(), type, sets = unlist(strsplit(key, symbol)), cardinality = value, color = cc(key))
   }
-  combinations = mapply(
+  combinations <- mapply(
     toCombination,
-    key = names(raw_combinations),
-    value = raw_combinations,
+    key = names(rawCombinations),
+    value = rawCombinations,
     SIMPLIFY = FALSE
   )
-  names(combinations) = NULL
-  combinations = sortSets(combinations, order.by = order.by)
+  names(combinations) <- NULL
+  combinations <- sortSets(combinations, order.by = order.by)
 
-  sets = list()
-  defined_sets = c()
+  sets <- list()
+  definedSets <- c()
   for (c in combinations) {
     for (s in c$setNames) {
-      if (!(s %in% defined_sets)) {
-        defined_sets = c(defined_sets, s)
-        sets[[s]] = asSet(s, c(), color=cc(s))
+      if (!(s %in% definedSets)) {
+        definedSets <- c(definedSets, s)
+        sets[[s]] <- asSet(s, c(), color = cc(s))
       }
       # determine base set based on type and value
-      set = sets[[s]]
-      if (type == 'distinctIntersection') {
-        set$cardinality = set$cardinality + c$cardinality
+      set <- sets[[s]]
+      if (type == "distinctIntersection") {
+        set$cardinality <- set$cardinality + c$cardinality
       } else if (length(c$setNames) == 1) {
-        set$cardinality = c$cardinality
-      } else if (type == 'intersection') {
-        set$cardinality = max(set$cardinality, c$cardinality)
-      } else if (type == 'union') {
-        set$cardinality = min(set$cardinality, c$cardinality)
+        set$cardinality <- c$cardinality
+      } else if (type == "intersection") {
+        set$cardinality <- max(set$cardinality, c$cardinality)
+      } else if (type == "union") {
+        set$cardinality <- min(set$cardinality, c$cardinality)
       }
-      sets[[s]] = set
+      sets[[s]] <- set
     }
   }
-  names(sets) = NULL
-  sets = sortSets(sets, order.by = order.by)
+  names(sets) <- NULL
+  sets <- sortSets(sets, order.by = order.by)
 
 
-  props = list(
+  props <- list(
     sets = sets,
     combinations = combinations,
     elems = c(),
@@ -240,12 +239,12 @@ fromExpression = function(upsetjs,
 #' @param colors the optional list with set name to color
 #' @param store.elems store the elements in the sets (default TRUE)
 #' @export
-extractSetsFromDataFrame = function(df,
-                         attributes = NULL,
-                         order.by = "cardinality",
-                         limit = NULL,
-                         colors = NULL,
-                         store.elems = TRUE) {
+extractSetsFromDataFrame <- function(df,
+                                     attributes = NULL,
+                                     order.by = "cardinality",
+                                     limit = NULL,
+                                     colors = NULL,
+                                     store.elems = TRUE) {
   stopifnot(is.data.frame(df))
   stopifnot((
     is.null(attributes) ||
@@ -253,24 +252,25 @@ extractSetsFromDataFrame = function(df,
       is.list(attributes) || is.character(attributes)
   ))
   stopifnot(order.by == "cardinality" || order.by == "degree")
-  stopifnottype("limit", limit)
+  stopIfNotType("limit", limit)
   stopifnot(is.null(colors) || is.list(colors))
 
-  cc = colorLookup(colors)
+  cc <- colorLookup(colors)
 
-  elems = rownames(df)
+  elems <- rownames(df)
 
-  toSet = function(key) {
-    sub = elems[df[[key]] == TRUE]
-    x = if(store.elems) sub else c()
-     asSet(key, x, cardinality=length(sub), color=cc(key))
+  toSet <- function(key) {
+    sub <- elems[df[[key]] == TRUE]
+    x <- if (store.elems) sub else c()
+    asSet(key, x, cardinality = length(sub), color = cc(key))
   }
 
-  set_names = setdiff(colnames(df), if (is.character(attributes))
+  setNames <- setdiff(colnames(df), if (is.character(attributes)) {
     attributes
-    else
-      c())
-  sets = lapply(set_names, toSet)
+  } else {
+    c()
+  })
+  sets <- lapply(setNames, toSet)
 
   sortSets(sets, order.by = order.by, limit = limit)
 }
@@ -286,22 +286,23 @@ extractSetsFromDataFrame = function(df,
 #' @param shared.mode whether on 'hover' or 'click' (default) is synced
 #' @param colors the optional list with set name to color
 #' @param c_type the combination type to use
+#' @param store.elems whether to store the set elements within the structures (set to false for big data frames)
 #' @return the object given as first argument
+#' @importFrom stats aggregate
 #' @examples
-#' df <- as.data.frame(list(a=c(1, 1, 1),b=c(0, 1, 1)),row.names=c('a', 'b', 'c'))
+#' df <- as.data.frame(list(a = c(1, 1, 1), b = c(0, 1, 1)), row.names = c("a", "b", "c"))
 #' upsetjs() %>% fromDataFrame(df)
-#'
 #' @export
-fromDataFrame = function(upsetjs,
-                         df,
-                         attributes = NULL,
-                         order.by = "cardinality",
-                         limit = NULL,
-                         shared = NULL,
-                         shared.mode = "click",
-                         colors = NULL,
-                         c_type = NULL,
-                         store.elems = TRUE) {
+fromDataFrame <- function(upsetjs,
+                          df,
+                          attributes = NULL,
+                          order.by = "cardinality",
+                          limit = NULL,
+                          shared = NULL,
+                          shared.mode = "click",
+                          colors = NULL,
+                          c_type = NULL,
+                          store.elems = TRUE) {
   checkUpSetCommonArgument(upsetjs)
   stopifnot(is.data.frame(df))
   stopifnot((
@@ -310,7 +311,7 @@ fromDataFrame = function(upsetjs,
       is.list(attributes) || is.character(attributes)
   ))
   stopifnot(order.by == "cardinality" || order.by == "degree")
-  stopifnottype('limit', limit)
+  stopIfNotType("limit", limit)
   stopifnot(shared.mode == "click" || shared.mode == "hover")
   stopifnot(is.null(colors) || is.list(colors))
   stopifnot(
@@ -320,20 +321,21 @@ fromDataFrame = function(upsetjs,
       c_type == "none"
   )
 
-  cc = colorLookup(colors)
+  genType <- ifelse(!is.null(c_type), c_type, ifelse(isVennDiagram(upsetjs) || isKarnaughMap(upsetjs), "distinctIntersection", "intersection"))
+  sortedSets <- extractSetsFromDataFrame(df, attributes, order.by, limit,
+    colors,
+    store.elems = store.elems || genType != "distinctIntersection"
+  )
 
-  gen_type = ifelse(!is.null(c_type), c_type, ifelse(isVennDiagram(upsetjs) || isKarnaughMap(upsetjs), 'distinctIntersection', 'intersection'))
-  sorted_sets = extractSetsFromDataFrame(df, attributes, order.by, limit, colors, store.elems = store.elems || gen_type != 'distinctIntersection')
+  elems <- rownames(df)
 
-  elems = rownames(df)
-  
-  gen = if (!is.null(c_type) && c_type == "none") {
-    list() 
+  gen <- if (!is.null(c_type) && c_type == "none") {
+    list()
   } else if (isVennDiagram(upsetjs) || isKarnaughMap(upsetjs)) {
-    if (gen_type == 'distinctIntersection') {
+    if (genType == "distinctIntersection") {
       extractCombinationsImpl(
         df,
-        sorted_sets,
+        sortedSets,
         TRUE,
         order.by,
         limit,
@@ -342,21 +344,21 @@ fromDataFrame = function(upsetjs,
       )
     } else {
       generateCombinationsImpl(
-        sorted_sets,
-        gen_type,
+        sortedSets,
+        genType,
         0,
         NULL,
         TRUE,
-        'degree',
+        "degree",
         limit,
         colors,
         store.elems = store.elems
       )
     }
-  } else if (gen_type == 'distinctIntersection') {
+  } else if (genType == "distinctIntersection") {
     extractCombinationsImpl(
       df,
-      sorted_sets,
+      sortedSets,
       FALSE,
       order.by,
       limit,
@@ -365,8 +367,8 @@ fromDataFrame = function(upsetjs,
     )
   } else {
     generateCombinationsImpl(
-      sorted_sets,
-      gen_type,
+      sortedSets,
+      genType,
       0,
       NULL,
       FALSE,
@@ -377,34 +379,35 @@ fromDataFrame = function(upsetjs,
     )
   }
 
-  if (!store.elems && gen_type != 'distinctIntersection') {
+  if (!store.elems && genType != "distinctIntersection") {
     # delete
-    for(i in 1:length(sorted_sets)) {
-      sorted_sets[[i]]$elems = c()
+    for (i in seq_along(sortedSets)) {
+      sortedSets[[i]]$elems <- c()
     }
   }
 
-  props = list(
-    sets = sorted_sets,
+  props <- list(
+    sets = sortedSets,
     combinations = gen,
     elems = elems,
     expressionData = FALSE
   )
 
-  upsetjs = setProperties(upsetjs, props)
+  upsetjs <- setProperties(upsetjs, props)
 
   if (!is.null(attributes)) {
-    attr_df = if (is.character(attributes))
+    attrDf <- if (is.character(attributes)) {
       df[, attributes]
-    else
+    } else {
       attributes
-    upsetjs = setAttributes(upsetjs, attr_df)
+    }
+    upsetjs <- setAttributes(upsetjs, attrDf)
   }
 
   if (!is.null(shared)) {
-    upsetjs = enableCrosstalk(upsetjs, shared, mode = shared.mode)
+    upsetjs <- enableCrosstalk(upsetjs, shared, mode = shared.mode)
   } else {
-    upsetjs = enableCrosstalk(upsetjs, df, mode = shared.mode)
+    upsetjs <- enableCrosstalk(upsetjs, df, mode = shared.mode)
   }
 
   upsetjs
@@ -415,11 +418,12 @@ fromDataFrame = function(upsetjs,
 #' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
 #' @return vector of elements
 #' @examples
-#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% getElements()
-#'
+#' upsetjs() %>%
+#'   fromList(list(a = c(1, 2, 3), b = c(2, 3))) %>%
+#'   getElements()
 #' @export
-getElements = function(upsetjs) {
-  stopifnot(inherits(upsetjs, 'upsetjs_common'))
+getElements <- function(upsetjs) {
+  stopifnot(inherits(upsetjs, "upsetjs_common"))
   upsetjs$x$elems
 }
 
@@ -429,12 +433,13 @@ getElements = function(upsetjs) {
 #' @param value the vector of elements
 #' @return the object given as first argument
 #' @examples
-#' upsetjs() %>% setElements(c(1,2,3,4,5)) %>% getElements()
-#'
+#' upsetjs() %>%
+#'   setElements(c(1, 2, 3, 4, 5)) %>%
+#'   getElements()
 #' @export
-setElements = function(upsetjs, value) {
-  stopifnot(inherits(upsetjs, 'upsetjs_common'))
-  setProperty(upsetjs, 'elems', value)
+setElements <- function(upsetjs, value) {
+  stopifnot(inherits(upsetjs, "upsetjs_common"))
+  setProperty(upsetjs, "elems", value)
 }
 
 #'
@@ -442,11 +447,12 @@ setElements = function(upsetjs, value) {
 #' @param upsetjs an object of class \code{upsetjs}
 #' @return vector of sets
 #' @examples
-#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% getSets()
-#'
+#' upsetjs() %>%
+#'   fromList(list(a = c(1, 2, 3), b = c(2, 3))) %>%
+#'   getSets()
 #' @export
-getSets = function(upsetjs) {
-  stopifnot(inherits(upsetjs, 'upsetjs_common'))
+getSets <- function(upsetjs) {
+  stopifnot(inherits(upsetjs, "upsetjs_common"))
   upsetjs$x$sets
 }
 
@@ -456,12 +462,13 @@ getSets = function(upsetjs) {
 #' @param value the vector of sets
 #' @return the object given as first argument
 #' @examples
-#' upsetjs() %>% setCombinations(list(asSet('a', c(1,2,3)))) %>% getSets()
-#'
+#' upsetjs() %>%
+#'   setCombinations(list(asSet("a", c(1, 2, 3)))) %>%
+#'   getSets()
 #' @export
-setSets = function(upsetjs, value) {
-  stopifnot(inherits(upsetjs, 'upsetjs_common'))
-  setProperty(upsetjs, 'sets', value)
+setSets <- function(upsetjs, value) {
+  stopifnot(inherits(upsetjs, "upsetjs_common"))
+  setProperty(upsetjs, "sets", value)
 }
 
 #'
@@ -469,11 +476,12 @@ setSets = function(upsetjs, value) {
 #' @param upsetjs an object of class \code{upsetjs}
 #' @return vector of sets
 #' @examples
-#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% getCombinations()
-#'
+#' upsetjs() %>%
+#'   fromList(list(a = c(1, 2, 3), b = c(2, 3))) %>%
+#'   getCombinations()
 #' @export
-getCombinations = function(upsetjs) {
-  stopifnot(inherits(upsetjs, 'upsetjs_common'))
+getCombinations <- function(upsetjs) {
+  stopifnot(inherits(upsetjs, "upsetjs_common"))
   upsetjs$x$combinations
 }
 
@@ -483,40 +491,41 @@ getCombinations = function(upsetjs) {
 #' @param value the vector of combinations
 #' @return the object given as first argument
 #' @examples
-#' upsetjs() %>% setCombinations(list(asCombination('a', c(1,2,3)))) %>% getCombinations()
-#'
+#' upsetjs() %>%
+#'   setCombinations(list(asCombination("a", c(1, 2, 3)))) %>%
+#'   getCombinations()
 #' @export
-setCombinations = function(upsetjs, value) {
-  stopifnot(inherits(upsetjs, 'upsetjs_common'))
-  setProperty(upsetjs, 'combinations', value)
+setCombinations <- function(upsetjs, value) {
+  stopifnot(inherits(upsetjs, "upsetjs_common"))
+  setProperty(upsetjs, "combinations", value)
 }
 
-generateCombinations = function(upsetjs,
-                                c_type,
-                                min,
-                                max,
-                                empty,
-                                order.by,
-                                limit,
-                                colors = NULL,
-                                symbol = '&') {
+generateCombinations <- function(upsetjs,
+                                 c_type,
+                                 min,
+                                 max,
+                                 empty,
+                                 order.by,
+                                 limit,
+                                 colors = NULL,
+                                 symbol = "&") {
   checkUpSetArgument(upsetjs)
   stopifnot(is.numeric(min), length(min) == 1)
-  stopifnottype('max', max)
+  stopIfNotType("max", max)
   stopifnot(is.logical(empty), length(empty) == 1)
   stopifnot(is.character(order.by), length(order.by) >= 1)
   stopifnot(is.null(limit) ||
-              (is.numeric(limit) && length(limit) == 1))
+    (is.numeric(limit) && length(limit) == 1))
   stopifnot(is.null(colors) || is.list(colors))
   stopifnot(c_type == "intersection" ||
-              c_type == "union" || c_type == "distinctIntersection")
+    c_type == "union" || c_type == "distinctIntersection")
 
-  if (inherits(upsetjs, 'upsetjs_common')) {
-    sets = upsetjs$x$sets
-    gen = generateCombinationsImpl(sets, c_type, min, max, empty, order.by, limit, colors, symbol)
+  if (inherits(upsetjs, "upsetjs_common")) {
+    sets <- upsetjs$x$sets
+    gen <- generateCombinationsImpl(sets, c_type, min, max, empty, order.by, limit, colors, symbol)
   } else {
     # proxy
-    gen = cleanNull(list(
+    gen <- cleanNull(list(
       type = c_type,
       min = min,
       max = max,
@@ -525,7 +534,7 @@ generateCombinations = function(upsetjs,
       limit = limit
     ))
   }
-  setProperty(upsetjs, 'combinations', gen)
+  setProperty(upsetjs, "combinations", gen)
 }
 
 #'
@@ -539,24 +548,27 @@ generateCombinations = function(upsetjs,
 #' @param colors the optional list with set name to color
 #' @return the object given as first argument
 #' @examples
-#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% generateIntersections(min=2)
-#'
+#' upsetjs() %>%
+#'   fromList(list(a = c(1, 2, 3), b = c(2, 3))) %>%
+#'   generateIntersections(min = 2)
 #' @export
-generateIntersections = function(upsetjs,
-                                 min = 0,
-                                 max = NULL,
-                                 empty = FALSE,
-                                 order.by = "cardinality",
-                                 limit = NULL,
-                                 colors = NULL) {
-  generateCombinations(upsetjs,
-                       "intersection",
-                       min,
-                       max,
-                       empty,
-                       order.by,
-                       limit,
-                       colors)
+generateIntersections <- function(upsetjs,
+                                  min = 0,
+                                  max = NULL,
+                                  empty = FALSE,
+                                  order.by = "cardinality",
+                                  limit = NULL,
+                                  colors = NULL) {
+  generateCombinations(
+    upsetjs,
+    "intersection",
+    min,
+    max,
+    empty,
+    order.by,
+    limit,
+    colors
+  )
 }
 
 #'
@@ -570,24 +582,27 @@ generateIntersections = function(upsetjs,
 #' @param colors the optional list with set name to color
 #' @return the object given as first argument
 #' @examples
-#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% generateDistinctIntersections(min=2)
-#'
+#' upsetjs() %>%
+#'   fromList(list(a = c(1, 2, 3), b = c(2, 3))) %>%
+#'   generateDistinctIntersections(min = 2)
 #' @export
-generateDistinctIntersections = function(upsetjs,
-                                         min = 0,
-                                         max = NULL,
-                                         empty = FALSE,
-                                         order.by = "cardinality",
-                                         limit = NULL,
-                                         colors = NULL) {
-  generateCombinations(upsetjs,
-                       "distinctIntersection",
-                       min,
-                       max,
-                       empty,
-                       order.by,
-                       limit,
-                       colors)
+generateDistinctIntersections <- function(upsetjs,
+                                          min = 0,
+                                          max = NULL,
+                                          empty = FALSE,
+                                          order.by = "cardinality",
+                                          limit = NULL,
+                                          colors = NULL) {
+  generateCombinations(
+    upsetjs,
+    "distinctIntersection",
+    min,
+    max,
+    empty,
+    order.by,
+    limit,
+    colors
+  )
 }
 
 #'
@@ -601,15 +616,16 @@ generateDistinctIntersections = function(upsetjs,
 #' @param colors the optional list with set name to color
 #' @return the object given as first argument
 #' @examples
-#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3))) %>% generateUnions()
-#'
+#' upsetjs() %>%
+#'   fromList(list(a = c(1, 2, 3), b = c(2, 3))) %>%
+#'   generateUnions()
 #' @export
-generateUnions = function(upsetjs,
-                          min = 0,
-                          max = NULL,
-                          empty = FALSE,
-                          order.by = "cardinality",
-                          limit = NULL,
-                          colors = NULL) {
+generateUnions <- function(upsetjs,
+                           min = 0,
+                           max = NULL,
+                           empty = FALSE,
+                           order.by = "cardinality",
+                           limit = NULL,
+                           colors = NULL) {
   generateCombinations(upsetjs, "union", min, max, empty, order.by, limit, colors)
 }

@@ -21,11 +21,11 @@ const babel = {
 
 module.exports = {
   entry: {
-    app: './src/index.ts',
+    app: './js/htmlwidget.ts',
   },
   output: {
     filename: 'upsetjs.js',
-    path: path.resolve(__dirname, 'r_package', 'inst', 'htmlwidgets'),
+    path: path.resolve(__dirname, 'inst', 'htmlwidgets'),
   },
   module: {
     rules: [

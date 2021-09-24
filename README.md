@@ -98,9 +98,8 @@ requirements:
 
 ```sh
 npm i -g yarn
-yarn set version berry
 yarn install
-yarn pnpify --sdk vscode
+yarn sdks vscode
 ```
 
 ### Building
@@ -113,6 +112,8 @@ yarn build
 ### R Package
 
 ```sh
+yarn style:r
+yarn lint:r
 yarn check:r
 yarn build:r
 ```
@@ -120,10 +121,12 @@ yarn build:r
 or in R
 
 ```R
-devtools::check("r_package")
-devtools::document("r_package")
-devtools::build("r_package")
-devtools::load_all("r_package")
+devtools::load_all()
+styler::style_pkg()
+lintr::lint_pkg()
+devtools::check()
+devtools::document()
+devtools::build()
 ```
 
 **R Package Website**
@@ -137,7 +140,7 @@ yarn docs:r
 or in R
 
 ```R
-devtools::build_site("r_package)
+devtools::build_site()
 ```
 
 ## Release
@@ -146,7 +149,7 @@ use `release-it`
 
 ```sh
 yarn release
-Rscript -e "devtools::release('r_package')"
+Rscript -e "devtools::release()"
 ```
 
 ## Privacy Policy

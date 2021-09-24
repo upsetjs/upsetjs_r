@@ -4,76 +4,63 @@ on: [push]
 
 jobs:
   build_r:
-    runs-on: ubuntu-16.04
-    env:
-      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      RSPM: https://demo.rstudiopm.com/all/__linux__/xenial/latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: r-lib/actions/setup-r@master
+      - uses: actions/setup-node@v2
         with:
-          r-version: 3.6
-      - uses: r-lib/actions/setup-pandoc@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
+          node-version: 14
         # build client code
       - run: npm i -g yarn
-      - run: yarn set version berry
       - run: yarn config set checksumBehavior ignore
       - name: Cache Node.js modules
-        uses: actions/cache@v1
+        uses: actions/cache@v2.1.6
         with:
-          path: ./.yarn
-          key: ${{ runner.os }}-yarn2-${{ hashFiles('**/yarn.lock') }}
+          path: |
+            ./.yarn/cache
+            ./.yarn/unplugged
+          key: ${{ runner.os }}-yarn2-v4-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn2-
+            ${{ runner.os }}-yarn2-v4
       - run: yarn install
-        env:
-          CI: true
       - run: yarn build
-        env:
-          CI: true
-
-      - name: Cache R packages
-        uses: actions/cache@v1
+      - run: yarn clean:r
+      - uses: r-lib/actions/setup-r@v1
         with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-r-v2-${{ hashFiles('r_package/DESCRIPTION')}}
-          restore-keys: ${{ runner.os }}-r-v2-
+          use-public-rspm: true
+      - uses: r-lib/actions/setup-r-dependencies@v1
+        with:
+          extra-packages: |
+            webshot
+            textshaping
+            devtools
 
-      # - name: Install system dependencies
-      #   env:
-      #     RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
-      #   run: |
-      #     Rscript -e "remotes::install_github('r-hub/sysreqs')"
-      #     sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
-      #     sudo -s eval "$sysreqs"
-
-      - name: Install dependencies
-        run: |
-          install.packages(c('devtools', 'pkgdown', 'webshot', 'textshaping'))
-          devtools::install_deps('r_package', dependencies = TRUE)
+      - name: Style / Format
         shell: Rscript {0}
+        run: styler::style_pkg( dry="fail")
+
+      - name: Lint
+        shell: Rscript {0}
+        run: |
+          devtools::load_all()
+          lintr::lint_package()
 
       - name: Check
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
-        run: devtools::check('r_package', args = c("--no-manual", "--as-cran"), error_on = "error", check_dir = "check")
         shell: Rscript {0}
+        run: devtools::check( args = c("--no-manual", "--as-cran"), error_on = "error", check_dir = "check")
 
       - name: Test
-        env:
-          _R_CHECK_CRAN_INCOMING_REMOTE_: false
-        run: devtools::test('r_package')
         shell: Rscript {0}
+        run: devtools::test()
 
       - name: Upload check results
         if: failure()
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v2
         with:
           name: ${{ runner.os }}-results
-          path: r_package/check
+          path: check
 
       - name: Build Package
         run: yarn build:r
@@ -81,15 +68,14 @@ jobs:
         run: |
           mkdir -p public/integrations/r
           cp ./upsetjs.tar.gz public/integrations/r/
-          cp README.md r_package/
       - name: Build Website
         run: yarn docs:r
       - name: Copy Docs
         run: |
-          mv r_package/docs/* public/integrations/r/
+          mv docs/* public/integrations/r/
 
-      - name: Deploy Master
-        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      - name: Deploy Main
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: upsetjs/actions-gh-pages@sgratzl
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
@@ -125,28 +111,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
-          node-version: '12.x'
+          node-version: 14
+        # build client code
       - run: npm i -g yarn
-      - run: yarn set version berry
       - run: yarn config set checksumBehavior ignore
       - name: Cache Node.js modules
-        uses: actions/cache@v1
+        uses: actions/cache@v2.1.6
         with:
-          path: ./.yarn
-          key: ${{ runner.os }}-yarn2-${{ hashFiles('**/yarn.lock') }}
+          path: |
+            ./.yarn/cache
+            ./.yarn/unplugged
+          key: ${{ runner.os }}-yarn2-v4-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn2-
+            ${{ runner.os }}-yarn2-v4
       - run: yarn install
-        env:
-          CI: true
       - run: yarn build
-        env:
-          CI: true
       - run: yarn lint
-        env:
-          CI: true
       # - run: yarn test --ci --coverage --maxWorkers=2
-      #   env:
-      #     CI: true

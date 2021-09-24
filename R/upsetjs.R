@@ -14,15 +14,15 @@
 #' @param ... all other arguments supplied to \code{htmlwidgets::\link[htmlwidgets]{sizingPolicy}}
 #' @return An \code{htmlwidgets::sizingPolicy} object
 #' @examples
-#' upsetjs(sizingPolicy=upsetjsSizingPolicy(padding=20)) %>% fromList(list(a=c(1,2,3), b=c(2,3)))
+#' upsetjs(sizingPolicy = upsetjsSizingPolicy(padding = 20)) %>% fromList(list(a = c(1, 2, 3), b = c(2, 3)))
 #' @importFrom htmlwidgets sizingPolicy
 #'
 #' @export
-upsetjsSizingPolicy = function(defaultWidth = "100%",
-                               defaultHeight = 400,
-                               padding = 0,
-                               browser.fill = TRUE,
-                               ...) {
+upsetjsSizingPolicy <- function(defaultWidth = "100%",
+                                defaultHeight = 400,
+                                padding = 0,
+                                browser.fill = TRUE,
+                                ...) {
   # not adding extra arguments as htmlwidgets::sizingPolicy can change their own args) {
   htmlwidgets::sizingPolicy(
     defaultWidth = defaultWidth,
@@ -42,30 +42,32 @@ upsetjsSizingPolicy = function(defaultWidth = "100%",
 #'
 #' @return An object of class \code{upsetjs} and \code{htmlwidget}
 #' @examples
-#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3)))
+#' upsetjs() %>% fromList(list(a = c(1, 2, 3), b = c(2, 3)))
 #' @importFrom htmlwidgets createWidget
 #' @export
-upsetjs = function(width = '100%',
-                   height = NULL,
-                   elementId = NULL,
-                   sizingPolicy = upsetjsSizingPolicy()) {
+upsetjs <- function(width = "100%",
+                    height = NULL,
+                    elementId = NULL,
+                    sizingPolicy = upsetjsSizingPolicy()) {
   # forward options using x
-  x = structure(list(mode = 'hover',
-                     sets = c()))
+  x <- structure(list(
+    mode = "hover",
+    sets = c()
+  ))
 
-  dependencies = c()
+  dependencies <- c()
 
-  r = htmlwidgets::createWidget(
-    'upsetjs',
+  r <- htmlwidgets::createWidget(
+    "upsetjs",
     x,
     width = width,
     height = height,
-    package = 'upsetjs',
+    package = "upsetjs",
     elementId = elementId,
     sizingPolicy = sizingPolicy,
     dependencies = dependencies
   )
-  class(r) = c(class(r), 'upsetjs_common', 'upsetjs_upset')
+  class(r) <- c(class(r), "upsetjs_common", "upsetjs_upset")
   r
 }
 
@@ -76,17 +78,17 @@ upsetjs = function(width = '100%',
 #' @return an object of class \code{upsetjs_proxy}
 #' @examples
 #' \dontrun{
-#' upsetjsProxy('upsetjs1', session) %>% setSelection('a')
+#' upsetjsProxy("upsetjs1", session) %>% setSelection("a")
 #' }
 #' @export
-upsetjsProxy = function(outputId, session) {
+upsetjsProxy <- function(outputId, session) {
   structure(
     list(
       session = session,
       id = session$ns(outputId),
       x = structure(list())
     ),
-    class = c('upsetjs_proxy', 'upsetjs_upset_proxy', 'upsetjs_common_proxy')
+    class = c("upsetjs_proxy", "upsetjs_upset_proxy", "upsetjs_common_proxy")
   )
 }
 
@@ -100,33 +102,33 @@ upsetjsProxy = function(outputId, session) {
 #'
 #' @return An object of class \code{upsetjs_venn} and \code{htmlwidget}
 #' @examples
-#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3)))
+#' upsetjs() %>% fromList(list(a = c(1, 2, 3), b = c(2, 3)))
 #' @importFrom htmlwidgets createWidget
 #' @export
-upsetjsVennDiagram = function(width = '100%',
-                              height = NULL,
-                              elementId = NULL,
-                              sizingPolicy = upsetjsSizingPolicy()) {
+upsetjsVennDiagram <- function(width = "100%",
+                               height = NULL,
+                               elementId = NULL,
+                               sizingPolicy = upsetjsSizingPolicy()) {
   # forward options using x
-  x = structure(list(
+  x <- structure(list(
     renderMode = "venn",
-    mode = 'hover',
+    mode = "hover",
     sets = c()
   ))
 
-  dependencies = c()
+  dependencies <- c()
 
-  r = htmlwidgets::createWidget(
-    'upsetjs',
+  r <- htmlwidgets::createWidget(
+    "upsetjs",
     x,
     width = width,
     height = height,
-    package = 'upsetjs',
+    package = "upsetjs",
     elementId = elementId,
     sizingPolicy = sizingPolicy,
     dependencies = dependencies
   )
-  class(r) = c(class(r), 'upsetjs_common', 'upsetjs_venn')
+  class(r) <- c(class(r), "upsetjs_common", "upsetjs_venn")
   r
 }
 
@@ -137,17 +139,17 @@ upsetjsVennDiagram = function(width = '100%',
 #' @return an object of class \code{upsetjs_proxy}
 #' @examples
 #' \dontrun{
-#' upsetjsVennDiagramProxy('upsetjs1', session) %>% setSelection('a')
+#' upsetjsVennDiagramProxy("upsetjs1", session) %>% setSelection("a")
 #' }
 #' @export
-upsetjsVennDiagramProxy = function(outputId, session) {
+upsetjsVennDiagramProxy <- function(outputId, session) {
   structure(
     list(
       session = session,
       id = session$ns(outputId),
       x = structure(list(renderMode = "venn"))
     ),
-    class = c('upsetjs_proxy', 'upsetjs_venn_proxy', 'upsetjs_common_proxy')
+    class = c("upsetjs_proxy", "upsetjs_venn_proxy", "upsetjs_common_proxy")
   )
 }
 
@@ -161,33 +163,33 @@ upsetjsVennDiagramProxy = function(outputId, session) {
 #'
 #' @return An object of class \code{upsetjs_venn} and \code{htmlwidget}
 #' @examples
-#' upsetjs() %>% fromList(list(a=c(1,2,3), b=c(2,3)))
+#' upsetjs() %>% fromList(list(a = c(1, 2, 3), b = c(2, 3)))
 #' @importFrom htmlwidgets createWidget
 #' @export
-upsetjsEulerDiagram = function(width = '100%',
-                              height = NULL,
-                              elementId = NULL,
-                              sizingPolicy = upsetjsSizingPolicy()) {
+upsetjsEulerDiagram <- function(width = "100%",
+                                height = NULL,
+                                elementId = NULL,
+                                sizingPolicy = upsetjsSizingPolicy()) {
   # forward options using x
-  x = structure(list(
+  x <- structure(list(
     renderMode = "euler",
-    mode = 'hover',
+    mode = "hover",
     sets = c()
   ))
 
-  dependencies = c()
+  dependencies <- c()
 
-  r = htmlwidgets::createWidget(
-    'upsetjs',
+  r <- htmlwidgets::createWidget(
+    "upsetjs",
     x,
     width = width,
     height = height,
-    package = 'upsetjs',
+    package = "upsetjs",
     elementId = elementId,
     sizingPolicy = sizingPolicy,
     dependencies = dependencies
   )
-  class(r) = c(class(r), 'upsetjs_common', 'upsetjs_venn')
+  class(r) <- c(class(r), "upsetjs_common", "upsetjs_venn")
   r
 }
 
@@ -198,17 +200,17 @@ upsetjsEulerDiagram = function(width = '100%',
 #' @return an object of class \code{upsetjs_proxy}
 #' @examples
 #' \dontrun{
-#' upsetjsEulerDiagramProxy('upsetjs1', session) %>% setSelection('a')
+#' upsetjsEulerDiagramProxy("upsetjs1", session) %>% setSelection("a")
 #' }
 #' @export
-upsetjsEulerDiagramProxy = function(outputId, session) {
+upsetjsEulerDiagramProxy <- function(outputId, session) {
   structure(
     list(
       session = session,
       id = session$ns(outputId),
       x = structure(list(renderMode = "euler"))
     ),
-    class = c('upsetjs_proxy', 'upsetjs_venn_proxy', 'upsetjs_common_proxy')
+    class = c("upsetjs_proxy", "upsetjs_venn_proxy", "upsetjs_common_proxy")
   )
 }
 
@@ -222,33 +224,33 @@ upsetjsEulerDiagramProxy = function(outputId, session) {
 #'
 #' @return An object of class \code{upsetjs_venn} and \code{htmlwidget}
 #' @examples
-#' upsetjsKarnaughMap() %>% fromList(list(a=c(1,2,3), b=c(2,3)))
+#' upsetjsKarnaughMap() %>% fromList(list(a = c(1, 2, 3), b = c(2, 3)))
 #' @importFrom htmlwidgets createWidget
 #' @export
-upsetjsKarnaughMap = function(width = '100%',
-                              height = NULL,
-                              elementId = NULL,
-                              sizingPolicy = upsetjsSizingPolicy()) {
+upsetjsKarnaughMap <- function(width = "100%",
+                               height = NULL,
+                               elementId = NULL,
+                               sizingPolicy = upsetjsSizingPolicy()) {
   # forward options using x
-  x = structure(list(
+  x <- structure(list(
     renderMode = "kmap",
-    mode = 'hover',
+    mode = "hover",
     sets = c()
   ))
 
-  dependencies = c()
+  dependencies <- c()
 
-  r = htmlwidgets::createWidget(
-    'upsetjs',
+  r <- htmlwidgets::createWidget(
+    "upsetjs",
     x,
     width = width,
     height = height,
-    package = 'upsetjs',
+    package = "upsetjs",
     elementId = elementId,
     sizingPolicy = sizingPolicy,
     dependencies = dependencies
   )
-  class(r) = c(class(r), 'upsetjs_common', 'upsetjs_kmap')
+  class(r) <- c(class(r), "upsetjs_common", "upsetjs_kmap")
   r
 }
 
@@ -259,16 +261,16 @@ upsetjsKarnaughMap = function(width = '100%',
 #' @return an object of class \code{upsetjs_proxy}
 #' @examples
 #' \dontrun{
-#' upsetjsKarnaughMapProxy('upsetjs1', session) %>% setSelection('a')
+#' upsetjsKarnaughMapProxy("upsetjs1", session) %>% setSelection("a")
 #' }
 #' @export
-upsetjsKarnaughMapProxy = function(outputId, session) {
+upsetjsKarnaughMapProxy <- function(outputId, session) {
   structure(
     list(
       session = session,
       id = session$ns(outputId),
       x = structure(list(renderMode = "kmap"))
     ),
-    class = c('upsetjs_proxy', 'upsetjs_kmap_proxy', 'upsetjs_common_proxy')
+    class = c("upsetjs_proxy", "upsetjs_kmap_proxy", "upsetjs_common_proxy")
   )
 }

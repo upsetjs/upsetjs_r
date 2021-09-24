@@ -1,12 +1,12 @@
 {
-  "include": ["src", "types", "test"],
+  "include": ["js", "types", "test"],
   "compilerOptions": {
     "target": "es6",
     "rootDir": "./",
     "baseUrl": "./",
     "paths": {
       "@": ["./"],
-      "*": ["src/*", "node_modules/*"]
+      "*": ["js/*", "node_modules/*"]
     },
     "module": "esnext",
     "lib": ["dom", "esnext"],
