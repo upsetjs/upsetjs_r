@@ -16,6 +16,9 @@
 #' @param dot.padding padding factor (default 0.7) for the dots
 #' @param numerical.scale numerical scale: linear (default) or log
 #' @param band.scale band scale: band (default)
+#' @param set.label.alignment set label alignment: left, center (default), right
+#' @param set.max.scale maximum value for the set scale
+#' @param combination.max.scale maximum value for the combination scale
 #' @return the object given as first argument
 #' @examples
 #' upsetjs() %>%
@@ -29,7 +32,10 @@ chartLayout <- function(upsetjs,
                         bar.padding = NULL,
                         dot.padding = NULL,
                         numerical.scale = NULL,
-                        band.scale = NULL) {
+                        band.scale = NULL,
+                        set.label.alignment = NULL,
+                        set.max.scale = NULL,
+                        combination.max.scale = NULL) {
   checkUpSetArgument(upsetjs)
   stopifnot(is.null(height.ratios) ||
     (is.numeric(height.ratios) &&
@@ -40,11 +46,14 @@ chartLayout <- function(upsetjs,
   stopIfNotType("padding", padding)
   stopIfNotType("bar.padding", bar.padding)
   stopIfNotType("dot.padding", dot.padding)
+  stopIfNotType("set.max.scale", set.max.scale)
+  stopIfNotType("combination.max.scale", combination.max.scale)
   stopifnot(
     is.null(numerical.scale) ||
       (numerical.scale == "linear" || numerical.scale == "log")
   )
   stopifnot(is.null(band.scale) || band.scale == "band")
+  stopifnot(is.null(set.label.alignment) || set.label.alignment %in% c("left", "center", "right"))
 
 
   props <- list(
@@ -54,7 +63,10 @@ chartLayout <- function(upsetjs,
     barPadding = bar.padding,
     dotPadding = dot.padding,
     numericalScale = numerical.scale,
-    bandScale = band.scale
+    bandScale = band.scale,
+    setLabelAlignment = set.label.alignment,
+    setMaxScale = set.max.scale,
+    combinationMaxScale = combination.max.scale
   )
   setProperties(upsetjs, props, clean = TRUE)
 }
