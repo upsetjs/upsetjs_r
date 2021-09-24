@@ -25,7 +25,7 @@ export declare type RBindingUpSetProps = UpSetProps<Elem> &
   VennDiagramProps<Elem> & {
     renderMode: 'upset' | 'venn' | 'euler' | 'kmap';
     expressionData?: boolean;
-    interactive?: boolean;
+    interactive?: boolean | 'hover' | 'click' | 'contextMenu';
 
     elems: ReadonlyArray<Elem>;
     attrs: ReadonlyArray<UpSetAttrSpec>;
@@ -92,17 +92,18 @@ export interface RenderContext {
   props: UpSetProps<Elem> & VennDiagramProps<Elem> & KarnaughMapProps<Elem>;
   elemToIndex: Map<Elem, number>;
   attrs: UpSetAttrSpec[];
-  interactive: boolean;
+  interactive: false | 'hover' | 'click' | 'contextMenu';
   renderMode: 'upset' | 'venn' | 'euler' | 'kmap';
 }
 
 export function createContext(
   width: number,
   height: number,
+  interactive: boolean,
   extra: Partial<RenderContext['props']> = {}
 ): RenderContext {
   return {
-    interactive: false,
+    interactive: interactive ? 'hover' : false,
     renderMode: 'upset',
     elemToIndex: new Map<Elem, number>(),
     attrs: [],
@@ -126,8 +127,8 @@ export function fixProps(context: RenderContext, delta: any, append = false) {
     Object.assign(context.props, delta);
   }
 
-  if (typeof delta.interactive === 'boolean') {
-    context.interactive = delta.interactive;
+  if (typeof delta.interactive === 'boolean' || typeof delta.interactive === 'string') {
+    context.interactive = typeof delta.interactive === 'boolean' ? 'hover' : delta.interactive;
   }
   const expressionData = delta.expressionData;
   if (typeof delta.renderMode === 'string') {
@@ -172,7 +173,14 @@ export function fixProps(context: RenderContext, delta: any, append = false) {
       context.props.sets,
       context.props.combinations as ISetCombinations<Elem>
     );
+  } else if (typeof delta.selection?.name === 'string') {
+    context.props.selection = resolveSet(
+      delta.selection.name,
+      context.props.sets,
+      context.props.combinations as ISetCombinations<Elem>
+    );
   }
+
   if (delta.queries) {
     context.props.queries = delta.queries.map((query: any) => {
       const base = Object.assign({}, query);

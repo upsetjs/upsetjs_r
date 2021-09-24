@@ -28,7 +28,7 @@ setSelection <- function(upsetjs, name = NULL) {
 #'
 #' make it an interactive chart
 #' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
-#' @param value whether to enable or disable
+#' @param value whether to enable or disable or set the mode: hover, click, contextMenu
 #' @return the object given as first argument
 #' @examples
 #' upsetjs() %>%
@@ -37,7 +37,7 @@ setSelection <- function(upsetjs, name = NULL) {
 #' @export
 interactiveChart <- function(upsetjs, value = TRUE) {
   checkUpSetCommonArgument(upsetjs)
-  stopifnot(is.logical(value), length(value) == 1)
+  stopifnot(is.logical(value) || (value %in% c("hover", "click", "contextMenu")), length(value) == 1)
 
   setProperty(upsetjs, "interactive", value)
 }

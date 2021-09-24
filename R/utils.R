@@ -7,28 +7,32 @@
 
 checkUpSetCommonArgument <- function(upsetjs) {
   if (!inherits(upsetjs, "upsetjs_common") &&
-    !inherits(upsetjs, "upsetjs_common_proxy")) {
-    stop("first argument needs to be an upsetjs or upsetjs_venn instance")
+    !inherits(upsetjs, "upsetjs_common_proxy") &&
+    !inherits(upsetjs, "upsetjs_common_dash")) {
+    stop("first argument needs to be an upsetjs or upsetjs_venn or upsetjs_kmap instance")
   }
 }
 
 checkUpSetArgument <- function(upsetjs) {
   if (!inherits(upsetjs, "upsetjs_upset") &&
-    !inherits(upsetjs, "upsetjs_upset_proxy")) {
+    !inherits(upsetjs, "upsetjs_upset_proxy") &&
+    !inherits(upsetjs, "upsetjs_upset_dash")) {
     stop("first argument needs to be an upsetjs instance")
   }
 }
 
 checkVennDiagramArgument <- function(upsetjs) {
   if (!inherits(upsetjs, "upsetjs_venn") &&
-    !inherits(upsetjs, "upsetjs_venn_proxy")) {
+    !inherits(upsetjs, "upsetjs_venn_proxy") &&
+    !inherits(upsetjs, "upsetjs_venn_dash")) {
     stop("first argument needs to be an upsetjs_venn instance")
   }
 }
 
 checkKarnaughMapArgument <- function(upsetjs) {
   if (!inherits(upsetjs, "upsetjs_kmap") &&
-    !inherits(upsetjs, "upsetjs_kmap_proxy")) {
+    !inherits(upsetjs, "upsetjs_kmap_proxy") &&
+    !inherits(upsetjs, "upsetjs_kmap_dash")) {
     stop("first argument needs to be an upsetjs_kmap instance")
   }
 }
@@ -36,13 +40,15 @@ checkKarnaughMapArgument <- function(upsetjs) {
 isVennDiagram <- function(upsetjs) {
   checkUpSetCommonArgument(upsetjs)
   inherits(upsetjs, "upsetjs_venn") ||
-    inherits(upsetjs, "upsetjs_venn_proxy")
+    inherits(upsetjs, "upsetjs_venn_proxy") ||
+    inherits(upsetjs, "upsetjs_venn_dash")
 }
 
 isKarnaughMap <- function(upsetjs) {
   checkUpSetCommonArgument(upsetjs)
   inherits(upsetjs, "upsetjs_kmap") ||
-    inherits(upsetjs, "upsetjs_kmap_proxy")
+    inherits(upsetjs, "upsetjs_kmap_proxy") ||
+    inherits(upsetjs, "upsetjs_kmap_dash")
 }
 
 stopIfNotType <- function(name,
@@ -90,6 +96,8 @@ setProperty <- function(upsetjs, prop, value) {
     props <- list()
     props[[prop]] <- value
     sendMessage(upsetjs, props)
+  } else if (inherits(upsetjs, "upsetjs_common_dash")) {
+    upsetjs$props[[prop]] <- value
   }
   upsetjs
 }
@@ -107,6 +115,12 @@ appendProperty <- function(upsetjs, prop, value) {
     props <- list()
     props[[prop]] <- value
     sendMessage(upsetjs, props, append = TRUE)
+  } else if (inherits(upsetjs, "upsetjs_common_dash")) {
+    if (is.null(upsetjs$x[[prop]])) {
+      upsetjs$props[[prop]] <- list(value)
+    } else {
+      upsetjs$props[[prop]] <- c(upsetjs$props[[prop]], list(value))
+    }
   }
   upsetjs
 }
@@ -123,6 +137,10 @@ setProperties <- function(upsetjs, props, clean = FALSE) {
     }
   } else if (inherits(upsetjs, "upsetjs_common_proxy")) {
     sendMessage(upsetjs, props)
+  } else if (inherits(upsetjs, "upsetjs_common_dash")) {
+    for (prop in names(props)) {
+      upsetjs$props[[prop]] <- props[[prop]]
+    }
   }
   upsetjs
 }

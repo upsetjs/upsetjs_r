@@ -7,7 +7,6 @@
 
 upsetjs_mock <- function() {
   x <- structure(list(
-    mode = "hover",
     sets = c()
   ))
 

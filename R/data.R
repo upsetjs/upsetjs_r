@@ -423,8 +423,12 @@ fromDataFrame <- function(upsetjs,
 #'   getElements()
 #' @export
 getElements <- function(upsetjs) {
-  stopifnot(inherits(upsetjs, "upsetjs_common"))
-  upsetjs$x$elems
+  stopifnot(inherits(upsetjs, c("upsetjs_common", "upsetjs_common_dash")))
+  if (inherits(upsetjs, "upsetjs_common")) {
+    upsetjs$x$elems
+  } else {
+    upsetjs$props$elems
+  }
 }
 
 #'
@@ -438,7 +442,7 @@ getElements <- function(upsetjs) {
 #'   getElements()
 #' @export
 setElements <- function(upsetjs, value) {
-  stopifnot(inherits(upsetjs, "upsetjs_common"))
+  stopifnot(inherits(upsetjs, c("upsetjs_common", "upsetjs_common_dash")))
   setProperty(upsetjs, "elems", value)
 }
 
@@ -452,8 +456,12 @@ setElements <- function(upsetjs, value) {
 #'   getSets()
 #' @export
 getSets <- function(upsetjs) {
-  stopifnot(inherits(upsetjs, "upsetjs_common"))
-  upsetjs$x$sets
+  stopifnot(inherits(upsetjs, c("upsetjs_common", "upsetjs_common_dash")))
+  if (inherits(upsetjs, "upsetjs_common")) {
+    upsetjs$x$sets
+  } else {
+    upsetjs$props$sets
+  }
 }
 
 #'
@@ -467,7 +475,7 @@ getSets <- function(upsetjs) {
 #'   getSets()
 #' @export
 setSets <- function(upsetjs, value) {
-  stopifnot(inherits(upsetjs, "upsetjs_common"))
+  stopifnot(inherits(upsetjs, c("upsetjs_common", "upsetjs_common_dash")))
   setProperty(upsetjs, "sets", value)
 }
 
@@ -481,8 +489,12 @@ setSets <- function(upsetjs, value) {
 #'   getCombinations()
 #' @export
 getCombinations <- function(upsetjs) {
-  stopifnot(inherits(upsetjs, "upsetjs_common"))
-  upsetjs$x$combinations
+  stopifnot(inherits(upsetjs, c("upsetjs_common", "upsetjs_common_dash")))
+  if (inherits(upsetjs, "upsetjs_common")) {
+    upsetjs$x$combinations
+  } else {
+    upsetjs$props$combinations
+  }
 }
 
 #'
@@ -496,7 +508,7 @@ getCombinations <- function(upsetjs) {
 #'   getCombinations()
 #' @export
 setCombinations <- function(upsetjs, value) {
-  stopifnot(inherits(upsetjs, "upsetjs_common"))
+  stopifnot(inherits(upsetjs, c("upsetjs_common", "upsetjs_common_dash")))
   setProperty(upsetjs, "combinations", value)
 }
 
@@ -522,6 +534,9 @@ generateCombinations <- function(upsetjs,
 
   if (inherits(upsetjs, "upsetjs_common")) {
     sets <- upsetjs$x$sets
+    gen <- generateCombinationsImpl(sets, c_type, min, max, empty, order.by, limit, colors, symbol)
+  } else if (inherits(upsetjs, "upsetjs_common_dash")) {
+    sets <- upsetjs$props$sets
     gen <- generateCombinationsImpl(sets, c_type, min, max, empty, order.by, limit, colors, symbol)
   } else {
     # proxy
