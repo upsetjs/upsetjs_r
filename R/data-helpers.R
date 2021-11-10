@@ -111,7 +111,7 @@ generateCombinationsImpl <- function(sets,
     if (!store.elems) {
       s <<- asCombination(s$name, c(), "distinctIntersection", s$setNames, cardinality = s$cardinality, color = s$color)
     }
-    if (!distinct || s$degree == 1) {
+    if (!distinct) {
       combinations <<- c(combinations, list(s))
       return()
     }
