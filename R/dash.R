@@ -7,6 +7,13 @@
 
 #'
 #' create a new upsetjs dash adapter
+#' @param children dash children
+#' @param id dash id
+#' @param width upsetjs width
+#' @param height upestjs height
+#' @return the set object
+#' @examples
+#' upestjsDash("u") %>% fromList(list(a = c(1, 2, 3), b = c(2, 3)))
 #' @export
 upsetjsDash <- function(children = NULL, id = NULL, width = NULL, height = NULL) {
   props <- list(
