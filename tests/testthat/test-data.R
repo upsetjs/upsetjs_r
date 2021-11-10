@@ -59,9 +59,9 @@ test_that("fromList - distinctIntersection", {
 
   cc <- u %>% getCombinations()
   expect_equal(length(cc), 7)
-  expect_set(cc[[1]], "one", 9)
-  expect_set(cc[[2]], "three", 9)
-  expect_set(cc[[3]], "two", 5)
+  expect_set(cc[[1]], "one", 2)
+  expect_set(cc[[2]], "three", 2)
+  expect_set(cc[[3]], "two", 1)
   expect_set(cc[[4]], "one&three", 4)
   expect_set(cc[[5]], "one&two", 1)
   expect_set(cc[[6]], "three&two", 1)
