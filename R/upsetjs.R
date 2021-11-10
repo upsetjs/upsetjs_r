@@ -15,7 +15,7 @@
 #' @return An \code{htmlwidgets::sizingPolicy} object
 #' @examples
 #' upsetjs(sizingPolicy = upsetjsSizingPolicy(padding = 20)) %>%
-#'  fromList(list(a = c(1, 2, 3), b = c(2, 3)))
+#'   fromList(list(a = c(1, 2, 3), b = c(2, 3)))
 #' @importFrom htmlwidgets sizingPolicy
 #'
 #' @export
