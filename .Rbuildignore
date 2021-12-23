@@ -18,8 +18,10 @@
 
 ^.*\.map$
 ^.*\.js$
+^.*\.mjs$
 ^.*\.json$
 ^.*\.cjs$
+^.*\.gz$
 ^\.lintr$
 ^yarn\.lock$
 ^bench\.R$
