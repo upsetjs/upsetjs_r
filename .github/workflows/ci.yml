@@ -82,7 +82,7 @@ jobs:
         with:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           external_repository: upsetjs/upsetjs.github.io
-          publish_branch: master
+          publish_branch: main
           publish_dir: ./public
           enable_jekyll: true
           remove_path_spec: 'integrations/r/'
@@ -102,7 +102,7 @@ jobs:
         with:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           external_repository: upsetjs/upsetjs.github.io
-          publish_branch: master
+          publish_branch: main
           publish_dir: ./public
           enable_jekyll: true
           remove_path_spec: 'next/integrations/r/'
