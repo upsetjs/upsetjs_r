@@ -21,7 +21,7 @@
 ^.*\.mjs$
 ^.*\.json$
 ^.*\.cjs$
-^.*\.gz$
+^.*\.tar\.gz$
 ^\.lintr$
 ^yarn\.lock$
 ^bench\.R$
