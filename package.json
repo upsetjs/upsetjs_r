@@ -70,10 +70,10 @@
   },
   "dependencies": {
     "@types/react": "^16.8",
-    "@upsetjs/bundle": "~1.10.0",
-    "@upsetjs/react": "v1.10.0",
+    "@upsetjs/bundle": "~1.10.10",
+    "@upsetjs/react": "~1.10.10",
     "@upsetjs/venn.js": "^1.4.1",
-    "core-js": "^3",
+    "core-js": "^2",
     "element-closest-polyfill": "^1.0.4",
     "regenerator-runtime": "^0.13.9",
     "use-resize-observer": "^8.0.0"
