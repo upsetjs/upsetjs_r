@@ -26,7 +26,7 @@ upsetjs() %>% fromList(listInput) %>% interactiveChart()
 
 ![List Input Example](https://user-images.githubusercontent.com/4129778/79375541-10dda700-7f59-11ea-933a-a3ffbca1bfd2.png)
 
-see also [UpSetJS.Rmd](./master/vignettes/upsetjs.Rmd)
+see also [UpSetJS.Rmd](https://github.com/upsetjs/upsetjs_r/blob/main/vignettes/upsetjs.Rmd)
 
 ## Shiny Example
 
@@ -57,7 +57,7 @@ shinyApp(ui = ui, server = server)
 
 ![shiny](https://user-images.githubusercontent.com/4129778/79375695-51d5bb80-7f59-11ea-8437-40fa60ce425c.png)
 
-see also [Shiny Examples](./main/shiny)
+see also [Shiny Examples](https://github.com/upsetjs/upsetjs_r/blob/main/shiny)
 
 ## Dash Example
 
@@ -91,7 +91,7 @@ app$run_server()
 
 TODO
 
-see also [Dash Examples](./main/dash)
+see also [Dash Examples](https://github.com/upsetjs/upsetjs_r/blob/main/dash)
 
 ## Documentation
 
@@ -108,7 +108,7 @@ upsetjsVennDiagram() %>% fromList(listInput) %>% interactiveChart()
 
 ![image](https://user-images.githubusercontent.com/4129778/84817608-8a574b80-b015-11ea-91b8-2ff17bb533e4.png)
 
-see also [Venn.Rmd](./master/vignettes/venn.Rmd)
+see also [Venn.Rmd](https://github.com/upsetjs/upsetjs_r/blob/main/vignettes/venn.Rmd)
 
 ## Karnaugh Maps Diagram
 
@@ -121,7 +121,7 @@ upsetjsKarnaughMap() %>% fromList(listInput) %>% interactiveChart()
 
 ![image](https://user-images.githubusercontent.com/4129778/86348506-09789080-bc60-11ea-9ed0-be0560269f7f.png)
 
-see also [KMap.Rmd](./master/vignettes/kmap.Rmd)
+see also [KMap.Rmd](https://github.com/upsetjs/upsetjs_r/blob/main/vignettes/kmap.Rmd)
 
 ## Dev Environment
 
@@ -205,7 +205,7 @@ In case of a commercial use, please get in touch regarding a commercial license.
 [github-actions-url]: https://github.com/upsetjs/upsetjs_r/actions
 [codepen]: https://img.shields.io/badge/CodePen-open-blue?logo=codepen
 [binder]: https://mybinder.org/badge_logo.svg
-[binder-r-url]: https://mybinder.org/v2/gh/upsetjs/upsetjs_r/master?urlpath=rstudio
+[binder-r-url]: https://mybinder.org/v2/gh/upsetjs/upsetjs_r/main?urlpath=rstudio
 [docs]: https://img.shields.io/badge/API-open-blue
 [docs-r-url]: https://upset.js.org/integrations/r/
 [example]: https://img.shields.io/badge/Example-open-red
