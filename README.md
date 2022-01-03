@@ -2,7 +2,7 @@
 
 [![CRAN][cran-image]][cran-url] [![Github Actions][github-actions-image]][github-actions-url] [![Open in Binder][binder]][binder-r-url] [![Open Docs][docs]][docs-r-url] [![Open example][example]][example-r-url]
 
-This is a [HTMLWidget](http://www.htmlwidgets.org/) and [Plot.ly Dash](https://dashr.plotly.com/) wrapper around the JavaScript library [UpSet.js](https://github.com/upsetjs/upsetjs) and an alternative implementation of [UpSetR](https://www.rdocumentation.org/packages/UpSetR).
+This is a [HTMLWidget](https://www.htmlwidgets.org/) and [Plot.ly Dash](https://dash.plotly.com/r) wrapper around the JavaScript library [UpSet.js](https://github.com/upsetjs/upsetjs) and an alternative implementation of [UpSetR](https://www.rdocumentation.org/packages/UpSetR).
 
 This package is part of the UpSet.js ecosystem located at the main [Github Monorepo](https://github.com/upsetjs/upsetjs).
 
@@ -207,8 +207,8 @@ In case of a commercial use, please get in touch regarding a commercial license.
 [binder]: https://mybinder.org/badge_logo.svg
 [binder-r-url]: https://mybinder.org/v2/gh/upsetjs/upsetjs_r/master?urlpath=rstudio
 [docs]: https://img.shields.io/badge/API-open-blue
-[docs-r-url]: https://upset.js.org/integrations/r
+[docs-r-url]: https://upset.js.org/integrations/r/
 [example]: https://img.shields.io/badge/Example-open-red
-[example-r-url]: https://upset.js.org/integrations/r/articles/basic
+[example-r-url]: https://upset.js.org/integrations/r/articles/upsetjs.html
 [cran-image]: https://img.shields.io/cran/v/upsetjs
 [cran-url]: https://www.rdocumentation.org/packages/upsetjs

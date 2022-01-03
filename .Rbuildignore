@@ -32,3 +32,4 @@
 ^data-raw$
 ^cran-comments.md$
 ^.editorconfig$
+^CRAN-RELEASE$
