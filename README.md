@@ -57,7 +57,7 @@ shinyApp(ui = ui, server = server)
 
 ![shiny](https://user-images.githubusercontent.com/4129778/79375695-51d5bb80-7f59-11ea-8437-40fa60ce425c.png)
 
-see also [Shiny Examples](https://github.com/upsetjs/upsetjs_r/blob/main/shiny)
+see also [Shiny Examples](https://github.com/upsetjs/upsetjs_r/tree/main/shiny)
 
 ## Dash Example
 
@@ -91,7 +91,7 @@ app$run_server()
 
 TODO
 
-see also [Dash Examples](https://github.com/upsetjs/upsetjs_r/blob/main/dash)
+see also [Dash Examples](https://github.com/upsetjs/upsetjs_r/tree/main/dash)
 
 ## Documentation
 
