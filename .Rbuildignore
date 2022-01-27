@@ -17,7 +17,9 @@
 ^\.yarn$
 
 ^.*\.map$
-^.*\.js$
+^\.prettierrc\.js$
+^\.eslintrc\.js$
+^\webpack\.config\.js$
 ^.*\.mjs$
 ^.*\.json$
 ^.*\.cjs$
