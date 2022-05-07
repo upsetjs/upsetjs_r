@@ -156,3 +156,13 @@ HTMLWidgets.widget({
     };
   },
 });
+
+if (isShinyMode()) {
+  Shiny.addCustomMessageHandler('upsetjs-update', (msg) => {
+    const el = document.getElementById(msg.id);
+    const update: (props: any, append: boolean) => void = (el as any)?.__update;
+    if (typeof update === 'function') {
+      update(msg.props, msg.append);
+    }
+  });
+}
