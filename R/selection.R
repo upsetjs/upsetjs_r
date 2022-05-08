@@ -22,7 +22,8 @@ setSelection <- function(upsetjs, name = NULL) {
   stopifnot(is.null(name) ||
     (is.character(name) && length(name) >= 1))
 
-  setProperty(upsetjs, "selection", name)
+  # NULL won't be transmitted
+  setProperty(upsetjs, "selection", ifelse(is.null(name), '', name))
 }
 
 #'
