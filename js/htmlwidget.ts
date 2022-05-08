@@ -31,6 +31,38 @@ function isShinyMode(): boolean {
   return HTMLWidgets && HTMLWidgets.shinyMode;
 }
 
+function toShinyEventData(
+  set: (ISetLike<string> & { setNames?: string[] | undefined }) | null,
+  selected?: ISetLike<string> | readonly string[] | null
+): any {
+  if (!set) {
+    return {
+      name: null,
+      setNames: null,
+      cardinality: null,
+      isSelected: selected == null,
+      type: null,
+      elems: [],
+    };
+  }
+
+  const cleanSelected =
+    Array.isArray(selected) || typeof selected === 'function' ? null : (selected as ISetLike<string> | null);
+
+  return {
+    name: set.name,
+    setNames: Array.isArray(set.setNames) ? set.setNames : set.setNames == null ? [] : [set.setNames],
+    cardinality: set.cardinality,
+    isSelected:
+      cleanSelected &&
+      cleanSelected.name == set.name &&
+      cleanSelected.type === set.type &&
+      cleanSelected.cardinality === set.cardinality,
+    type: set.type,
+    elems: set.elems || [],
+  };
+}
+
 HTMLWidgets.widget({
   name: 'upsetjs',
   type: 'output',
@@ -62,12 +94,9 @@ HTMLWidgets.widget({
       null;
 
     function createHandler(mode: 'hover' | 'click' | 'contextMenu') {
-      return (set: ISetLike<Elem> | null) => {
+      return (set: (ISetLike<Elem> & { setNames?: string[] }) | null) => {
         if (isShinyMode()) {
-          Shiny.onInputChange(`${el.id}_${mode}`, {
-            name: set ? set.name : null,
-            elems: set ? set.elems || [] : [],
-          });
+          Shiny.onInputChange(`${el.id}_${mode}`, toShinyEventData(set, context.props.selection as ISetLike<string>));
         }
         const crosstalk = crosstalkHandler && crosstalkHandler.mode === mode;
         if (crosstalk && crosstalkHandler) {
