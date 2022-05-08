@@ -167,7 +167,9 @@ export function fixProps(context: RenderContext, delta: any, append = false) {
       }
     }
   }
-  if (typeof delta.selection === 'string' || Array.isArray(delta.selection)) {
+  if (typeof delta.selection === null || delta.selection === '') {
+    context.props.selection = null;
+  } else if (typeof delta.selection === 'string' || Array.isArray(delta.selection)) {
     context.props.selection = resolveSet(
       delta.selection,
       context.props.sets,
