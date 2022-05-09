@@ -94,6 +94,7 @@ export interface RenderContext {
   attrs: UpSetAttrSpec[];
   interactive: false | 'hover' | 'click' | 'contextMenu';
   renderMode: 'upset' | 'venn' | 'euler' | 'kmap';
+  useNonce: boolean;
 }
 
 export function createContext(
@@ -105,6 +106,7 @@ export function createContext(
   return {
     interactive: interactive ? 'hover' : false,
     renderMode: 'upset',
+    useNonce: false,
     elemToIndex: new Map<Elem, number>(),
     attrs: [],
     props: {
@@ -129,6 +131,9 @@ export function fixProps(context: RenderContext, delta: any, append = false) {
 
   if (typeof delta.interactive === 'boolean' || typeof delta.interactive === 'string') {
     context.interactive = typeof delta.interactive === 'boolean' ? 'hover' : delta.interactive;
+  }
+  if (typeof delta.events_nonce === 'boolean') {
+    context.useNonce = delta.events_nonce;
   }
   const expressionData = delta.expressionData;
   if (typeof delta.renderMode === 'string') {

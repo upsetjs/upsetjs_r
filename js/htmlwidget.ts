@@ -19,6 +19,7 @@ declare type CrosstalkOptions = {
 
 declare type ShinyUpSetProps = RBindingUpSetProps & {
   crosstalk?: CrosstalkOptions;
+  events_nonce?: boolean;
 };
 
 declare type CrosstalkHandler = {
@@ -33,8 +34,10 @@ function isShinyMode(): boolean {
 
 function toShinyEventData(
   set: (ISetLike<string> & { setNames?: string[] | undefined }) | null,
-  selected?: ISetLike<string> | readonly string[] | null
+  selected?: ISetLike<string> | readonly string[] | null,
+  events_nonce = false
 ): any {
+  const nonce = events_nonce ? Date.now() : null;
   if (!set) {
     return {
       name: null,
@@ -43,6 +46,7 @@ function toShinyEventData(
       isSelected: selected == null,
       type: null,
       elems: [],
+      nonce,
     };
   }
 
@@ -60,6 +64,7 @@ function toShinyEventData(
       cleanSelected.cardinality === set.cardinality,
     type: set.type,
     elems: set.elems || [],
+    nonce,
   };
 }
 
@@ -96,7 +101,10 @@ HTMLWidgets.widget({
     function createHandler(mode: 'hover' | 'click' | 'contextMenu') {
       return (set: (ISetLike<Elem> & { setNames?: string[] }) | null) => {
         if (isShinyMode()) {
-          Shiny.onInputChange(`${el.id}_${mode}`, toShinyEventData(set, context.props.selection as ISetLike<string>));
+          Shiny.onInputChange(
+            `${el.id}_${mode}`,
+            toShinyEventData(set, context.props.selection as ISetLike<string>, context.useNonce)
+          );
         }
         const crosstalk = crosstalkHandler && crosstalkHandler.mode === mode;
         if (crosstalk && crosstalkHandler) {
