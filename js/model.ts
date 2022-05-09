@@ -94,6 +94,7 @@ export interface RenderContext {
   attrs: UpSetAttrSpec[];
   interactive: false | 'hover' | 'click' | 'contextMenu';
   renderMode: 'upset' | 'venn' | 'euler' | 'kmap';
+  useNonce: boolean;
 }
 
 export function createContext(
@@ -105,6 +106,7 @@ export function createContext(
   return {
     interactive: interactive ? 'hover' : false,
     renderMode: 'upset',
+    useNonce: false,
     elemToIndex: new Map<Elem, number>(),
     attrs: [],
     props: {
@@ -129,6 +131,9 @@ export function fixProps(context: RenderContext, delta: any, append = false) {
 
   if (typeof delta.interactive === 'boolean' || typeof delta.interactive === 'string') {
     context.interactive = typeof delta.interactive === 'boolean' ? 'hover' : delta.interactive;
+  }
+  if (typeof delta.events_nonce === 'boolean') {
+    context.useNonce = delta.events_nonce;
   }
   const expressionData = delta.expressionData;
   if (typeof delta.renderMode === 'string') {
@@ -167,15 +172,19 @@ export function fixProps(context: RenderContext, delta: any, append = false) {
       }
     }
   }
-  if (typeof delta.selection === 'string' || Array.isArray(delta.selection)) {
+  if (typeof delta.selection === null || delta.selection === '') {
+    context.props.selection = null;
+  } else if (typeof delta.selection === 'string' || Array.isArray(delta.selection)) {
     context.props.selection = resolveSet(
       delta.selection,
+      null,
       context.props.sets,
       context.props.combinations as ISetCombinations<Elem>
     );
   } else if (typeof delta.selection?.name === 'string') {
     context.props.selection = resolveSet(
       delta.selection.name,
+      delta.selection.type,
       context.props.sets,
       context.props.combinations as ISetCombinations<Elem>
     );
@@ -185,7 +194,12 @@ export function fixProps(context: RenderContext, delta: any, append = false) {
     context.props.queries = delta.queries.map((query: any) => {
       const base = Object.assign({}, query);
       if (isSetQuery(query) && (typeof query.set === 'string' || Array.isArray(query.set))) {
-        base.set = resolveSet(query.set, context.props.sets, context.props.combinations as ISetCombinations<Elem>)!;
+        base.set = resolveSet(
+          query.set,
+          (query as any).type,
+          context.props.sets,
+          context.props.combinations as ISetCombinations<Elem>
+        )!;
       } else if (isElemQuery(query) && typeof query.elems !== 'undefined' && !Array.isArray(query.elems)) {
         base.elems = [query.elems];
       }

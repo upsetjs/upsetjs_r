@@ -19,6 +19,7 @@ declare type CrosstalkOptions = {
 
 declare type ShinyUpSetProps = RBindingUpSetProps & {
   crosstalk?: CrosstalkOptions;
+  events_nonce?: boolean;
 };
 
 declare type CrosstalkHandler = {
@@ -29,6 +30,42 @@ declare type CrosstalkHandler = {
 
 function isShinyMode(): boolean {
   return HTMLWidgets && HTMLWidgets.shinyMode;
+}
+
+function toShinyEventData(
+  set: (ISetLike<string> & { setNames?: string[] | undefined }) | null,
+  selected?: ISetLike<string> | readonly string[] | null,
+  events_nonce = false
+): any {
+  const nonce = events_nonce ? Date.now() : null;
+  if (!set) {
+    return {
+      name: null,
+      setNames: [],
+      cardinality: null,
+      isSelected: selected == null,
+      type: null,
+      elems: [],
+      nonce,
+    };
+  }
+
+  const cleanSelected =
+    Array.isArray(selected) || typeof selected === 'function' ? null : (selected as ISetLike<string> | null);
+
+  return {
+    name: set.name,
+    setNames: Array.isArray(set.setNames) ? set.setNames : set.setNames == null ? [] : [set.setNames],
+    cardinality: set.cardinality,
+    isSelected:
+      cleanSelected &&
+      cleanSelected.name == set.name &&
+      cleanSelected.type === set.type &&
+      cleanSelected.cardinality === set.cardinality,
+    type: set.type,
+    elems: set.elems || [],
+    nonce,
+  };
 }
 
 HTMLWidgets.widget({
@@ -62,12 +99,12 @@ HTMLWidgets.widget({
       null;
 
     function createHandler(mode: 'hover' | 'click' | 'contextMenu') {
-      return (set: ISetLike<Elem> | null) => {
+      return (set: (ISetLike<Elem> & { setNames?: string[] }) | null) => {
         if (isShinyMode()) {
-          Shiny.onInputChange(`${el.id}_${mode}`, {
-            name: set ? set.name : null,
-            elems: set ? set.elems || [] : [],
-          });
+          Shiny.onInputChange(
+            `${el.id}_${mode}`,
+            toShinyEventData(set, context.props.selection as ISetLike<string>, context.useNonce)
+          );
         }
         const crosstalk = crosstalkHandler && crosstalkHandler.mode === mode;
         if (crosstalk && crosstalkHandler) {
@@ -156,3 +193,13 @@ HTMLWidgets.widget({
     };
   },
 });
+
+if (isShinyMode()) {
+  Shiny.addCustomMessageHandler('upsetjs-update', (msg) => {
+    const el = document.getElementById(msg.id);
+    const update: (props: any, append: boolean) => void = (el as any)?.__update;
+    if (typeof update === 'function') {
+      update(msg.props, msg.append);
+    }
+  });
+}

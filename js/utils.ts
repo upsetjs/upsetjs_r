@@ -85,14 +85,22 @@ function toUnifiedCombinationName(c: ISetCombination<any>) {
     .join('&');
 }
 
-export function resolveSet(set: string | string[], sets: ISets<any>, combinations: ISetCombinations<any>) {
-  const s = sets.find((s) => s.name === set);
+export function resolveSet(
+  set: string | string[],
+  type: null | undefined | ISetLike['type'],
+  sets: ISets<any>,
+  combinations: ISetCombinations<any>
+) {
+  const s = sets.find((s) => s.name === set && type != null && type === s.type);
   if (s) {
     return s;
   }
   const combinedNames = Array.isArray(set) ? set.slice().sort().join('&') : null;
   return combinations.find((c) => {
-    return c.name === set || (combinedNames && combinedNames === toUnifiedCombinationName(c));
+    return (
+      c.name === set ||
+      (combinedNames && combinedNames === toUnifiedCombinationName(c) && type != null && type === c.type)
+    );
   });
 }
 
