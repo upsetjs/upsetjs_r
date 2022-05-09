@@ -177,12 +177,14 @@ export function fixProps(context: RenderContext, delta: any, append = false) {
   } else if (typeof delta.selection === 'string' || Array.isArray(delta.selection)) {
     context.props.selection = resolveSet(
       delta.selection,
+      null,
       context.props.sets,
       context.props.combinations as ISetCombinations<Elem>
     );
   } else if (typeof delta.selection?.name === 'string') {
     context.props.selection = resolveSet(
       delta.selection.name,
+      delta.selection.type,
       context.props.sets,
       context.props.combinations as ISetCombinations<Elem>
     );
@@ -192,7 +194,12 @@ export function fixProps(context: RenderContext, delta: any, append = false) {
     context.props.queries = delta.queries.map((query: any) => {
       const base = Object.assign({}, query);
       if (isSetQuery(query) && (typeof query.set === 'string' || Array.isArray(query.set))) {
-        base.set = resolveSet(query.set, context.props.sets, context.props.combinations as ISetCombinations<Elem>)!;
+        base.set = resolveSet(
+          query.set,
+          (query as any).type,
+          context.props.sets,
+          context.props.combinations as ISetCombinations<Elem>
+        )!;
       } else if (isElemQuery(query) && typeof query.elems !== 'undefined' && !Array.isArray(query.elems)) {
         base.elems = [query.elems];
       }

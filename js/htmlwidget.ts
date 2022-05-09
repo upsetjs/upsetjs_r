@@ -41,7 +41,7 @@ function toShinyEventData(
   if (!set) {
     return {
       name: null,
-      setNames: null,
+      setNames: [],
       cardinality: null,
       isSelected: selected == null,
       type: null,

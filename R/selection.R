@@ -10,7 +10,7 @@
 #'
 #' sets the selection of the chart
 #' @param upsetjs an object of class \code{upsetjs} or \code{upsetjs_proxy}
-#' @param name the name of the set to select
+#' @param name the name of the set to select or a list with name and type
 #' @return the object given as first argument
 #' @examples
 #' upsetjs() %>%
@@ -20,10 +20,15 @@
 setSelection <- function(upsetjs, name = NULL) {
   checkUpSetCommonArgument(upsetjs)
   stopifnot(is.null(name) ||
-    (is.character(name) && length(name) >= 1))
+    (is.character(name) && length(name) >= 1) ||
+    (is.list(name) && 'name' %in% names(name) && 'type' %in% names(name)))
 
   # NULL won't be transmitted
-  setProperty(upsetjs, "selection", ifelse(is.null(name), "", name))
+  if(is.null(name)) {
+    setProperty(upsetjs, "selection", "")
+  } else {
+    setProperty(upsetjs, "selection", name)
+  }
 }
 
 #'
