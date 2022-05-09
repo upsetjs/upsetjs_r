@@ -59,7 +59,7 @@ function toShinyEventData(
     cardinality: set.cardinality,
     isSelected:
       cleanSelected &&
-      cleanSelected.name == set.name &&
+      cleanSelected.name === set.name &&
       cleanSelected.type === set.type &&
       cleanSelected.cardinality === set.cardinality,
     type: set.type,
