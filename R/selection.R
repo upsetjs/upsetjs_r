@@ -21,10 +21,10 @@ setSelection <- function(upsetjs, name = NULL) {
   checkUpSetCommonArgument(upsetjs)
   stopifnot(is.null(name) ||
     (is.character(name) && length(name) >= 1) ||
-    (is.list(name) && 'name' %in% names(name) && 'type' %in% names(name)))
+    (is.list(name) && "name" %in% names(name) && "type" %in% names(name)))
 
   # NULL won't be transmitted
-  if(is.null(name)) {
+  if (is.null(name)) {
     setProperty(upsetjs, "selection", "")
   } else {
     setProperty(upsetjs, "selection", name)
