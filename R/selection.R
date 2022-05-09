@@ -23,7 +23,7 @@ setSelection <- function(upsetjs, name = NULL) {
     (is.character(name) && length(name) >= 1))
 
   # NULL won't be transmitted
-  setProperty(upsetjs, "selection", ifelse(is.null(name), '', name))
+  setProperty(upsetjs, "selection", ifelse(is.null(name), "", name))
 }
 
 #'
