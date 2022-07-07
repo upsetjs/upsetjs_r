@@ -37,11 +37,12 @@ jobs:
 
       - name: Style / Format
         shell: Rscript {0}
-        run: styler::style_pkg( dry="fail")
+        run: styler::style_pkg(dry="fail")
 
       - name: Lint
         shell: Rscript {0}
         run: |
+          devtools::document()
           devtools::load_all()
           lintr::lint_package()
 
@@ -49,7 +50,9 @@ jobs:
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         shell: Rscript {0}
-        run: devtools::check( args = c("--no-manual", "--as-cran"), error_on = "error", check_dir = "check")
+        run: |
+          devtools::document()
+          devtools::check(args = c("--no-manual", "--as-cran"), error_on = "error", check_dir = "check")
 
       - name: Test
         shell: Rscript {0}
