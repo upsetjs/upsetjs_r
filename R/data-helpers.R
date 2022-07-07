@@ -118,14 +118,11 @@ generateCombinationsImpl <- function(sets,
     otherSets <- Filter(function(ss) {
       !(ss$name %in% s$setNames)
     }, sets)
-    dElems <- Filter(function(e) {
-      for (o in otherSets) {
-        if (e %in% o$elems) {
-          return(FALSE)
-        }
-      }
-      TRUE
-    }, s$elems)
+
+    dElems <- s$elems
+    for (o in otherSets) {
+      dElems <- setdiff(dElems, o$elems)
+    }
 
     if (s$cardinality == length(dElems)) {
       combinations <<- c(combinations, list(s))
