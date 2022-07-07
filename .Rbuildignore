@@ -35,3 +35,4 @@
 ^cran-comments.md$
 ^.editorconfig$
 ^CRAN-RELEASE$
+^CRAN-SUBMISSION$
