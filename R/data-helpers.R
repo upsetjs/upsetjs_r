@@ -201,23 +201,36 @@ extractCombinationsImpl <- function(df,
   # Then paste0() these translated names by row
   cName <- do.call(paste0, translatedSets)
 
-  dd <- aggregate(elems, list(c_name = cName), function(r) {
-    r
-  })
+  dd <- if (store.elems) {
+    # Calculate members only if we need it
+    members <- aggregate(elems, list(c_name = cName), function(r) {
+      r
+    })
+    members$cardinality <- lengths(members$x)
+    members
+  } else {
+    # ... otherwise just count cardinality
+    counts <- table(cName)
+    data.frame(
+      c_name = names(counts),
+      cardinality = as.integer(counts)
+    )
+  }
+
   setNames <- strsplit(dd$c_name, symbol, fixed = TRUE)
   # We got an extra symbol with the translatedSets above; clean it up
   dd$c_name <- vapply(setNames, paste0, collapse = symbol, character(1))
   setColors <- cc(dd$c_name)
 
   combinations <- lapply(seq_len(nrow(dd)), function(i) {
-    elems <- as.character(dd[i, "x"][[1]])
     structure(
       list(
         name = dd[i, "c_name"],
         color = setColors[i],
         type = "distinctIntersection",
-        elems = if (store.elems) elems else c(),
-        setNames = setNames[i][[1]], cardinality = length(elems)
+        elems = if (store.elems) as.character(dd[[i, "x"]]) else c(),
+        setNames = setNames[i][[1]],
+        cardinality = dd[i, "cardinality"]
       ),
       class = "upsetjs_combination"
     )
