@@ -29,7 +29,7 @@
     "build:dev": "webpack-cli --mode development --devtool source-map",
     "build": "yarn run clean && webpack-cli --mode production",
     "test:r": "Rscript -e 'devtools::test()'",
-    "check:r": "rimraf node_modules && Rscript -e 'devtools::check(, error_on = \"error\")'",
+    "check:r": "rimraf node_modules && Rscript -e 'devtools::check(error_on = \"error\")'",
     "style:r": "Rscript -e 'styler::style_pkg()'",
     "lint:r": "Rscript -e 'devtools::load_all();lintr::lint_package()'",
     "clean:r": "rimraf \"*.tar.gz\" check man doc docs NAMESPACE \"vignettes/*.R\" \"vignettes/*.html\" upsetjs.Rcheck Meta node_modules",
