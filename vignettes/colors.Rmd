@@ -25,11 +25,14 @@ library(upsetjs)
 ## Basic User Interface
 
 ```{r}
-listInput <- list(s1 = c('a', 'b', 'c', 'e', 'g', 'h', 'k', 'l', 'm'), s2 = c('a', 'b', 'd', 'e', 'j'), s3 = c('a', 'e', 'f', 'g', 'h', 'i', 'j', 'l', 'm'))
-colors <- list(s1 = '#1f77b4', s2 = '#2ca02c', s3 = '#d62728', `s1&s2` = '#9467bd', `s1&s3` = '#8c564b', `s2&s3` = '#e377c2', `s1&s2&s3` = '#bcbd22')
+listInput <- list(s1 = c("a", "b", "c", "e", "g", "h", "k", "l", "m"), s2 = c("a", "b", "d", "e", "j"), s3 = c("a", "e", "f", "g", "h", "i", "j", "l", "m"))
+colors <- list(s1 = "#1f77b4", s2 = "#2ca02c", s3 = "#d62728", `s1&s2` = "#9467bd", `s1&s3` = "#8c564b", `s2&s3` = "#e377c2", `s1&s2&s3` = "#bcbd22")
 
 render <- function(upsetjs) {
-  upsetjs %>% fromList(listInput, colors=colors) %>% chartTheme(selection.color="", has.selection.opacity=0.3) %>% interactiveChart()
+  upsetjs %>%
+    fromList(listInput, colors = colors) %>%
+    chartTheme(selection.color = "", has.selection.opacity = 0.3) %>%
+    interactiveChart()
 }
 ```
 

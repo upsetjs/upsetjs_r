@@ -25,9 +25,11 @@ library(upsetjs)
 ## Basic User Interface
 
 ```{r, fig.width=9, fig.height=5, out.width="850px", tidy=TRUE, fig.align='center'}
-listInput <- list(one = c('a', 'b', 'c', 'e', 'g', 'h', 'k', 'l', 'm'), two = c('a', 'b', 'd', 'e', 'j'), three = c('a', 'e', 'f', 'g', 'h', 'i', 'j', 'l', 'm'))
+listInput <- list(one = c("a", "b", "c", "e", "g", "h", "k", "l", "m"), two = c("a", "b", "d", "e", "j"), three = c("a", "e", "f", "g", "h", "i", "j", "l", "m"))
 
-w <- upsetjsVennDiagram() %>% fromList(listInput) %>% interactiveChart()
+w <- upsetjsVennDiagram() %>%
+  fromList(listInput) %>%
+  interactiveChart()
 w
 ```
 
@@ -35,7 +37,9 @@ Euler diagrams are based on [venn.js](https://github.com/upsetjs/venn.js)
 thus supporting more than three sets but might result in unexpected results
 
 ```{r, fig.width=9, fig.height=5, out.width="850px", tidy=TRUE, fig.align='center'}
-we <- upsetjsEulerDiagram() %>% fromList(listInput) %>% interactiveChart()
+we <- upsetjsEulerDiagram() %>%
+  fromList(listInput) %>%
+  interactiveChart()
 we
 ```
 

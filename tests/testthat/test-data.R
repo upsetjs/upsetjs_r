@@ -90,12 +90,13 @@ test_that("fromExpression", {
 })
 
 test_that("fromDataFrame", {
-  dataFrame <- as.data.frame(list(
-    one = c(1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1),
-    two = c(1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0),
-    three = c(1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)
-  ),
-  row.names = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m")
+  dataFrame <- as.data.frame(
+    list(
+      one = c(1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1),
+      two = c(1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0),
+      three = c(1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)
+    ),
+    row.names = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m")
   )
 
   u <- upsetjs_mock() %>% fromDataFrame(dataFrame, order.by = "degree")
@@ -117,12 +118,13 @@ test_that("fromDataFrame", {
 })
 
 test_that("fromDataFrame - union", {
-  dataFrame <- as.data.frame(list(
-    one = c(1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1),
-    two = c(1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0),
-    three = c(1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)
-  ),
-  row.names = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m")
+  dataFrame <- as.data.frame(
+    list(
+      one = c(1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1),
+      two = c(1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0),
+      three = c(1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)
+    ),
+    row.names = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m")
   )
 
   u <- upsetjs_mock() %>% fromDataFrame(dataFrame, order.by = "degree", c_type = "union")
@@ -144,12 +146,13 @@ test_that("fromDataFrame - union", {
 })
 
 test_that("fromDataFrame - distinctIntersection", {
-  dataFrame <- as.data.frame(list(
-    one = c(1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1),
-    two = c(1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0),
-    three = c(1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)
-  ),
-  row.names = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m")
+  dataFrame <- as.data.frame(
+    list(
+      one = c(1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1),
+      two = c(1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0),
+      three = c(1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)
+    ),
+    row.names = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m")
   )
 
   u <- upsetjs_mock() %>% fromDataFrame(dataFrame, c_type = "distinctIntersection", order.by = "degree")

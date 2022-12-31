@@ -64,12 +64,13 @@ sendMessage <- function(upsetjsProxy, props, ...) {
   session <- upsetjsProxy$session
   id <- upsetjsProxy$id
 
-  msg <- structure(list(
-    id = id,
-    props = props,
-    ...
-  ),
-  class = "upsetjs_msg"
+  msg <- structure(
+    list(
+      id = id,
+      props = props,
+      ...
+    ),
+    class = "upsetjs_msg"
   )
 
   session$sendCustomMessage("upsetjs-update", msg)

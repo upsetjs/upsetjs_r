@@ -119,18 +119,18 @@ cat("Plotted  in", format(end - start), "\n")
 ## works nicely
 start <- Sys.time()
 upsetjs() %>%
-  fromDataFrame(toyset_1[,1:6], c_type="distinctIntersection") %>%
+  fromDataFrame(toyset_1[, 1:6], c_type = "distinctIntersection") %>%
   interactiveChart()
 end <- Sys.time()
 cat("Plotted  in", format(end - start), "\n")
 
 start <- Sys.time()
 upset(
- toyset_2,
-   order.by = "freq",
-   set_size.show = TRUE,
-   set_size.scale_max = 250000,
-   nsets = 33
+  toyset_2,
+  order.by = "freq",
+  set_size.show = TRUE,
+  set_size.scale_max = 250000,
+  nsets = 33
 )
 end <- Sys.time()
 cat("Plotted  in", format(end - start), "\n")
@@ -140,7 +140,7 @@ cat("Plotted  in", format(end - start), "\n")
 start <- Sys.time()
 
 upsetjs() %>%
-  fromDataFrame(toyset_2, c_type="distinctIntersection", store.elems=FALSE, limit = 40) %>%
+  fromDataFrame(toyset_2, c_type = "distinctIntersection", store.elems = FALSE, limit = 40) %>%
   interactiveChart()
 
 end <- Sys.time()
