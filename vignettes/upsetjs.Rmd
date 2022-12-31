@@ -89,12 +89,13 @@ The following data frame defines the same set structure as the dictionary format
 ```{r, fig.width=9, fig.height=5, out.width="850px", tidy=TRUE, fig.align='center'}
 
 # boolean table with rows = elements, columns = sets, cell = is row part of this set
-dataFrame <- as.data.frame(list(
-  one = c(1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1),
-  two = c(1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0),
-  three = c(1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)
-),
-row.names = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m")
+dataFrame <- as.data.frame(
+  list(
+    one = c(1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1),
+    two = c(1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0),
+    three = c(1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)
+  ),
+  row.names = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m")
 )
 
 
@@ -194,12 +195,13 @@ The are given as part of the data frame. The attributes element has to be a list
 
 
 ```{r, fig.width=9, fig.height=5, out.width="850px", tidy=TRUE, fig.align='center'}
-dataFrame <- as.data.frame(list(
-  one = c(1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1),
-  two = c(1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0),
-  three = c(1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)
-),
-row.names = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m")
+dataFrame <- as.data.frame(
+  list(
+    one = c(1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1),
+    two = c(1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0),
+    three = c(1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)
+  ),
+  row.names = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m")
 )
 
 upsetjs() %>%
