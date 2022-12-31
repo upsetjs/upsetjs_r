@@ -66,6 +66,7 @@ asCombination <- function(name, elems = c(), type = "intersection",
 #' @param shared.mode whether on 'hover' or 'click' (default) is synced
 #' @param colors the optional list with set name to color
 #' @param c_type the combination type to use or "none" for disabling initial generation
+#' @param order.sets.by optional other ordering for sets
 #' @return the object given as first argument
 #' @examples
 #' upsetjs() %>% fromList(list(a = c(1, 2, 3), b = c(2, 3)))
@@ -77,10 +78,15 @@ fromList <- function(upsetjs,
                      shared = NULL,
                      shared.mode = "click",
                      colors = NULL,
-                     c_type = NULL) {
+                     c_type = NULL,
+                     order.sets.by = NULL) {
   checkUpSetCommonArgument(upsetjs)
   stopifnot(is.list(value))
-  stopifnot(order.by == "cardinality" || order.by == "degree")
+  stopifnot(order.by %in% c("cardinality", "degree", "name"))
+  if (is.null(order.sets.by)) {
+    order.sets.by <- order.by
+  }
+  stopifnot(order.sets.by %in% c("cardinality", "degree", "name"))
   stopifnot(is.null(limit) ||
     (is.numeric(limit) && length(limit) == 1))
   stopifnot(shared.mode == "click" || shared.mode == "hover")
@@ -111,7 +117,7 @@ fromList <- function(upsetjs,
     upsetjs <- enableCrosstalk(upsetjs, shared, mode = shared.mode)
   }
 
-  sortedSets <- sortSets(sets, order.by = order.by, limit = limit)
+  sortedSets <- sortSets(sets, order.by = order.sets.by, limit = limit)
 
   gen <- if (!is.null(c_type) && c_type == "none") {
     list()
@@ -158,6 +164,7 @@ fromList <- function(upsetjs,
 #' @param order.by order intersections by cardinality or name
 #' @param colors the optional list with set name to color
 #' @param type the type of intersections this data represents (intersection,union,distinctIntersection)
+#' @param order.sets.by optional other ordering for sets
 #' @return the object given as first argument
 #' @examples
 #' upsetjs() %>% fromExpression(list(a = 3, b = 2, `a&b` = 2))
@@ -167,10 +174,15 @@ fromExpression <- function(upsetjs,
                            symbol = "&",
                            order.by = "cardinality",
                            colors = NULL,
-                           type = "intersection") {
+                           type = "intersection",
+                           order.sets.by = NULL) {
   checkUpSetCommonArgument(upsetjs)
   stopifnot(is.list(value))
-  stopifnot(order.by == "cardinality" || order.by == "degree")
+  stopifnot(order.by %in% c("cardinality", "degree", "name"))
+  if (is.null(order.sets.by)) {
+    order.sets.by <- order.by
+  }
+  stopifnot(order.sets.by %in% c("cardinality", "degree", "name"))
   stopifnot(is.null(colors) || is.list(colors))
   stopifnot(type == "intersection" ||
     type == "union" || type == "distinctIntersection")
@@ -218,7 +230,7 @@ fromExpression <- function(upsetjs,
     }
   }
   names(sets) <- NULL
-  sets <- sortSets(sets, order.by = order.by)
+  sets <- sortSets(sets, order.by = order.sets.by)
 
 
   props <- list(
@@ -252,7 +264,7 @@ extractSetsFromDataFrame <- function(df,
       is.data.frame(attributes) ||
       is.list(attributes) || is.character(attributes)
   ))
-  stopifnot(order.by == "cardinality" || order.by == "degree")
+  stopifnot(order.by %in% c("cardinality", "degree", "name"))
   stopIfNotType("limit", limit)
   stopifnot(is.null(colors) || is.list(colors))
 
@@ -288,6 +300,7 @@ extractSetsFromDataFrame <- function(df,
 #' @param colors the optional list with set name to color
 #' @param c_type the combination type to use
 #' @param store.elems whether to store the set elements within the structures (set to false for big data frames)
+#' @param order.sets.by optional other ordering for sets
 #' @return the object given as first argument
 #' @importFrom stats aggregate
 #' @examples
@@ -303,7 +316,8 @@ fromDataFrame <- function(upsetjs,
                           shared.mode = "click",
                           colors = NULL,
                           c_type = NULL,
-                          store.elems = TRUE) {
+                          store.elems = TRUE,
+                          order.sets.by = NULL) {
   checkUpSetCommonArgument(upsetjs)
   stopifnot(is.data.frame(df))
   stopifnot((
@@ -311,7 +325,11 @@ fromDataFrame <- function(upsetjs,
       is.data.frame(attributes) ||
       is.list(attributes) || is.character(attributes)
   ))
-  stopifnot(order.by == "cardinality" || order.by == "degree")
+  stopifnot(order.by %in% c("cardinality", "degree", "name"))
+  if (is.null(order.sets.by)) {
+    order.sets.by <- order.by
+  }
+  stopifnot(order.sets.by %in% c("cardinality", "degree", "name"))
   stopIfNotType("limit", limit)
   stopifnot(shared.mode == "click" || shared.mode == "hover")
   stopifnot(is.null(colors) || is.list(colors))
@@ -323,7 +341,7 @@ fromDataFrame <- function(upsetjs,
   )
 
   genType <- ifelse(!is.null(c_type), c_type, ifelse(isVennDiagram(upsetjs) || isKarnaughMap(upsetjs), "distinctIntersection", "intersection"))
-  sortedSets <- extractSetsFromDataFrame(df, attributes, order.by, limit,
+  sortedSets <- extractSetsFromDataFrame(df, attributes, order.sets.by, limit,
     colors,
     store.elems = store.elems || genType != "distinctIntersection"
   )
