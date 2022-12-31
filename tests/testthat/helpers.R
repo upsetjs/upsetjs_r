@@ -19,9 +19,9 @@ upsetjs_mock <- function() {
 }
 
 expect_set <- function(s, name, cardinality, check.length = TRUE) {
-  expect_equal(s$name, name)
-  expect_equal(s$cardinality, cardinality)
+  testthat::expect_equal(s$name, name)
+  testthat::expect_equal(s$cardinality, cardinality)
   if (check.length) {
-    expect_equal(length(s$elems), cardinality)
+    testthat::expect_equal(length(s$elems), cardinality)
   }
 }

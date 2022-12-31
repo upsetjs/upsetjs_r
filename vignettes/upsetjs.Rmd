@@ -35,9 +35,11 @@ library(upsetjs)
 example of list input (list of named vectors, each having a list of contained elements)
 
 ```{r, fig.width=9, fig.height=5, out.width="850px", tidy=TRUE, fig.align='center'}
-listInput <- list(one = c('a', 'b', 'c', 'e', 'g', 'h', 'k', 'l', 'm'), two = c('a', 'b', 'd', 'e', 'j'), three = c('a', 'e', 'f', 'g', 'h', 'i', 'j', 'l', 'm'))
+listInput <- list(one = c("a", "b", "c", "e", "g", "h", "k", "l", "m"), two = c("a", "b", "d", "e", "j"), three = c("a", "e", "f", "g", "h", "i", "j", "l", "m"))
 
-w <- upsetjs() %>% fromList(listInput) %>% interactiveChart()
+w <- upsetjs() %>%
+  fromList(listInput) %>%
+  interactiveChart()
 w
 ```
 
@@ -59,7 +61,7 @@ In the current version the UpSet.js wrapper supports three input data formats: l
 The first format is a list. The key of the list entry is the set name while the value is the vector of elements this set has. See also UpsetR
 
 ```{r, fig.width=9, fig.height=5, out.width="850px", tidy=TRUE, fig.align='center'}
-upsetjs() %>% fromList(list(one = c('a', 'b', 'c', 'e', 'g', 'h', 'k', 'l', 'm'), two = c('a', 'b', 'd', 'e', 'j'), three = c('a', 'e', 'f', 'g', 'h', 'i', 'j', 'l', 'm')))
+upsetjs() %>% fromList(list(one = c("a", "b", "c", "e", "g", "h", "k", "l", "m"), two = c("a", "b", "d", "e", "j"), three = c("a", "e", "f", "g", "h", "i", "j", "l", "m")))
 ```
 
 
@@ -73,7 +75,9 @@ The second version is a a variant in which not the elements are given but their 
 expressionInput <- list(one = 9, two = 5, three = 9, `one&two` = 3, `one&three` = 6, `two&three` = 3, `one&two&three` = 2)
 
 
-upsetjs() %>% fromExpression(expressionInput) %>% interactiveChart()
+upsetjs() %>%
+  fromExpression(expressionInput) %>%
+  interactiveChart()
 ```
 
 
@@ -86,10 +90,12 @@ The following data frame defines the same set structure as the dictionary format
 
 # boolean table with rows = elements, columns = sets, cell = is row part of this set
 dataFrame <- as.data.frame(list(
-  one=c(1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1),
-  two=c(1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0),
-  three=c(1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)),
-  row.names=c('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'))
+  one = c(1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1),
+  two = c(1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0),
+  three = c(1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)
+),
+row.names = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m")
+)
 
 
 upsetjs() %>% fromDataFrame(dataFrame)
@@ -110,20 +116,23 @@ In case of an `expressionInput` the combinations of sets are directly given.
 
 ```{r, fig.width=9, fig.height=5, out.width="850px", tidy=TRUE, fig.align='center'}
 
-upsetjs() %>% fromList(listInput) %>%
+upsetjs() %>%
+  fromList(listInput) %>%
   generateDistinctIntersections()
 ```
 
 ```{r, fig.width=9, fig.height=5, out.width="850px", tidy=TRUE, fig.align='center'}
 
-upsetjs() %>% fromList(listInput) %>%
-  generateIntersections(min=2, max=NULL, empty=T, order.by='cardinality', limit=NULL)
+upsetjs() %>%
+  fromList(listInput) %>%
+  generateIntersections(min = 2, max = NULL, empty = TRUE, order.by = "cardinality", limit = NULL)
 ```
 
 ```{r, fig.width=9, fig.height=5, out.width="850px", tidy=TRUE, fig.align='center'}
 
-upsetjs() %>% fromList(listInput) %>%
-  generateUnions(min=0, max=2, empty=T, order.by='degree', limit=NULL)
+upsetjs() %>%
+  fromList(listInput) %>%
+  generateUnions(min = 0, max = 2, empty = TRUE, order.by = "degree", limit = NULL)
 ```
 
 ## Interaction
@@ -173,8 +182,8 @@ besides the selection UpSet.js supports defining queries. A query can be a list 
 ```{r, fig.width=9, fig.height=5, out.width="850px", tidy=TRUE, fig.align='center'}
 upsetjs() %>%
   fromList(listInput) %>%
-  addQuery("Q1", color="red", elems=c('a', 'b', 'c')) %>%
-  addQuery("Q2", color="blue", set='two')
+  addQuery("Q1", color = "red", elems = c("a", "b", "c")) %>%
+  addQuery("Q2", color = "blue", set = "two")
 ```
 
 
@@ -186,13 +195,15 @@ The are given as part of the data frame. The attributes element has to be a list
 
 ```{r, fig.width=9, fig.height=5, out.width="850px", tidy=TRUE, fig.align='center'}
 dataFrame <- as.data.frame(list(
-  one=c(1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1),
-  two=c(1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0),
-  three=c(1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)),
-  row.names=c('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'))
+  one = c(1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1),
+  two = c(1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0),
+  three = c(1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1)
+),
+row.names = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m")
+)
 
 upsetjs() %>%
-  fromDataFrame(dataFrame, attributes = list(attr=runif(nrow(dataFrame))))
+  fromDataFrame(dataFrame, attributes = list(attr = runif(nrow(dataFrame))))
 ```
 
 
@@ -205,7 +216,7 @@ UpSet.js supports thre themes: light, dark, and vega. The theme can be set by th
 ```{r, fig.width=9, fig.height=5, out.width="850px", tidy=TRUE, fig.align='center'}
 upsetjs() %>%
   fromList(listInput) %>%
-  chartTheme('dark')
+  chartTheme("dark")
 ```
 
 ### Title
@@ -231,5 +242,5 @@ setting `chartLayout(numerical.scale = 'log')` switches to a log scale, similarl
 ```{r, fig.width=9, fig.height=5, out.width="850px", tidy=TRUE, fig.align='center'}
 upsetjs() %>%
   fromList(listInput) %>%
-  chartLayout(numerical.scale = 'log')
+  chartLayout(numerical.scale = "log")
 ```

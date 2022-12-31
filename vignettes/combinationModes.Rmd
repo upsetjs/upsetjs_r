@@ -24,26 +24,26 @@ library(tibble)
 ```{r}
 t <- tribble(
   ~set1, ~set2, ~set3,
-   1,   1,   0,
-   0,   0,   1,
-   0,   1,   1,
-   0,   0,   1,
-   0,   0,   1,
-   0,   1,   1,
-   1,   0,   1,
-   0,   1,   1,
-   0,   0,   1,
-   0,   0,   1,
-   1,   1,   1,
-   1,   0,   0,
-   0,   0,   1,
-   0,   1,   0,
-   1,   1,   1,
-   0,   1,   0,
-   0,   1,   1,
-   0,   1,   0,
-   0,   0,   1,
-   0,   0,   1
+  1, 1, 0,
+  0, 0, 1,
+  0, 1, 1,
+  0, 0, 1,
+  0, 0, 1,
+  0, 1, 1,
+  1, 0, 1,
+  0, 1, 1,
+  0, 0, 1,
+  0, 0, 1,
+  1, 1, 1,
+  1, 0, 0,
+  0, 0, 1,
+  0, 1, 0,
+  1, 1, 1,
+  0, 1, 0,
+  0, 1, 1,
+  0, 1, 0,
+  0, 0, 1,
+  0, 0, 1
 )
 ```
 
@@ -51,19 +51,25 @@ t <- tribble(
 
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
 
-upsetjs() %>% fromDataFrame(t) %>% generateIntersections()
+upsetjs() %>%
+  fromDataFrame(t) %>%
+  generateIntersections()
 ```
 
 ## Union Mode
 
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
 
-upsetjs() %>% fromDataFrame(t) %>% generateUnions()
+upsetjs() %>%
+  fromDataFrame(t) %>%
+  generateUnions()
 ```
 
 ## Distinct Intersection Mode
 
 ```{r, fig.width=9, fig.height=5, out.width="850px",tidy=TRUE, fig.align='center'}
 
-upsetjs() %>% fromDataFrame(t) %>% generateDistinctIntersections()
+upsetjs() %>%
+  fromDataFrame(t) %>%
+  generateDistinctIntersections()
 ```

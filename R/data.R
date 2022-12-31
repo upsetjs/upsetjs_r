@@ -176,9 +176,9 @@ fromExpression <- function(upsetjs,
 
   cc <- colorLookup(colors)
 
-  degrees <- sapply(names(value), function(x) {
-    length(unlist(strsplit(x, symbol)))
-  })
+  # degrees <- sapply(names(value), function(x) {
+  #   length(unlist(strsplit(x, symbol)))
+  # })
 
   rawCombinations <- value
 
