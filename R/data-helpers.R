@@ -79,7 +79,7 @@ generateCombinationsImpl <- function(sets,
   cc <- colorLookup(colors)
 
   mergeUnion <- function(a, b) {
-    abSets <- union(a$setNames, b$setNames)
+    abSets <- sort(union(a$setNames, b$setNames))
     abName <- paste(abSets, collapse = symbol)
     abElems <- c()
     if (a$cardinality == 0) {
@@ -93,7 +93,7 @@ generateCombinationsImpl <- function(sets,
   }
 
   mergeIntersect <- function(a, b) {
-    abSets <- union(a$setNames, b$setNames)
+    abSets <- sort(union(a$setNames, b$setNames))
     abName <- paste(abSets, collapse = symbol)
     abElems <- c()
     if (a$cardinality > 0 && b$cardinality > 0) {
