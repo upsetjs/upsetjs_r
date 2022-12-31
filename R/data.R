@@ -16,14 +16,15 @@
 #' asSet("a", c(1, 2, 3))
 #' @export
 asSet <- function(name, elems = c(), cardinality = length(elems), color = NULL) {
-  structure(list(
-    name = name,
-    type = "set",
-    elems = elems,
-    cardinality = cardinality,
-    color = color
-  ),
-  class = "upsetjs_set"
+  structure(
+    list(
+      name = name,
+      type = "set",
+      elems = elems,
+      cardinality = cardinality,
+      color = color
+    ),
+    class = "upsetjs_set"
   )
 }
 
@@ -176,9 +177,9 @@ fromExpression <- function(upsetjs,
 
   cc <- colorLookup(colors)
 
-  degrees <- sapply(names(value), function(x) {
-    length(unlist(strsplit(x, symbol)))
-  })
+  # degrees <- sapply(names(value), function(x) {
+  #   length(unlist(strsplit(x, symbol)))
+  # })
 
   rawCombinations <- value
 

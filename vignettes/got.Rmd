@@ -30,17 +30,23 @@ got
 ## UpSet Plot
 
 ```{r, fig.width=9, fig.height=5, out.width="850px", tidy=TRUE, fig.align='center'}
-upsetjs() %>% fromDataFrame(got) %>% interactiveChart()
+upsetjs() %>%
+  fromDataFrame(got) %>%
+  interactiveChart()
 ```
 
 ## Venn Diagram (5 sets at most)
 
 ```{r, fig.width=9, fig.height=5, out.width="850px", tidy=TRUE, fig.align='center'}
-upsetjsVennDiagram() %>% fromDataFrame(got) %>% interactiveChart()
+upsetjsVennDiagram() %>%
+  fromDataFrame(got) %>%
+  interactiveChart()
 ```
 
 ## Karnaugh Map
 
 ```{r, fig.width=9, fig.height=5, out.width="850px", tidy=TRUE, fig.align='center'}
-upsetjsKarnaughMap() %>% fromDataFrame(got) %>% interactiveChart()
+upsetjsKarnaughMap() %>%
+  fromDataFrame(got) %>%
+  interactiveChart()
 ```

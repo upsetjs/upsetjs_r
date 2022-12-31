@@ -6,16 +6,18 @@ library(dplyr)
 set_list_2_combinations <- function(set_list) {
   set_list <- set_list[
     order(purrr::map_int(set_list, length), decreasing = TRUE)
-    ]
+  ]
   set_names <- names(set_list)
-  purrr::map(seq_along(set_names), ~{
-    lst <- combn(set_names, .x) %>% as.data.frame() %>% as.list()
-    names(lst) <- purrr::map_chr(lst, ~paste0(.x, collapse = "&"))
+  purrr::map(seq_along(set_names), ~ {
+    lst <- combn(set_names, .x) %>%
+      as.data.frame() %>%
+      as.list()
+    names(lst) <- purrr::map_chr(lst, ~ paste0(.x, collapse = "&"))
     lst
   }) %>% unlist(recursive = FALSE)
 }
 
-set_list <- list("A" = c(1,2,3,4,5),"B" = c(1,2,3),"C" = c(2,6,7,8))
+set_list <- list("A" = c(1, 2, 3, 4, 5), "B" = c(1, 2, 3), "C" = c(2, 6, 7, 8))
 combinations <- c(list("none" = ""), set_list_2_combinations(set_list))
 
 # reactive values ----
@@ -35,31 +37,30 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
-
   output$upset_plot <- upsetjs::renderUpsetjs({
     upsetjs::upsetjs() %>%
       upsetjs::fromList(set_list) %>%
-      upsetjs::interactiveChart('click', events_nonce = TRUE)
+      upsetjs::interactiveChart("click", events_nonce = TRUE)
   })
 
-  upset_selection <- reactiveValues(selected_sets = '')
+  upset_selection <- reactiveValues(selected_sets = "")
 
   observeEvent(upset_selection$selected_sets, {
-    upsetjs::upsetjsProxy('upset_plot', session) %>%
+    upsetjs::upsetjsProxy("upset_plot", session) %>%
       upsetjs::setSelection(upset_selection$selected_sets)
   })
 
 
   observeEvent(input$upset_plot_click, {
-    if(isTRUE(input$upset_plot_click[['isSelected']])) {
-      upset_selection$selected_sets <- ''
+    if (isTRUE(input$upset_plot_click[["isSelected"]])) {
+      upset_selection$selected_sets <- ""
     } else {
       upset_selection$selected_sets <- input$upset_plot_click
     }
   })
 
   observeEvent(input$reset_selection, {
-    upset_selection$selected_sets <- ''
+    upset_selection$selected_sets <- ""
   })
 
   # debug info
